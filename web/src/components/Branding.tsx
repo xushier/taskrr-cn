@@ -11,7 +11,7 @@ import { useAuth } from "@/components/AuthProvider";
 const DEFAULTS: BrandingData = {
   name: "Taskrr",
   title: "",
-  tagline: "last-done tracker",
+  tagline: "上次完成时间追踪",
   icon: "",
   loginHideIcon: false,
   loginHideText: false,
