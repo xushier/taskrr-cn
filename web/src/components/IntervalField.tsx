@@ -6,9 +6,9 @@ import { Input } from "@/components/ui/input";
 // The units the user can pick from. Everything is stored as seconds in the DB;
 // these are just convenient multiples for the UI.
 const UNITS = [
-  { label: "hours", seconds: 3_600 },
-  { label: "days", seconds: 86_400 },
-  { label: "weeks", seconds: 604_800 },
+  { label: "小时", seconds: 3_600 },
+  { label: "天", seconds: 86_400 },
+  { label: "周", seconds: 604_800 },
 ] as const;
 
 /** Given a cadence in seconds, pick the nicest {amount, unit} to display it as. */
@@ -90,11 +90,11 @@ export function IntervalField({
           onChange={(e) => setEnabled(e.target.checked)}
           className="h-4 w-4 rounded border-input bg-transparent accent-primary"
         />
-        Routine
+        周期
       </label>
 
       <div className={cn("flex items-center gap-2 transition-opacity", !enabled && "pointer-events-none opacity-40")}>
-        <span className="text-sm text-muted-foreground">every</span>
+        <span className="text-sm text-muted-foreground">每</span>
         <Input
           type="number"
           min={1}
@@ -102,13 +102,13 @@ export function IntervalField({
           onChange={(e) => setAmount(Number(e.target.value))}
           className="w-20"
           disabled={!enabled}
-          aria-label="Interval amount"
+          aria-label="间隔数量"
         />
         <select
           value={unitSeconds}
           onChange={(e) => setUnitSeconds(Number(e.target.value))}
           disabled={!enabled}
-          aria-label="Interval unit"
+          aria-label="间隔单位"
           className="h-9 rounded-md border border-input bg-transparent px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {UNITS.map((u) => (

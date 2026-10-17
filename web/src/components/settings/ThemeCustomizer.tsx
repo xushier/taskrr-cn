@@ -49,29 +49,29 @@ import { useToast } from "@/components/ui/Toast";
 import { useConfirm } from "@/components/ui/ConfirmDialog";
 
 const COLOR_FIELDS: { key: keyof ThemeColors; label: string }[] = [
-  { key: "background", label: "Background" },
-  { key: "card", label: "Panel" },
-  { key: "sidebar", label: "Sidebar" },
-  { key: "border", label: "Border" },
-  { key: "foreground", label: "Text" },
-  { key: "accent", label: "Accent" },
+  { key: "background", label: "背景" },
+  { key: "card", label: "面板" },
+  { key: "sidebar", label: "侧边栏" },
+  { key: "border", label: "边框" },
+  { key: "foreground", label: "文字" },
+  { key: "accent", label: "强调色" },
 ];
 
 const EFFECTS = [
-  { value: "none", label: "None" },
-  { value: "stars", label: "Starfield" },
-  { value: "constellations", label: "Constellations" },
-  { value: "synapse", label: "Synapse" },
-  { value: "dots", label: "Drifting dots" },
-  { value: "perlin", label: "Flow field" },
-  { value: "aurora", label: "Aurora" },
-  { value: "waves", label: "Waves" },
-  { value: "rain", label: "Rain" },
-  { value: "petals", label: "Petals" },
-  { value: "sparkles", label: "Sparkles" },
-  { value: "embers", label: "Embers" },
-  { value: "fireflies", label: "Fireflies" },
-  { value: "comets", label: "Comets" },
+  { value: "none", label: "无" },
+  { value: "stars", label: "星空" },
+  { value: "constellations", label: "星座" },
+  { value: "synapse", label: "神经脉冲" },
+  { value: "dots", label: "漂浮圆点" },
+  { value: "perlin", label: "流场" },
+  { value: "aurora", label: "极光" },
+  { value: "waves", label: "波浪" },
+  { value: "rain", label: "雨" },
+  { value: "petals", label: "落花" },
+  { value: "sparkles", label: "闪耀" },
+  { value: "embers", label: "余烬" },
+  { value: "fireflies", label: "萤火虫" },
+  { value: "comets", label: "彗星" },
 ] as const satisfies readonly { value: BackgroundEffect; label: string }[];
 
 // Compile-time guard that the picker offers every effect the renderer knows.
@@ -98,7 +98,7 @@ export function ThemeCustomizer() {
   const fileRef = useRef<HTMLInputElement>(null);
   const setDefault = useMutation({
     mutationFn: () => api.setDefaultTheme(theme),
-    onSuccess: () => toast("Saved as the site default", { tone: "success" }),
+    onSuccess: () => toast("已保存为站点默认", { tone: "success" }),
   });
 
   // Saved themes now live in the account's prefs (server-side), so they follow
@@ -159,7 +159,7 @@ export function ThemeCustomizer() {
     if (!trimmed) return;
     setPrefs({ savedThemes: [...saved.filter((t) => t.name !== trimmed), { ...theme, name: trimmed }] });
     setName("");
-    toast("Theme saved", { tone: "success" });
+    toast("主题已保存", { tone: "success" });
   }
   const remove = (n: string) => setPrefs({ savedThemes: saved.filter((t) => t.name !== n) });
 
@@ -177,16 +177,16 @@ export function ThemeCustomizer() {
       .text()
       .then((text) => {
         applyTheme({ ...DEFAULT_THEME, ...(JSON.parse(text) as Theme) });
-        toast("Theme imported", { tone: "success" });
+        toast("主题已导入", { tone: "success" });
       })
-      .catch(() => void alert({ title: "Import failed", description: "That file isn't a valid Taskrr theme." }));
+      .catch(() => void alert({ title: "导入失败", description: "该文件不是有效的 Taskrr 主题。" }));
   }
 
   return (
     <div className="space-y-5">
       {/* Light / dark — remembers the theme you had in each mode and swaps. */}
       <section className="space-y-2">
-        <Label>Mode</Label>
+        <Label>模式</Label>
         {/* The same sliding pill as every other choice in the app — these two
             were hand-rolled before Segmented existed and never caught up. */}
         <Segmented
@@ -198,7 +198,7 @@ export function ThemeCustomizer() {
               value: "light",
               label: (
                 <>
-                  <Sun className="h-4 w-4" /> Light
+                  <Sun className="h-4 w-4" /> 浅色
                 </>
               ),
             },
@@ -206,7 +206,7 @@ export function ThemeCustomizer() {
               value: "dark",
               label: (
                 <>
-                  <Moon className="h-4 w-4" /> Dark
+                  <Moon className="h-4 w-4" /> 深色
                 </>
               ),
             },
@@ -218,7 +218,7 @@ export function ThemeCustomizer() {
           features, because it restyles every element rather than recolouring. */}
       {experimental && (
         <section className="space-y-2">
-          <Label>Style</Label>
+          <Label>风格</Label>
           {/* "instance" stands in for "no style of my own" — Segmented keys on a
               string, and undefined is not something a pill can slide to. */}
           <Segmented
@@ -226,24 +226,23 @@ export function ThemeCustomizer() {
             value={theme.style ?? "instance"}
             onChange={(v) => patch({ style: v === "instance" ? undefined : (v as ThemeStyle) })}
             options={[
-              { value: "instance", label: "Instance" },
-              { value: "soft", label: "Soft" },
-              { value: "flat", label: "Flat" },
+              { value: "instance", label: "跟随实例" },
+              { value: "soft", label: "柔和" },
+              { value: "flat", label: "扁平" },
             ]}
           />
           <p className="text-[11px] text-muted-foreground">
-            Flat squares off the corners and drops the shadows and frosted glass —
-            the same colours, without the depth. <strong>Instance</strong> follows
-            whatever the admin set. Experimental.
+            扁平风格将圆角改为直角，并去掉阴影和磨砂玻璃——颜色不变，只是没有层次感。
+            <strong>跟随实例</strong>则使用管理员的设置。实验性功能。
           </p>
 
-          <Label>Layout</Label>
+          <Label>布局</Label>
           <Select
             value={prefs.appLayout}
             onChange={(e) => setPrefs({ appLayout: e.target.value })}
-            aria-label="App layout"
+            aria-label="应用布局"
           >
-            <option value="">Instance default</option>
+            <option value="">实例默认</option>
             {APP_LAYOUTS.map((l) => (
               <option key={l.value} value={l.value}>
                 {l.label} — {l.hint}
@@ -251,14 +250,13 @@ export function ThemeCustomizer() {
             ))}
           </Select>
           <p className="text-[11px] text-muted-foreground">
-            Where the navigation lives. The rail and the top bar work on a phone
-            too; the full sidebar is a drawer there, as it always has been.
+            导航所在的位置。图标栏和顶栏在手机上也可用；完整侧边栏在手机上仍是抽屉，一如既往。
           </p>
         </section>
       )}
 
       {/* Presets: open by default — it's what most visits to this pane are for. */}
-      <SettingsGroup id="theme.presets" title="Presets" icon={<Palette />} flat>
+      <SettingsGroup id="theme.presets" title="预设" icon={<Palette />} flat>
       <section className="space-y-2">
         <div className="grid grid-cols-3 gap-2">
           {presets.map((p) => (
@@ -289,7 +287,7 @@ export function ThemeCustomizer() {
 
       {/* Shared themes — admin-published, available to everyone. */}
       {!lite && shared && shared.length > 0 && (
-        <SettingsGroup id="theme.shared" title="Shared themes" icon={<Users />}>
+        <SettingsGroup id="theme.shared" title="共享主题" icon={<Users />}>
         <section className="space-y-2">
           <div className="grid grid-cols-3 gap-2">
             {shared.map((p) => (
@@ -315,8 +313,8 @@ export function ThemeCustomizer() {
                 {isAdmin && (
                   <button
                     type="button"
-                    aria-label={`Unshare ${p.name}`}
-                    title="Stop sharing"
+                    aria-label={`停止共享 ${p.name}`}
+                    title="停止共享"
                     onClick={() => unshare.mutate(p.name)}
                     className="absolute right-1 top-1 rounded p-0.5 text-muted-foreground opacity-0 transition-opacity hover:text-destructive group-hover:opacity-100"
                   >
@@ -330,7 +328,7 @@ export function ThemeCustomizer() {
         </SettingsGroup>
       )}
 
-      <SettingsGroup id="theme.colors" title="Colors" icon={<Droplet />} summary="Surfaces and accent">
+      <SettingsGroup id="theme.colors" title="颜色" icon={<Droplet />} summary="界面与强调色">
       <section className="space-y-2">
         <div className="grid grid-cols-2 gap-2">
           {COLOR_FIELDS.map((f) => (
@@ -347,18 +345,18 @@ export function ThemeCustomizer() {
       {/* Font + frosted */}
       <section className="space-y-2">
         <div className="space-y-1">
-          <Label>Font</Label>
+          <Label>字体</Label>
           <Select
             value={theme.font}
             onChange={(e) => patch({ font: e.target.value as FontChoice })}
           >
-            <option value="mono">Monospace</option>
-            <option value="sans">Sans-serif</option>
+            <option value="mono">等宽</option>
+            <option value="sans">无衬线</option>
           </Select>
         </div>
         <ToggleRow
-        label="Frosted glass"
-        hint="Translucent windows, sidebar, and task cards with a backdrop blur"
+        label="磨砂玻璃"
+        hint="半透明的窗口、侧边栏和任务卡片，带背景模糊"
         checked={theme.frosted}
         onChange={(v) => patch({ frosted: v })}
       />
@@ -367,13 +365,13 @@ export function ThemeCustomizer() {
       {/* Harmony generator + preview */}
       <section className="space-y-2 rounded-lg border p-3">
         <h3 className="flex items-center gap-1.5 text-sm font-semibold">
-          <Sparkles className="h-4 w-4" /> Color Harmony
+          <Sparkles className="h-4 w-4" /> 颜色协调
         </h3>
         <p className="text-xs text-muted-foreground">
-          Pick a base accent, then Generate a coordinated palette around it.
+          选择一个基础强调色，然后生成一套与之协调的配色。
         </p>
         <ColorField
-          label="Base accent"
+          label="基础强调色"
           value={theme.colors.accent}
           onChange={(hex) => setColor("accent", hex)}
         />
@@ -382,13 +380,13 @@ export function ThemeCustomizer() {
             value={harmony}
             onChange={(e) => setHarmony(e.target.value as Harmony)}
           >
-            <option value="complementary">Complementary</option>
-            <option value="analogous">Analogous</option>
-            <option value="triadic">Triadic</option>
-            <option value="monochrome">Monochrome</option>
+            <option value="complementary">互补色</option>
+            <option value="analogous">邻近色</option>
+            <option value="triadic">三角色</option>
+            <option value="monochrome">单色</option>
           </Select>
           <Button type="button" size="sm" onClick={generate}>
-            Generate
+            生成
           </Button>
         </div>
         <div className="grid grid-cols-6 gap-1 pt-1">
@@ -409,7 +407,7 @@ export function ThemeCustomizer() {
       <BackgroundImageSection />
 
       {/* Background effect */}
-      <SettingsGroup id="theme.background" title="Background effect" icon={<Sparkles />} summary="Effect, intensity, motion">
+      <SettingsGroup id="theme.background" title="背景效果" icon={<Sparkles />} summary="效果、强度、动态">
         <Select
           value={theme.background}
           onChange={(e) => patch({ background: e.target.value as BackgroundEffect })}
@@ -424,7 +422,7 @@ export function ThemeCustomizer() {
           <>
             <div className="grid grid-cols-2 gap-3 pt-1">
               <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">Intensity</Label>
+                <Label className="text-xs text-muted-foreground">强度</Label>
                 <input
                   type="range"
                   min={0}
@@ -436,7 +434,7 @@ export function ThemeCustomizer() {
                 />
               </div>
               <div className="space-y-1">
-                <Label className="text-xs text-muted-foreground">Size</Label>
+                <Label className="text-xs text-muted-foreground">大小</Label>
                 <input
                   type="range"
                   min={0}
@@ -450,7 +448,7 @@ export function ThemeCustomizer() {
             </div>
             <div className="space-y-1">
               <Label className="text-xs text-muted-foreground">
-                Visibility: {Math.round((theme.bgOpacity ?? 1) * 100)}%
+                可见度：{Math.round((theme.bgOpacity ?? 1) * 100)}%
               </Label>
               <input
                 type="range"
@@ -460,18 +458,18 @@ export function ThemeCustomizer() {
                 value={theme.bgOpacity ?? 1}
                 onChange={(e) => patch({ bgOpacity: Number(e.target.value) })}
                 className="w-full accent-primary"
-                aria-label="Background effect visibility"
+                aria-label="背景效果可见度"
               />
             </div>
             <ToggleRow
-        label="Custom colour"
-        hint="Off = the effect follows the accent"
+        label="自定义颜色"
+        hint="关闭时效果跟随强调色"
         checked={!!theme.bgColor}
         onChange={(v) => patch({ bgColor: v ? theme.colors.accent : "" })}
       />
             {!!theme.bgColor && (
               <ColorField
-                label="Effect colour"
+                label="效果颜色"
                 value={theme.bgColor}
                 onChange={(hex) => patch({ bgColor: hex })}
               />
@@ -480,13 +478,13 @@ export function ThemeCustomizer() {
         )}
         {/* Animation controls live here, next to the background they drive. */}
         <ToggleRow
-        label="Animations"
+        label="动画"
         checked={prefs.animations}
         onChange={(v) => setPrefs({ animations: v })}
       />
         {prefs.animations && (
           <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Animation speed: {prefs.animationSpeed}×</Label>
+            <Label className="text-xs text-muted-foreground">动画速度：{prefs.animationSpeed}×</Label>
             <input
               type="range"
               min={0.25}
@@ -501,16 +499,16 @@ export function ThemeCustomizer() {
       </SettingsGroup>
 
       {/* Save / share */}
-      <SettingsGroup id="theme.save" title="Save &amp; share" icon={<Save />} summary="Your saved themes">
+      <SettingsGroup id="theme.save" title="保存与分享" icon={<Save />} summary="已保存的主题">
         <div className="flex gap-2">
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            placeholder="Theme name…"
+            placeholder="主题名称…"
             onKeyDown={(e) => e.key === "Enter" && save()}
           />
           <Button type="button" size="sm" onClick={save} disabled={!name.trim()}>
-            Save
+            保存
           </Button>
         </div>
         {saved.length > 0 && (
@@ -533,21 +531,21 @@ export function ThemeCustomizer() {
                       onClick={(e) => {
                         const anchor = e.currentTarget;
                         share.mutate(t, {
-                          onSuccess: () => toast("Shared with everyone", { anchor, tone: "success" }),
+                          onSuccess: () => toast("已共享给所有人", { anchor, tone: "success" }),
                         });
                       }}
                       disabled={share.isPending}
-                      title="Share with everyone"
+                      title="共享给所有人"
                       className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary disabled:opacity-50"
                     >
-                      <Share2 className="h-3.5 w-3.5" /> Share
+                      <Share2 className="h-3.5 w-3.5" /> 共享
                     </button>
                   )}
                   <button
                     onClick={() => remove(t.name)}
                     className="text-xs text-muted-foreground hover:text-destructive"
                   >
-                    remove
+                    删除
                   </button>
                 </div>
               </div>
@@ -557,10 +555,10 @@ export function ThemeCustomizer() {
         {share.isError && <p className="text-xs text-destructive">{(share.error as Error).message}</p>}
         <div className="flex gap-2">
           <Button type="button" variant="outline" size="sm" className="flex-1" onClick={() => fileRef.current?.click()}>
-            <Upload /> Import
+            <Upload /> 导入
           </Button>
           <Button type="button" variant="outline" size="sm" className="flex-1" onClick={exportTheme}>
-            <Download /> Export
+            <Download /> 导出
           </Button>
           <input
             ref={fileRef}
@@ -573,7 +571,7 @@ export function ThemeCustomizer() {
         {/* A site default and theme sharing both need more than one account. */}
         {isAdmin && !lite && (
           <div className="space-y-2 rounded-lg border p-3">
-            <h4 className="text-xs font-semibold text-muted-foreground">Site themes (admin)</h4>
+            <h4 className="text-xs font-semibold text-muted-foreground">站点主题（管理员）</h4>
             <Button
               type="button"
               variant="outline"
@@ -584,27 +582,27 @@ export function ThemeCustomizer() {
             >
               <Globe />
               {setDefault.isSuccess
-                ? "Saved as site default"
+                ? "已保存为站点默认"
                 : setDefault.isPending
-                  ? "Saving…"
-                  : "Set this as the site default"}
+                  ? "保存中…"
+                  : "设为站点默认"}
             </Button>
             <ToggleRow
-        label="Use the default for everyone"
-        hint="Accounts that haven't picked their own theme follow the site default."
+        label="为所有人使用默认主题"
+        hint="未自选主题的账户将跟随站点默认主题。"
         checked={settings?.default_theme_enforce ?? false}
         onChange={(v) => saveSetting.mutate({ default_theme_enforce: v })}
       />
             <ToggleRow
-        label="Allow sharing themes"
-        hint="Adds a Share button on saved themes to publish them to all users."
+        label="允许共享主题"
+        hint="在已保存的主题上显示共享按钮，发布给所有用户。"
         checked={settings?.themes_shareable ?? false}
         onChange={(v) => saveSetting.mutate({ themes_shareable: v })}
       />
             {settings?.themes_shareable && (
               <ToggleRow
-        label="Let everyone share"
-        hint="Regular users get the Share button too, not just admins."
+        label="允许所有人共享"
+        hint="普通用户也能看到共享按钮，不只是管理员。"
         checked={settings?.themes_share_users ?? false}
         onChange={(v) => saveSetting.mutate({ themes_share_users: v })}
       />
@@ -620,7 +618,7 @@ export function ThemeCustomizer() {
         className="w-full"
         onClick={() => applyTheme({ ...DEFAULT_THEME })}
       >
-        <RotateCcw /> Reset to default
+        <RotateCcw /> 恢复默认
       </Button>
     </div>
   );

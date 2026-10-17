@@ -124,7 +124,7 @@ export function ColorPicker({ value, onChange }: { value: string; onChange: (hex
 
       {/* Suggestions */}
       <div className="space-y-1">
-        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Suggestions</p>
+        <p className="text-[10px] uppercase tracking-wide text-muted-foreground">建议</p>
         <div className="grid grid-cols-10 gap-1">
           {SWATCHES.map((c) => (
             <button
@@ -148,7 +148,7 @@ export function ColorPicker({ value, onChange }: { value: string; onChange: (hex
       {/* Recent */}
       {recent.length > 0 && (
         <div className="space-y-1">
-          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">Recent</p>
+          <p className="text-[10px] uppercase tracking-wide text-muted-foreground">最近使用</p>
           <div className="grid grid-cols-10 gap-1">
             {recent.map((c) => (
               <button
@@ -210,7 +210,7 @@ export function ColorField({
       <label className="flex items-center justify-between gap-2 rounded-md border px-2 py-1.5 text-sm">
         <span className="text-muted-foreground">{label}</span>
         <span className="flex items-center gap-1.5">
-          {onClear && isDefault && <span className="text-[10px] text-muted-foreground">default</span>}
+          {onClear && isDefault && <span className="text-[10px] text-muted-foreground">默认</span>}
           <input
             type="color"
             aria-label={label}
@@ -220,7 +220,7 @@ export function ColorField({
           />
           {onClear && !isDefault && (
             <button type="button" onClick={onClear} className="text-[10px] text-muted-foreground hover:text-foreground">
-              reset
+              重置
             </button>
           )}
         </span>
@@ -238,7 +238,7 @@ export function ColorField({
       >
         <span className="text-muted-foreground">{label}</span>
         <span className="flex items-center gap-1.5">
-          {onClear && isDefault && <span className="text-[10px] text-muted-foreground">default</span>}
+          {onClear && isDefault && <span className="text-[10px] text-muted-foreground">默认</span>}
           <span className="h-5 w-7 rounded border border-black/20" style={{ backgroundColor: value }} />
         </span>
       </button>
@@ -263,7 +263,7 @@ export function ColorField({
                   }}
                   className="mt-2 w-full rounded-md border px-2 py-1 text-xs text-muted-foreground hover:bg-accent hover:text-foreground"
                 >
-                  Use app default
+                  恢复默认
                 </button>
               )}
             </div>

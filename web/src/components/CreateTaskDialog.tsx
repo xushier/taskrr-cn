@@ -99,7 +99,7 @@ export function CreateTaskDialog({
       setTags([]);
       setFolder("");
       setOpen(false);
-      toast("Task created", { tone: "success" });
+      toast("任务已创建", { tone: "success" });
     },
   });
 
@@ -109,16 +109,16 @@ export function CreateTaskDialog({
         <DialogTrigger asChild>
           {trigger ?? (
             <Button>
-              <Plus /> New task
+              <Plus /> 新建任务
             </Button>
           )}
         </DialogTrigger>
       )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create a task</DialogTitle>
+          <DialogTitle>新建任务</DialogTitle>
           <DialogDescription>
-            Something you do repeatedly and want to track the last time you did.
+            一件你重复做、并想记住上次何时做的事。
           </DialogDescription>
         </DialogHeader>
         <form
@@ -133,7 +133,7 @@ export function CreateTaskDialog({
               there are templates; nobody needs an empty picker. */}
           {templates.length > 0 && (
             <div className="space-y-2">
-              <Label htmlFor="task-template">Start from</Label>
+              <Label htmlFor="task-template">从模板开始</Label>
               <Select
                 id="task-template"
                 value=""
@@ -148,7 +148,7 @@ export function CreateTaskDialog({
                   setFolder(input.folder ?? "");
                 }}
               >
-                <option value="">Blank task</option>
+                <option value="">空白任务</option>
                 {templates.map((t) => (
                   <option key={t.name} value={t.name}>
                     {t.name}
@@ -159,12 +159,12 @@ export function CreateTaskDialog({
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="task-name">Name</Label>
+            <Label htmlFor="task-name">名称</Label>
             <Input
               id="task-name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Water the plants every 2 weeks #home"
+              placeholder="例如：浇花 every 2 weeks #home"
               autoFocus
             />
             {suggestion && (
@@ -175,31 +175,31 @@ export function CreateTaskDialog({
               >
                 <Wand2 className="mt-px h-3.5 w-3.5 shrink-0 text-primary" />
                 <span className="min-w-0">
-                  <span className="font-medium text-foreground">{suggestion.name || "(no name yet)"}</span>
+                  <span className="font-medium text-foreground">{suggestion.name || "（还没有名称）"}</span>
                   <span className="block text-muted-foreground">
-                    {describeQuickAdd(suggestion, formatInterval)} — click to use
+                    {describeQuickAdd(suggestion, formatInterval)}——点击采用
                   </span>
                 </span>
               </button>
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="task-description">Description (optional)</Label>
+            <Label htmlFor="task-description">描述（可选）</Label>
             <Textarea
               id="task-description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Any details worth remembering"
+              placeholder="任何值得记住的细节"
               rows={2}
             />
           </div>
           <IntervalField value={intervalSeconds} onChange={setIntervalSeconds} />
           <div className="space-y-2">
-            <Label>Tags (optional)</Label>
+            <Label>标签（可选）</Label>
             <TagInput value={tags} onChange={setTags} />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="task-folder">Folder (optional)</Label>
+            <Label htmlFor="task-folder">文件夹（可选）</Label>
             <FolderInput value={folder} onChange={setFolder} suggestions={folderSuggestions} />
           </div>
           {mutation.isError && (
@@ -207,7 +207,7 @@ export function CreateTaskDialog({
           )}
           <DialogFooter>
             <Button type="submit" disabled={!name.trim() || mutation.isPending}>
-              {mutation.isPending ? "Creating…" : "Create task"}
+              {mutation.isPending ? "创建中…" : "创建任务"}
             </Button>
           </DialogFooter>
         </form>

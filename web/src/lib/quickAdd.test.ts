@@ -127,7 +127,7 @@ describe("parseQuickAdd", () => {
 describe("describeQuickAdd", () => {
   it("summarises what was understood", () => {
     const parsed = parseQuickAdd("water plants every 2 weeks #home /Indoors");
-    expect(describeQuickAdd(parsed, formatInterval)).toBe("every 2 weeks · in Indoors · #home");
+    expect(describeQuickAdd(parsed, formatInterval)).toBe("每 2 周 · 位于 Indoors · #home");
   });
 
   it("is empty when nothing was recognised", () => {

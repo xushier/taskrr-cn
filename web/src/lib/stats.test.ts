@@ -132,42 +132,42 @@ describe("formatGap (the stats-facing duration format)", () => {
   it("keeps days as the unit past a fortnight, so near spans stay distinct", () => {
     // The case that motivated it: humanizeDuration renders both as "2 weeks",
     // which made the pace sentence contradict itself.
-    expect(formatGap(18 * DAY)).toBe("18 days");
-    expect(formatGap(14 * DAY)).toBe("14 days");
+    expect(formatGap(18 * DAY)).toBe("18 天");
+    expect(formatGap(14 * DAY)).toBe("14 天");
     expect(formatGap(18 * DAY)).not.toBe(formatGap(14 * DAY));
   });
 
   it("steps down to hours and minutes for short spans", () => {
-    expect(formatGap(90 * 1000)).toBe("2 minutes");
-    expect(formatGap(5 * 3_600_000)).toBe("5 hours");
-    expect(formatGap(30 * 3_600_000)).toBe("30 hours");
+    expect(formatGap(90 * 1000)).toBe("2 分钟");
+    expect(formatGap(5 * 3_600_000)).toBe("5 小时");
+    expect(formatGap(30 * 3_600_000)).toBe("30 小时");
   });
 
   it("steps up to months and years for long ones", () => {
-    expect(formatGap(90 * DAY)).toBe("3 months");
-    expect(formatGap(400 * DAY)).toBe("13 months");
-    expect(formatGap(1000 * DAY)).toBe("3 years");
+    expect(formatGap(90 * DAY)).toBe("3 个月");
+    expect(formatGap(400 * DAY)).toBe("13 个月");
+    expect(formatGap(1000 * DAY)).toBe("3 年");
   });
 
   it("singularises a value of one", () => {
-    expect(formatGap(60_000)).toBe("1 minute");
-    expect(formatGap(3_600_000)).toBe("1 hour");
+    expect(formatGap(60_000)).toBe("1 分钟");
+    expect(formatGap(3_600_000)).toBe("1 小时");
   });
 
   it("prefers resolution over a rounder unit around the day mark", () => {
     // Each range hands over above its own unit's "1", so a gap never degrades
     // to a single unit that hides a big relative difference: 24h and 30h stay
     // distinguishable as hours instead of both collapsing to "1 day".
-    expect(formatGap(DAY)).toBe("24 hours");
-    expect(formatGap(30 * 3_600_000)).toBe("30 hours");
-    expect(formatGap(740 * DAY)).toBe("2 years");
+    expect(formatGap(DAY)).toBe("24 小时");
+    expect(formatGap(30 * 3_600_000)).toBe("30 小时");
+    expect(formatGap(740 * DAY)).toBe("2 年");
   });
 
   it("hands off between units at the documented thresholds", () => {
     // 36h is the hours→days boundary; 60d is days→months.
-    expect(formatGap(35 * 3_600_000)).toBe("35 hours");
-    expect(formatGap(37 * 3_600_000)).toBe("2 days");
-    expect(formatGap(59 * DAY)).toBe("59 days");
-    expect(formatGap(60 * DAY)).toBe("2 months");
+    expect(formatGap(35 * 3_600_000)).toBe("35 小时");
+    expect(formatGap(37 * 3_600_000)).toBe("2 天");
+    expect(formatGap(59 * DAY)).toBe("59 天");
+    expect(formatGap(60 * DAY)).toBe("2 个月");
   });
 });

@@ -9,12 +9,12 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/Toast";
 
 const LEAD_OPTIONS: { label: string; value: number }[] = [
-  { label: "When it's due", value: 0 },
-  { label: "1 hour before", value: 3600 },
-  { label: "6 hours before", value: 21600 },
-  { label: "1 day before", value: 86400 },
-  { label: "3 days before", value: 259200 },
-  { label: "1 week before", value: 604800 },
+  { label: "到期时", value: 0 },
+  { label: "提前 1 小时", value: 3600 },
+  { label: "提前 6 小时", value: 21600 },
+  { label: "提前 1 天", value: 86400 },
+  { label: "提前 3 天", value: 259200 },
+  { label: "提前 1 周", value: 604800 },
 ];
 
 /** Reminders: deliver a webhook when one of your tasks comes due. */
@@ -49,21 +49,21 @@ export function RemindersSection() {
     onSuccess: (updated) => {
       queryClient.setQueryData(["reminders"], updated);
       apply(updated); // reflect any server-side normalisation
-      toast("Reminders saved", { tone: "success" });
+      toast("提醒已保存", { tone: "success" });
     },
   });
   const test = useMutation({
     mutationFn: () => api.testReminder(webhookUrl.trim()),
-    onSuccess: () => toast("Test webhook sent", { tone: "success" }),
+    onSuccess: () => toast("测试 Webhook 已发送", { tone: "success" }),
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
 
   const canSave = !enabled || webhookUrl.trim() !== "";
 
   return (
-    <SettingsGroup id="account.reminders" title="Reminders" icon={<Bell />} summary="Webhook when due">
+    <SettingsGroup id="account.reminders" title="提醒" icon={<Bell />} summary="到期时发 Webhook">
         <label className="flex items-center justify-between gap-2 text-sm">
-          <span>Send a webhook when a task is due</span>
+          <span>任务到期时发送 Webhook</span>
           <input
             type="checkbox"
             className="h-4 w-4 accent-primary"
@@ -79,11 +79,11 @@ export function RemindersSection() {
           className="h-8"
         />
         <p className="text-[11px] text-muted-foreground">
-          Taskrr POSTs a JSON notification (title + message) to this URL. Works with ntfy, Apprise,
-          Gotify, Discord/Slack webhooks, Home Assistant, and the like.
+          Taskrr 会向此 URL 发送 JSON 通知（标题 + 正文）。支持 ntfy、Apprise、Gotify、Discord/Slack
+          Webhook、Home Assistant 等。
         </p>
         <div className="flex items-center gap-2">
-          <span className="text-xs text-muted-foreground">Notify</span>
+          <span className="text-xs text-muted-foreground">提醒时间</span>
           <select
             value={leadSeconds}
             onChange={(e) => setLeadSeconds(Number(e.target.value))}
@@ -98,7 +98,7 @@ export function RemindersSection() {
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Button size="sm" disabled={save.isPending || !canSave} onClick={() => save.mutate()}>
-            {save.isPending ? "Saving…" : "Save"}
+            {save.isPending ? "保存中…" : "保存"}
           </Button>
           <Button
             size="sm"
@@ -106,11 +106,11 @@ export function RemindersSection() {
             disabled={test.isPending || webhookUrl.trim() === ""}
             onClick={() => test.mutate()}
           >
-            {test.isPending ? "Sending…" : "Send test"}
+            {test.isPending ? "发送中…" : "发送测试"}
           </Button>
-          {save.isSuccess && <span className="text-xs text-emerald-500">Saved.</span>}
+          {save.isSuccess && <span className="text-xs text-emerald-500">已保存。</span>}
           {save.isError && <span className="text-xs text-destructive">{(save.error as Error).message}</span>}
-          {test.isSuccess && <span className="text-xs text-emerald-500">Test sent.</span>}
+          {test.isSuccess && <span className="text-xs text-emerald-500">已发送。</span>}
           {test.isError && <span className="text-xs text-destructive">{(test.error as Error).message}</span>}
         </div>
     </SettingsGroup>

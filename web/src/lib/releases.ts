@@ -41,8 +41,8 @@ export const RELEASES: Release[] = [
     date: "2026-10-06",
     changes: [
       fix(
-        "Adding Taskrr to an iPhone's home screen showing a screenshot instead of the mark",
-        "The home-screen icon was pointed at the SVG the browser tab uses, which iOS can't draw, and the file describing what to install was served as plain text. Both are fixed, so adding Taskrr to a home screen gives you the mark and the name rather than a picture of whatever page you were on.",
+        "iOS 主屏图标显示错误",
+        "主屏图标此前指向浏览器标签页使用的 SVG（iOS 无法绘制），安装清单文件也被当作纯文本返回。均已修复，添加到主屏后可正常显示图标和名称。",
       ),
     ],
   },
@@ -51,16 +51,16 @@ export const RELEASES: Release[] = [
     date: "2026-08-25",
     changes: [
       fix(
-        "The window tab strip ignoring which layout you were in",
-        "It always started 15rem in, as though the full sidebar were there — leaving a gap beside the icon rail, and a bigger one under the top bar, where there is no column at all. It now starts where the page does, including when the sidebar is folded away.",
+        "窗口标签栏未适配布局",
+        "标签栏此前固定缩进 15rem（按完整侧栏计算），在图标栏布局下留有空隙，顶栏布局下空隙更大。现在从页面实际起点开始，收起侧栏时同样正确。",
       ),
       fix(
-        "The changelog opening underneath the windows",
-        "It blocked everything behind it, as a dialog should, while sitting below any window opened after the first — so the thing you had just opened was buried and nothing else would respond.",
+        "更新日志被窗口遮挡",
+        "对话框本应遮挡背后内容，却位于其后打开的窗口之下，导致刚打开的内容被埋住、界面无响应。已修复。",
       ),
       fix(
-        "Signing out flashing the stock look",
-        "The sign-in screen appeared in the built-in colours and name for a moment before redrawing as this instance. Its own look is the server's, not the account's, so it no longer goes away with the account.",
+        "退出登录时闪现默认外观",
+        "登录页此前会先以内置配色和名称短暂显示，再重绘为实例外观。登录页外观属于服务器而非账户，不再随账户一起消失。",
       ),
     ],
   },
@@ -69,24 +69,24 @@ export const RELEASES: Release[] = [
     date: "2026-08-25",
     changes: [
       feat(
-        "Invitation links for new accounts",
-        "Adding someone without a password now gives you a link to send them. Opening it lets them choose their own password and signs them in. A link works once and lasts a week; there is a button beside each account to issue a new one when it runs out or never arrives. On a brand-new instance with no admin password preset, the server prints its own setup link in the log.",
+        "新账户邀请链接",
+        "添加无密码用户后会生成一个链接，对方打开即可自设密码并登录。链接一次性有效、为期一周，每个账户旁有按钮可重新签发。全新实例未预设管理员密码时，服务器会在日志中打印设置链接。",
       ),
       fix(
-        "An account waiting to be set up could be claimed by anyone who knew the username",
-        "Usernames are meant to be known - they appear on shared tasks and in folder members - so knowing one was enough to set the password on an account whose owner had not signed in yet. Setting that first password now takes the invitation link.",
+        "待设置账户可被冒领",
+        "用户名本是公开的（显示在共享任务和文件夹成员中），此前仅凭用户名就能给从未登录的账户设置密码。现在首次设置密码需要邀请链接。",
       ),
       fix(
-        "Reverse-proxy headers believed no matter who sent them",
-        "The client IP is read from X-Forwarded-For and CF-Connecting-IP, which anyone can write. It is now trusted only when the connection came from where a proxy actually runs, so an instance published straight to the internet can no longer be fed an invented address to slip past the sign-in rate limit. Behind a proxy nothing changes.",
+        "反代请求头被无条件信任",
+        "客户端 IP 此前无条件读取 X-Forwarded-For 和 CF-Connecting-IP，而任何人都能伪造。现在仅当连接来自代理实际所在位置时才信任，直连暴露的实例无法再靠伪造地址绕过登录限流。使用代理时无变化。",
       ),
       feat(
-        "Reminder webhooks can be kept off your local network",
-        "They can reach your LAN by default, since a local ntfy or Home Assistant is the usual reason to set one up. On an instance where you don't know everyone with an account, TASKRR_WEBHOOK_ALLOW_PRIVATE=false restricts them to the public internet.",
+        "提醒 Webhook 可禁止访问内网",
+        "默认允许访问局域网（本地 ntfy 或 Home Assistant 是常见用途）。若实例用户并非全部可信，可设置 TASKRR_WEBHOOK_ALLOW_PRIVATE=false 将其限制为仅公网。",
       ),
       feat(
-        "Downloadable builds for every release",
-        "Each release now has binaries for Linux, macOS and Windows with checksums, alongside the container image. One file, the web interface included, nothing to install beside it.",
+        "每个版本提供可下载构建",
+        "除容器镜像外，每个版本还提供 Linux、macOS 和 Windows 的可执行文件及校验和。单个文件即含 Web 界面，无需额外安装。",
       ),
     ],
   },
@@ -95,20 +95,20 @@ export const RELEASES: Release[] = [
     date: "2026-08-25",
     changes: [
       fix(
-        "Settings scrolling as one sheet",
-        "The section scrolls on its own now; the list of sections and the rule beside it stay where they are. Scrolling a long page used to carry the way out of it off the top of the window.",
+        "设置页整页滚动",
+        "现在仅内容区自行滚动，分组列表和分隔线保持固定。此前长页面滚动会把退出入口卷出窗口顶部。",
       ),
       fix(
-        "The top bar's tabs sitting out of line with the page",
-        "The name beside the mark pushed the whole row inward, away from the heading and search box directly beneath it. The mark alone stays, at the same margin as everything else, and takes you to All tasks.",
+        "顶栏标签与页面未对齐",
+        "图标旁的应用名使整行内缩，与正下方的标题和搜索框不对齐。现在只保留图标，边距与其他元素一致，点击可前往“全部任务”。",
       ),
       fix(
-        "Mode and Style not sliding like every other choice",
-        "Both were built before the shared control existed and never caught up. They use it now, so the filled pill glides the way it does everywhere else.",
+        "模式与风格切换动画不一致",
+        "两者早于通用控件实现，一直未跟进。现在改用通用控件，滑块动画与其他设置一致。",
       ),
       fix(
-        "A setting snapping back when changed right after signing in",
-        "Your account's saved preferences arriving a moment later would overwrite the choice you had just made. The change you made wins, and is what gets saved.",
+        "登录后立即修改设置被还原",
+        "此前账户保存的偏好稍晚到达时会覆盖刚做出的修改。现在以你的修改为准并保存。",
       ),
     ],
   },
@@ -117,16 +117,16 @@ export const RELEASES: Release[] = [
     date: "2026-08-25",
     changes: [
       fix(
-        "A background surviving a restore that predates it",
-        "Restoring an older backup left the picture on screen, with the settings saying it was on while the list of images was empty. Preferences the restored account has never heard of now go back to their defaults instead of lingering from the browser, a pick that points at a missing image falls back on its own, and images are revalidated rather than cached for a week under an id a restore can hand to a different picture.",
+        "还原旧备份后背景残留",
+        "还原较早的备份后壁纸残留：设置显示开启但图片列表为空。现在恢复数据中不存在的偏好会回到默认值，指向已缺失图片的选择会自动回退，图片改为重新校验而非按 id 缓存一周。",
       ),
       fix(
-        "The sign-in card keeping round corners on a phone under the flat style",
-        "The rule that squares everything off read the card's `sm:rounded-none` as if the card were already square, and skipped it — so it stayed round at the width where that variant doesn't apply.",
+        "扁平风格下手机登录卡仍为圆角",
+        "直角化规则误判卡片已为直角而跳过处理，导致在 `sm:rounded-none` 不生效的窄屏宽度下卡片仍是圆角。已修复。",
       ),
       fix(
-        "Nowhere to find the version in the rail and top-bar layouts",
-        "It sits at the foot of the settings window in the layouts without a sidebar footer, and still opens the changelog.",
+        "图标栏和顶栏布局找不到版本号",
+        "在无侧栏页脚的布局中，版本号位于设置窗口底部，点击仍可打开更新日志。",
       ),
     ],
   },
@@ -135,20 +135,20 @@ export const RELEASES: Release[] = [
     date: "2026-08-25",
     changes: [
       feat(
-        "Alternative layouts",
-        "Experimental: keep the sidebar, narrow it to a column of icons, or drop it for a row of tabs across the top with the content full width. All three work on a phone as well. Set your own under Theme \u2192 Layout, or set the instance's under Admin \u2192 Branding.",
+        "多种界面布局",
+        "实验性：保留侧栏、收窄为图标栏，或改为顶部标签行加全宽内容，手机上同样适用。个人设置在“主题 → 布局”，实例设置在“管理 → 品牌”。",
       ),
       feat(
-        "The instance can set its own style and layout",
-        "Under Branding, alongside the name and the icon. It applies to the sign-in page and to anyone who hasn't picked for themselves, so an instance looks like itself from the login screen onwards.",
+        "实例可设置默认风格与布局",
+        "在“品牌”中设置，与名称和图标并列。作用于登录页及未自行选择的用户，实例从登录页起就保持统一外观。",
       ),
       feat(
-        "Background upload limits are yours to set",
-        "Per image and per account, under Admin \u2192 Advanced \u2014 what counts as too big depends on the box it's running on. SVG can be allowed there too; it stays off by default and is served sandboxed when on.",
+        "背景上传限制可自定义",
+        "在“管理 → 高级”中设置单张图片与单账户限额，多大算过大取决于运行环境。也可允许 SVG：默认关闭，开启后以沙箱方式提供。",
       ),
       fix(
-        "The flat style missing dialogs, menus and the sign-in page",
-        "It squared off what it could see and left the rest: dialogs kept rounded corners because their radius only applies above a screen width, and the sign-in page had no way to know the instance was flat at all. Both follow now, and the whole interface was swept for anything still round or shadowed.",
+        "扁平风格未覆盖对话框和登录页",
+        "对话框因圆角仅在特定屏宽以上生效而保持圆角，登录页则完全无法感知实例的扁平风格。现在均已跟进，并全面清理了残留的圆角与阴影。",
       ),
     ],
   },
@@ -157,20 +157,20 @@ export const RELEASES: Release[] = [
     date: "2026-08-25",
     changes: [
       feat(
-        "A picture behind the app",
-        "Upload your own wallpaper under Theme \u2192 Background image, pick how it fills the screen, and dim it until the text on top is comfortable. Admins can set one for the whole instance \u2014 it shows on the login page too \u2014 and can turn the per-user side off entirely.",
+        "应用背景图",
+        "在“主题 → 背景图片”上传壁纸，可设置填充方式和调暗程度。管理员可为整个实例设置（登录页同样生效），也可完全关闭用户自定义。",
       ),
       feat(
-        "Flat interface styles",
-        "Experimental, behind TASKRR_EXPERIMENTAL=true: squared-off corners, no shadows, no frosted glass, with two plain presets to go with it. It restyles every element in the app, which is why it takes a deliberate switch rather than arriving with an update.",
+        "扁平界面风格",
+        "实验性，需设置 TASKRR_EXPERIMENTAL=true：直角、无阴影、无毛玻璃，另附两个朴素预设。因会重塑应用全部元素，需手动开启而不会随更新自动启用。",
       ),
       feat(
-        "Fold the sidebar away",
-        "A collapse button in the sidebar, and the menu button in the header brings it back \u2014 worth about another column of tasks on a wide screen.",
+        "侧栏可收起",
+        "侧栏新增收起按钮，顶栏菜单按钮可恢复，宽屏下约多出一列任务的空间。",
       ),
       fix(
-        "Auto columns ignoring the room they actually had",
-        "The column count stepped at screen widths, so hiding the calendar gave the list more space without a fourth column ever appearing. It now fits as many as the space in front of it will take, and you can pick up to six by hand.",
+        "自动列数未利用实际空间",
+        "列数此前按屏幕宽度分档，隐藏日历后列表空间变大却不出现第四列。现在按实际空间自适应，也可手动最多选六列。",
       ),
     ],
   },
@@ -179,24 +179,24 @@ export const RELEASES: Release[] = [
     date: "2026-08-23",
     changes: [
       feat(
-        "Revoke every API token at once",
-        "If you think a token has leaked and don't know which one it is, there's now one button for all of them under Account \u2192 API tokens.",
+        "一键吊销全部 API 令牌",
+        "若怀疑令牌泄露但不确定是哪个，可在“账户 → API 令牌”一键吊销全部。",
       ),
       feat(
-        "Take a share back",
-        "The owner of a shared task can remove someone from it, the same way folder sharing already worked. Sending an invite to the wrong username used to be the recipient's to decline.",
+        "可收回共享任务",
+        "共享任务所有者可将成员移出，与文件夹共享一致。此前误邀他人只能等对方自行拒绝。",
       ),
       fix(
-        "Changing a password leaving API tokens working",
-        "Changing your password signs out your other devices and now revokes your tokens with them, and an admin terminating an account's sessions does the same.",
+        "改密码后 API 令牌仍有效",
+        "修改密码现已同步吊销 API 令牌，管理员终止账户会话时同样处理。",
       ),
       fix(
-        "Exports opening as formulas in a spreadsheet",
-        "A task name starting with =, + or @ was handed to Excel or LibreOffice as something to run. Cells that start that way are quoted in the CSV now, which matters most for a name someone else chose on a task shared with you.",
+        "导出的表格被当作公式",
+        "以 =、+ 或 @ 开头的任务名此前会被 Excel 或 LibreOffice 当作公式执行。现在 CSV 中此类单元格已加引号保护。",
       ),
       fix(
-        "Two API details that didn't match the rest",
-        "Removing someone from a shared folder is DELETE /api/folders/{folder}/members/{userId} rather than a DELETE carrying a body, and asking for the members of a folder you don't have answers 404 instead of an empty list.",
+        "两处 API 行为不一致",
+        "移除共享文件夹成员改为 DELETE /api/folders/{folder}/members/{userId}（不再用带 body 的 DELETE）；查询无权文件夹的成员返回 404 而非空列表。",
       ),
     ],
   },
@@ -205,12 +205,12 @@ export const RELEASES: Release[] = [
     date: "2026-08-23",
     changes: [
       fix(
-        "The sidebar scrolling as one piece",
-        "With a lot of folders the name, the New task button and the account and Settings row all scrolled away with the list. Only the views and folders scroll now; everything above and below stays put.",
+        "侧栏整体滚动",
+        "文件夹较多时，应用名、“新建任务”按钮和账户行会随列表滚走。现在仅视图和文件夹区域滚动，其余固定。",
       ),
       fix(
-        "The folder list being easy to miss",
-        "Folders sat directly under the views in the sidebar and looked like more of them. They now have a heading and a line above them, and a clear link while one is filtering the list.",
+        "文件夹列表易被忽略",
+        "文件夹此前紧贴视图列表，易被当作视图的一部分。现在上方有标题和分隔线，筛选时还会显示清除链接。",
       ),
     ],
   },
@@ -219,23 +219,23 @@ export const RELEASES: Release[] = [
     date: "2026-08-23",
     changes: [
       feat(
-        "Task templates",
-        "Right-click a task and save its setup as a template, then start a new task from it. Handy for the things you add regularly \u2014 a new houseplant, a new bike \u2014 where there's nothing to duplicate from yet.",
+        "任务模板",
+        "右键任务可将其设置保存为模板，再从模板新建任务。适合经常添加的事项（如新植物、新自行车）这类尚无可复制对象的情况。",
       ),
       feat(
-        "Filter by folder",
-        "Folders are listed in the sidebar with a count each. Picking one narrows whichever view you're in, the same way clicking a tag does.",
+        "按文件夹筛选",
+        "文件夹在侧栏列出并显示数量，点击即可在当前视图中筛选，与点击标签一致。",
       ),
       feat(
-        "Set a routine on several tasks at once",
-        "The bulk bar can now set or clear a routine across a selection, alongside tagging and moving.",
+        "批量设置循环",
+        "批量操作栏现可对选中任务统一设置或清除循环，与打标签、移动并列。",
       ),
       fix(
-        "Windows that could be squeezed until the contents broke",
-        "Panels inside a window now lay themselves out against the window's width rather than the screen's, so a narrow window gets the stacked layout instead of a side nav crushing the text into single-word lines.",
+        "窗口过窄时内容排版损坏",
+        "窗口内面板现按窗口宽度而非屏幕宽度布局，窄窗口会切换为堆叠布局，不再出现侧边导航把文字挤成单词断行的情况。",
       ),
       fix(
-        "Dragging a window selecting the page text behind it",
+        "拖动窗口误选背后文字",
       ),
     ],
   },
@@ -244,20 +244,20 @@ export const RELEASES: Release[] = [
     date: "2026-08-23",
     changes: [
       feat(
-        "A colour per tag",
-        "Give the tags you use most their own colour under Preferences \u2192 Tag colours. Anything you don't colour keeps the plain chip.",
+        "标签自定义颜色",
+        "在“偏好设置 → 标签颜色”中为常用标签设置专属颜色，未设置的仍使用默认样式。",
       ),
       feat(
-        "Panels instead of windows",
-        "Turn off draggable windows and settings become plain full-screen menus with a title and a close button \u2014 no taskbar, no minimising. Phones always get this now.",
+        "面板模式替代窗口",
+        "关闭可拖动窗口后，设置变为带标题和关闭按钮的全屏菜单，无任务栏、无最小化。手机端始终使用此模式。",
       ),
       fix(
-        "The login page layout always showing \"Centred card\"",
-        "The setting saved correctly but the dropdown reset itself every time the admin page opened, so it looked like it hadn't stuck.",
+        "登录页布局总显示“居中卡片”",
+        "设置实际已保存，但每次打开管理页时下拉框会自行重置，看起来像未生效。",
       ),
       fix(
-        "Registration and single sign-on hidden behind a drawer",
-        "They're the first thing you set up, so they now sit open on the admin page like the rest of the first-run settings.",
+        "注册与单点登录被折叠隐藏",
+        "这两项是最先要设置的，现在与其他初始设置一样在管理页中默认展开。",
       ),
     ],
   },
@@ -266,24 +266,24 @@ export const RELEASES: Release[] = [
     date: "2026-08-23",
     changes: [
       feat(
-        "Change the keyboard shortcuts",
-        "A Shortcuts page in Settings, where you press the key you'd rather use. It won't let you take a key something else already has, and the number keys stay with the sidebar views. Only appears when shortcuts are switched on.",
+        "自定义键盘快捷键",
+        "设置中新增“快捷键”页，按下想要的按键即可。已被占用的按键不可选，数字键保留给侧栏视图。仅在开启快捷键后显示。",
       ),
       feat(
-        "Two more login page layouts",
-        "As well as the centred card, the sign-in form can sit in a panel down the left or right, with the background filling the rest. Under Admin \u2192 Branding.",
+        "新增两种登录页布局",
+        "除居中卡片外，登录表单还可靠左或靠右侧面板显示，其余空间由背景填充。设置位于“管理 → 品牌”。",
       ),
       feat(
-        "Lite mode hides more",
-        "With lite mode on there is nobody to share with, so task sharing, theme sharing, the site default theme, other accounts and account merging all go rather than sitting there doing nothing.",
+        "精简模式隐藏更多",
+        "精简模式下无共享对象，任务共享、主题共享、站点默认主题、其他账户及账户合并等均直接隐藏。",
       ),
       fix(
-        "Settings that were a wall of closed drawers",
-        "Time & date and Sign-in are out in the open again \u2014 they're the ones you'd open every time anyway.",
+        "设置页折叠项过多",
+        "“时间与日期”和“登录”恢复默认展开——它们本就是每次都要打开的分组。",
       ),
       fix(
-        "Leftover lines in the admin settings",
-        "Hiding a section left its separator behind, so lite mode and a quiet instance both ended up with stray rules. The admin page now uses the same groups as the rest of Settings and has none.",
+        "管理设置残留分隔线",
+        "隐藏分组后分隔线残留，精简模式等场景下会出现多余线条。管理页现改用与设置一致的分组，不再有此问题。",
       ),
     ],
   },
@@ -292,8 +292,8 @@ export const RELEASES: Release[] = [
     date: "2026-08-23",
     changes: [
       feat(
-        "Settings, tidied up",
-        "All three settings pages are now short lists of groups you open rather than one long scroll of switches. Nothing has gone \u2014 Task statistics is under Layout, the right-click, keyboard and quick-add switches are under Shortcuts & input, and whichever group you leave open stays open next time.",
+        "设置页重新整理",
+        "三个设置页改为简短的分组列表，不再是一长串开关。功能未减少：任务统计在“布局”下，右键、键盘、快速添加开关在“快捷键与输入”下，展开的分组会被记住。",
       ),
     ],
   },
@@ -302,40 +302,40 @@ export const RELEASES: Release[] = [
     date: "2026-08-23",
     changes: [
       feat(
-        "Undo a log you didn't mean",
-        "Quick log is one tap, and the wrong tap is easy. The confirmation now has an Undo on it, which puts the task back exactly as it was \u2014 no trip through Manage \u2192 History.",
+        "误打卡可撤销",
+        "快速打卡一键即成，也容易点错。确认提示现带“撤销”按钮，可将任务恢复原状，无需去“管理 → 历史”处理。",
       ),
       feat(
-        "Right-click in the calendar too",
-        "Click a day and the tasks listed under it get the same menu the cards have.",
+        "日历支持右键菜单",
+        "点击某一天，其下任务即可使用与任务卡片相同的右键菜单。",
       ),
       feat(
-        "A Today button on the calendar",
-        "Getting back from a wander through last spring used to mean pressing the arrow as many times as it took.",
+        "日历新增“今天”按钮",
+        "此前从几个月前翻回今天需连按箭头多次，现在一键直达。",
       ),
       feat(
-        "Snooze and skip a whole selection",
-        "Both are in the bulk bar now. Skip only touches the tasks that actually have a routine, so a mixed selection does the sensible thing.",
+        "批量延后与跳过",
+        "两者均已加入批量操作栏。跳过仅作用于设有循环的任务，混合选择时行为合理。",
       ),
       feat(
-        "Bring your tasks from another tracker",
-        "Import a CSV and say which column is the name, which is the cadence, and so on. Taskrr guesses from the headers first, and shows you what each row will become before anything is imported.",
+        "从其他工具导入任务",
+        "导入 CSV 并指定名称、频率等对应列。Taskrr 会先根据表头猜测，并在导入前预览每行的结果。",
       ),
       feat(
-        "The demo has seasons",
-        "The sample list now matches the time of year, and you can switch between spring, summer, autumn and winter from the banner.",
+        "演示数据随季节变化",
+        "示例列表与当前季节匹配，可从横幅切换春夏秋冬。",
       ),
       fix(
-        "The right-click menu flying in from off-screen",
-        "It was being drawn off-screen first and then animated into place. It now opens where you clicked.",
+        "右键菜单从屏幕外飞入",
+        "菜单此前先绘制在屏幕外再动画移入，现在直接在点击处打开。",
       ),
       fix(
-        "The right-click menu hanging off the bottom",
-        "Near the bottom of the screen it worked out where to go while it was still mid-animation, and got the size wrong by 5%.",
+        "右键菜单底部越界",
+        "靠近屏幕底部时，菜单位置计算发生在动画中途，尺寸偏差 5%。已修复。",
       ),
       fix(
-        "Accent colours that were hard to read",
-        "Where your accent colour is used as *text* \u2014 the selected sidebar item, mostly \u2014 it now gets nudged until it's properly readable. Blocks of the colour are untouched, so what you picked is still what you see.",
+        "强调色文字难以辨认",
+        "强调色用作文字时（主要是选中的侧栏项）会自动微调至清晰可读；色块保持原样，所选即所见。",
       ),
     ],
   },
@@ -344,44 +344,44 @@ export const RELEASES: Release[] = [
     date: "2026-08-23",
     changes: [
       feat(
-        "Right-click a task",
-        "Right-click (or long-press on a phone) any task for its actions \u2014 log, snooze, skip, pin, duplicate, archive, delete. Prefer your browser's own menu? Turn it off under Preferences \u2192 Right-click menu.",
+        "任务右键菜单",
+        "右键（手机长按）任务即可执行打卡、延后、跳过、置顶、复制、归档、删除。偏好浏览器原生菜单可在“偏好设置 → 右键菜单”关闭。",
       ),
       feat(
-        "Snooze and skip",
-        "Put a task off for an hour, a day, or a date you pick, and it stops counting as due (and stops sending reminders) until then. \"Skip this cycle\" moves the next due date on by one routine \u2014 without recording that you did it.",
+        "延后与跳过",
+        "可将任务延后一小时、一天或自选日期，期间不计为到期、不发提醒。“跳过本轮”将下次到期日顺延一个循环，且不记为已完成。",
       ),
       feat(
-        "Share a whole folder",
-        "Share a folder once instead of a task at a time. Anything you add to it later is included automatically, and moving a task out takes it back.",
+        "共享整个文件夹",
+        "一次共享整个文件夹，无需逐个任务。后续新增任务自动纳入，移出任务即收回共享。",
       ),
       feat(
-        "Whose turn is it",
-        "Turn on \"Take turns\" for a shared task and each card says who's up next, moving along every time someone logs it.",
+        "轮值打卡",
+        "共享任务开启“轮值”后，卡片会显示下一位负责人，每次打卡后依次轮换。",
       ),
       feat(
-        "Restore from a backup file",
-        "Import a JSON export back into your account, either alongside what's there or replacing it. The other half of the export added in 1.15.",
+        "从备份文件恢复",
+        "可将 JSON 导出文件恢复到账户，支持合并或替换。这是 1.15 导出功能的另一半。",
       ),
       feat(
-        "Pin and duplicate",
-        "Keep a task at the top of the list whatever the sort, and copy a task's setup \u2014 without copying its history.",
+        "置顶与复制",
+        "任务可固定在列表顶部（不受排序影响），也可复制任务设置但不复制历史。",
       ),
       feat(
-        "Quick add",
-        "Type \"water plants every 2 weeks #home\" and Taskrr offers to fill in the routine, tags and folder. It only ever offers; one click accepts.",
+        "快速添加",
+        "输入 \"water plants every 2 weeks #home\"，Taskrr 会识别其中的循环、标签和文件夹并主动建议，一键即采纳。",
       ),
       feat(
-        "Reminders per task",
-        "A task can now have its own lead time \u2014 a day before the NAS backup, an hour before the bins \u2014 instead of one setting for everything.",
+        "任务级提前提醒",
+        "每个任务可单独设置提前提醒时间——NAS 备份提前一天、倒垃圾提前一小时——不再全局共用一个设置。",
       ),
       feat(
-        "Add to your home screen",
-        "Taskrr can now be installed to a phone's home screen. There's an optional count of what's due in the browser tab, too.",
+        "添加到主屏幕",
+        "Taskrr 现可安装到手机主屏幕，浏览器标签页还可选显示到期数量。",
       ),
       fix(
-        "Setting a routine from outside the form",
-        "The routine field ignored a value set for it by anything other than typing, which is why quick add's suggestion left the routine switched off.",
+        "表单外设置循环失效",
+        "循环字段此前会忽略非手动输入的值，导致快速添加的建议未开启循环。已修复。",
       ),
     ],
   },
@@ -390,40 +390,40 @@ export const RELEASES: Release[] = [
     date: "2026-08-22",
     changes: [
       feat(
-        "Task statistics",
-        "A task's Manage window now shows how it actually goes: the typical gap between times you did it, the longest gap, and how that compares to its routine. Turn it off under Preferences \u2192 Task statistics.",
+        "任务统计",
+        "任务的“管理”窗口现显示实际执行情况：通常的打卡间隔、最长间隔及与循环的对比。可在“偏好设置 → 任务统计”关闭。",
       ),
       feat(
-        "Activity chart range",
-        "Switch the chart between 7 days, 30 days, 90 days and a year. A year groups into weeks so it stays readable.",
+        "活动图表时间范围",
+        "图表可切换 7 天、30 天、90 天和一年，一年视图按周聚合以保持可读。",
       ),
       feat(
-        "Keyboard shortcuts",
-        "Press ? for the list. n for a new task, / to search, 1-9 to switch views, Esc to clear. Turn them off under Preferences \u2192 Keyboard shortcuts.",
+        "键盘快捷键",
+        "按 ? 查看列表：n 新建任务、/ 搜索、1-9 切换视图、Esc 清除。可在“偏好设置 → 键盘快捷键”关闭。",
       ),
       feat(
-        "Bulk tags and folders",
-        "Select several tasks and add a tag or move them to a folder in one go. Tagging adds to what each task already has rather than replacing it.",
+        "批量打标签与移动",
+        "多选任务后可一次性添加标签或移入文件夹。打标签是追加而非覆盖。",
       ),
       feat(
-        "Log onto a past day",
-        "Click any past day in the calendar to record something you did then, without opening the task first.",
+        "补记往日打卡",
+        "点击日历上任意过去日期即可记录当天完成的事，无需先打开任务。",
       ),
       feat(
-        "Export your data",
-        "Download every task and its full history as JSON or CSV, from Settings \u2192 Account.",
+        "导出数据",
+        "在“设置 → 账户”中以 JSON 或 CSV 导出全部任务及完整历史。",
       ),
       feat(
-        "API tokens",
-        "Log a task from a script, an NFC tag, or your home automation. A token reaches your tasks and history only \u2014 never the admin area or your password. Admins can switch the feature off instance-wide.",
+        "API 令牌",
+        "可通过脚本、NFC 标签或家庭自动化打卡。令牌仅能访问任务和历史，不能碰管理区或密码。管理员可全实例关闭此功能。",
       ),
       feat(
-        "Background effects",
-        "Constellations and drifting dots are now in the background picker. Constellations shipped with the midnight preset but could never be chosen \u2014 and picking anything else lost it for good.",
+        "背景特效",
+        "背景选择器新增“星座”和“漂浮圆点”。星座此前随午夜预设附带却无法选中，且改选其他后便永久丢失。",
       ),
       fix(
-        "Light theme readability",
-        "Secondary text, task status labels and overdue dates were too faint on light themes to meet the usual contrast standard. They now stay readable while keeping their colour.",
+        "浅色主题可读性",
+        "浅色主题下次要文字、任务状态标签和逾期日期过淡，不达对比度标准。现已调整至清晰可读且保留原配色。",
       ),
     ],
   },
@@ -432,12 +432,12 @@ export const RELEASES: Release[] = [
     date: "2026-06-16",
     changes: [
       fix(
-        "Background pausing",
-        "With smooth scrolling and pause-on-scroll both on, the animated background no longer flickers off and on at the end of a scroll. It now stays paused for the whole smooth scroll and resumes once.",
+        "背景暂停逻辑",
+        "同时开启平滑滚动和滚动暂停后，滚动结束处动画背景不再反复闪烁。现在整个平滑滚动期间保持暂停，结束后恢复一次。",
       ),
       fix(
-        "Settings divider",
-        "The divider line in the settings window now runs the full height instead of stopping where the section's content ends.",
+        "设置分隔线",
+        "设置窗口的分隔线现贯穿整个高度，不再在分组内容结束处截断。",
       ),
     ],
   },
@@ -446,16 +446,16 @@ export const RELEASES: Release[] = [
     date: "2026-06-16",
     changes: [
       feat(
-        "In-app dialogs",
-        "Confirmations and prompts now use themed in-app dialogs instead of the browser's pop-ups. Prefer the native ones? Turn on \"Use browser dialogs\" in Preferences.",
+        "应用内对话框",
+        "确认和提示改用应用内主题对话框，替代浏览器弹窗。偏好原生弹窗可在“偏好设置”中开启“使用浏览器对话框”。",
       ),
       fix(
-        "Sidebar height",
-        "On shorter desktop layouts the sidebar now stays put and fills the viewport instead of scrolling away with the page.",
+        "侧栏高度",
+        "较矮的桌面布局下，侧栏现在固定并占满视口，不再随页面滚走。",
       ),
       fix(
-        "Smooth scrolling",
-        "The end of a smooth scroll no longer flickers the animated background off and on when it pauses on scroll.",
+        "平滑滚动",
+        "开启滚动暂停时，平滑滚动结束处不再造成动画背景闪烁。",
       ),
     ],
   },
@@ -464,8 +464,8 @@ export const RELEASES: Release[] = [
     date: "2026-06-16",
     changes: [
       feat(
-        "Project links",
-        "The changelog now links to the project's GitHub repository and a Ko-fi page for supporting development.",
+        "项目链接",
+        "更新日志现包含项目 GitHub 仓库和支持开发的 Ko-fi 页面链接。",
       ),
     ],
   },
@@ -474,12 +474,12 @@ export const RELEASES: Release[] = [
     date: "2026-06-15",
     changes: [
       fix(
-        "Changelog scrolling",
-        "Dragging the scrollbar in the changelog no longer fights an in-progress smooth-scroll and snaps back.",
+        "更新日志滚动",
+        "拖动更新日志的滚动条不再与进行中的平滑滚动冲突回弹。",
       ),
       fix(
-        "Version label",
-        "Removed the static change-count badge next to the version, which never changed or cleared.",
+        "版本标签",
+        "移除了版本号旁从不更新的静态变更数徽标。",
       ),
     ],
   },
@@ -488,12 +488,12 @@ export const RELEASES: Release[] = [
     date: "2026-06-15",
     changes: [
       feat(
-        "Reminders for shared tasks",
-        "Members of a shared task now get their own due reminders (if they've set a webhook), not just the owner — each reminded independently.",
+        "共享任务成员提醒",
+        "共享任务的成员（若设置了 webhook）现在也会各自独立收到到期提醒，不再只有所有者。",
       ),
       fix(
-        "Shared badge",
-        "A task is marked shared only once an invite is accepted; a pending invite alone no longer badges it.",
+        "共享标记",
+        "仅当邀请被接受后任务才标记为共享，待处理邀请不再触发标记。",
       ),
     ],
   },
@@ -502,34 +502,34 @@ export const RELEASES: Release[] = [
     date: "2026-06-15",
     changes: [
       feat(
-        "Shared tasks",
-        "Share a task with another user so you both see and log it, with who-logged-last tracked. Owners invite by username; members can leave. Admins enable it under Admin settings.",
+        "共享任务",
+        "可与其他用户共享任务，双方均可见、可打卡，并记录最近打卡人。所有者按用户名邀请，成员可退出。管理员在管理设置中启用。",
       ),
       feat(
-        "Requests and opt-out",
-        "Incoming shares wait under a Requests view to accept or decline, and you can opt out of receiving shares in your account settings.",
+        "分享请求与拒收",
+        "收到的共享先在“分享请求”视图中等待接受或拒绝，也可在账户设置中拒收一切共享。",
       ),
       feat(
-        "Tags",
-        "Label a task with one or more tags, then click a tag chip (or use search) to filter the list. Manage tags in the task's dialog.",
+        "标签",
+        "可为任务添加一个或多个标签，点击标签（或搜索）即可筛选列表。标签在任务对话框中管理。",
       ),
-      feat("Search", "A search box filters tasks by name, description, or tag as you type."),
-      feat("Sorting", "Order the list by name, most or least recently done, or newest, from the toolbar."),
+      feat("搜索", "搜索框可按名称、描述或标签实时筛选任务。"),
+      feat("排序", "可从工具栏按名称、最近/最早完成或最新创建排序。"),
       feat(
-        "Folders",
-        "Give a task a folder, then turn on Group in the toolbar to collapse the list into a section per folder.",
-      ),
-      feat(
-        "In-app changelog",
-        "The version number in the sidebar opens this changelog and shows each release's date.",
+        "文件夹",
+        "为任务指定文件夹后，可在工具栏开启“分组”将列表按文件夹折叠分区。",
       ),
       feat(
-        "What's new on update",
-        "After an update you get a one-off summary of everything that changed since you last opened the app.",
+        "应用内更新日志",
+        "点击侧栏版本号可打开此更新日志，并显示每个版本的发布日期。",
       ),
       feat(
-        "Update check",
-        "Admins can check whether a newer version has been released. It only reports what's available and never updates the app itself.",
+        "更新摘要弹窗",
+        "更新后会一次性展示自上次打开应用以来的全部变更。",
+      ),
+      feat(
+        "检查更新",
+        "管理员可检查是否有新版本发布。仅报告可用版本，绝不自动更新应用。",
       ),
     ],
   },
@@ -538,8 +538,8 @@ export const RELEASES: Release[] = [
     date: "2026-06-14",
     changes: [
       feat(
-        "Instance branding",
-        "Admins can set the app's name, browser-tab title, tagline, and icon under Admin settings.",
+        "实例品牌定制",
+        "管理员可在管理设置中配置应用名称、浏览器标签标题、标语和图标。",
       ),
     ],
   },
@@ -547,15 +547,15 @@ export const RELEASES: Release[] = [
     version: "1.9.0",
     date: "2026-06-14",
     changes: [
-      feat("Toasts", "Brief confirmations appear for common actions; turn them off in your preferences."),
+      feat("轻提示", "常见操作会显示简短确认提示，可在偏好设置中关闭。"),
     ],
   },
   {
     version: "1.8.0",
     date: "2026-06-14",
     changes: [
-      feat("Calendar month/year picker", "Jump the calendar to any month or year from its header."),
-      feat("User theme sharing", "Admins can let regular users publish their saved themes to everyone, not just admins."),
+      feat("日历年月选择", "可从日历头部快速跳转到任意月份或年份。"),
+      feat("用户主题共享", "管理员可允许普通用户（而不只是管理员）将保存的主题发布给所有人。"),
     ],
   },
   {
@@ -563,13 +563,13 @@ export const RELEASES: Release[] = [
     date: "2026-06-13",
     changes: [
       feat(
-        "Custom date picker",
-        "A built-in date and time picker, with its own preferences, used when logging or editing completions.",
+        "自定义日期选择器",
+        "内置日期时间选择器（有独立偏好设置），用于打卡或编辑完成记录。",
       ),
-      feat("Pop-out logs", "Admins can pop the server log view out into its own window."),
+      feat("日志弹出窗口", "管理员可将服务器日志视图弹出到独立窗口。"),
       feat(
-        "Colour-fade toggle",
-        "Turn off a task's fade to overdue when you only care that it was done, not how long ago.",
+        "逾期渐变开关",
+        "若只关心是否完成、不在乎多久以前，可关闭任务逾期后的颜色渐变。",
       ),
     ],
   },
@@ -577,8 +577,8 @@ export const RELEASES: Release[] = [
     version: "1.6.0",
     date: "2026-06-13",
     changes: [
-      feat("Per-account themes", "Your theme follows your account across devices, and admins can force a default for everyone."),
-      fix("Theme kept on logout", "Signing out no longer discards your customised theme."),
+      feat("账户级主题", "主题随账户跨设备同步，管理员可为所有人强制默认主题。"),
+      fix("退出登录保留主题", "退出登录不再丢失自定义主题。"),
     ],
   },
   {
@@ -586,18 +586,18 @@ export const RELEASES: Release[] = [
     date: "2026-06-13",
     changes: [
       feat(
-        "Safety backups",
-        "A backup is taken automatically just before a restore, so a mistaken restore can be undone. Toggle it with TASKRR_SAFETY_BACKUP.",
+        "安全备份",
+        "恢复前自动备份，误恢复可撤销。可通过 TASKRR_SAFETY_BACKUP 开关。",
       ),
-      feat("Versioned images", "Container images are published per release, not just as latest."),
+      feat("版本化容器镜像", "容器镜像按版本发布，不再只有 latest。"),
     ],
   },
   {
     version: "1.4.0",
     date: "2026-06-12",
     changes: [
-      feat("OIDC-only sign-in", "Admins can require single sign-on and hide the password login."),
-      feat("Wipe everything", "A true reset that clears all data while keeping the acting admin signed in."),
+      feat("仅 OIDC 登录", "管理员可强制单点登录并隐藏密码登录。"),
+      feat("清空所有数据", "真正的重置：清除所有数据，当前操作的管理员保持登录。"),
     ],
   },
   {
@@ -605,24 +605,24 @@ export const RELEASES: Release[] = [
     date: "2026-06-12",
     changes: [
       feat(
-        "Encrypted OIDC secret",
-        "The OIDC client secret is encrypted at rest when TASKRR_SECRET_KEY is set, so it isn't stored or backed up in plaintext.",
+        "OIDC 密钥加密存储",
+        "设置 TASKRR_SECRET_KEY 后，OIDC 客户端密钥静态加密，不再明文存储或备份。",
       ),
-      feat("HSTS behind TLS", "The server sends HSTS when served over HTTPS through a trusted proxy."),
+      feat("TLS 下启用 HSTS", "经可信代理以 HTTPS 提供服务时，服务器发送 HSTS。"),
     ],
   },
   {
     version: "1.2.0",
     date: "2026-06-11",
-    changes: [feat("Follows your clock", "Time and date formatting follow your device's locale by default.")],
+    changes: [feat("跟随设备区域设置", "时间和日期格式默认跟随设备区域设置。")],
   },
   {
     version: "1.1.0",
     date: "2026-06-11",
     changes: [
       feat(
-        "Browser demo",
-        "A no-backend demo of the whole app that runs entirely in your browser, behind the public demo site.",
+        "浏览器演示",
+        "挂在公开演示站点后的完整应用演示，无后端、完全在浏览器中运行。",
       ),
     ],
   },
@@ -631,8 +631,8 @@ export const RELEASES: Release[] = [
     date: "2026-06-11",
     changes: [
       feat(
-        "First public release",
-        "Last-done tracking with routines, a calendar, multiple users, OIDC, backups, reminders, and a themeable UI.",
+        "首次公开发布",
+        "带循环的最近完成追踪、日历、多用户、OIDC、备份、提醒及可定制主题的界面。",
       ),
     ],
   },

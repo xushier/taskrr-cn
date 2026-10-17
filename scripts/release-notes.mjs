@@ -32,7 +32,7 @@ lines.push(
   "### Install",
   "",
   "```sh",
-  `docker pull ghcr.io/unmaykr-a/taskrr:${release.version}`,
+  `docker pull ghcr.io/xushier/taskrr-cn:${release.version}`,
   "```",
   "",
   "Or download the binary for your platform below — each one is the whole",

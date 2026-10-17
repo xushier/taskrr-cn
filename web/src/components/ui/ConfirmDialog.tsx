@@ -78,7 +78,7 @@ function toText(opts: BaseOptions): string {
 }
 
 function defaultTitle(kind: Kind): string {
-  return kind === "alert" ? "Notice" : kind === "prompt" ? "Enter a value" : "Are you sure?";
+  return kind === "alert" ? "提示" : kind === "prompt" ? "请输入" : "确定吗？";
 }
 
 let nextId = 1;
@@ -169,14 +169,14 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
             <DialogFooter>
               {active.kind !== "alert" && (
                 <Button variant="outline" onClick={onCancel}>
-                  {active.opts.cancelText ?? "Cancel"}
+                  {active.opts.cancelText ?? "取消"}
                 </Button>
               )}
               <Button
                 variant={active.opts.destructive ? "destructive" : "default"}
                 onClick={onConfirm}
               >
-                {active.opts.confirmText ?? (active.kind === "alert" ? "OK" : "Confirm")}
+                {active.opts.confirmText ?? (active.kind === "alert" ? "确定" : "确认")}
               </Button>
             </DialogFooter>
           </DialogContent>

@@ -124,12 +124,12 @@ export function AuthPage() {
   };
 
   const buttonLabel = submit.isPending
-    ? "Please wait…"
+    ? "请稍候…"
     : claiming
-      ? "Set password & sign in"
+      ? "设置密码并登录"
       : active === "register"
-        ? "Create account"
-        : "Sign in";
+        ? "创建账户"
+        : "登录";
 
   // Three layouts, all the same form.
   //
@@ -188,9 +188,9 @@ export function AuthPage() {
 
         {pending ? (
           <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/10 p-4 text-center text-sm">
-            <p className="font-medium text-foreground">Request received</p>
+            <p className="font-medium text-foreground">请求已提交</p>
             <p className="mt-1 text-xs text-muted-foreground">
-              Your account is awaiting admin approval. You'll be able to sign in once it's approved.
+              你的账户正在等待管理员批准，批准后即可登录。
             </p>
             <button
               type="button"
@@ -202,7 +202,7 @@ export function AuthPage() {
               }}
               className="mt-3 text-xs text-muted-foreground hover:text-foreground"
             >
-              ← Back to sign in
+              ← 返回登录
             </button>
           </div>
         ) : (
@@ -211,10 +211,9 @@ export function AuthPage() {
         <>
         {claiming ? (
           <div className="mb-4 rounded-lg border border-primary/40 bg-primary/10 p-3 text-xs text-muted-foreground">
-            <p className="font-medium text-foreground">Set your password</p>
+            <p className="font-medium text-foreground">设置你的密码</p>
             <p className="mt-0.5">
-              The account <span className="font-medium text-foreground">{username.trim()}</span> is
-              waiting for you. Choose a password (min 8 characters) to finish setting it up.
+              账户 <span className="font-medium text-foreground">{username.trim()}</span> 正在等你完成设置。请设置密码（至少 8 个字符）。
             </p>
           </div>
         ) : (
@@ -236,7 +235,7 @@ export function AuthPage() {
                     active === t ? "text-primary-foreground" : "text-muted-foreground hover:text-foreground",
                   )}
                 >
-                  {t}
+                  {t === "login" ? "登录" : "注册"}
                 </button>
               ))}
             </div>
@@ -246,9 +245,9 @@ export function AuthPage() {
         {/* Followed a link that has been used, has lapsed, or was mistyped. */}
         {invite.isError && !claiming && (
           <div className="mb-4 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-xs text-muted-foreground">
-            <p className="font-medium text-foreground">That invitation isn't valid any more</p>
+            <p className="font-medium text-foreground">该邀请链接已失效</p>
             <p className="mt-0.5">
-              It may have been used already or run out. Ask an admin for a new link.
+              链接可能已被使用或已过期。请向管理员申请新链接。
             </p>
           </div>
         )}
@@ -259,11 +258,10 @@ export function AuthPage() {
         {needsInvite && (
           <div className="mb-4 rounded-lg border border-primary/40 bg-primary/10 p-3 text-xs text-muted-foreground">
             <p className="font-medium text-foreground">
-              {needsInvite} hasn't been set up yet
+              {needsInvite} 尚未完成设置
             </p>
             <p className="mt-0.5">
-              Open the invitation link an admin sent you to choose a password. If you don't have
-              one, or it has run out, ask them for a new link.
+              请打开管理员发给你的邀请链接来设置密码。如果链接丢失或已过期，请向管理员索取新的。
             </p>
           </div>
         )}
@@ -276,7 +274,7 @@ export function AuthPage() {
           className="space-y-3"
         >
           <div className="space-y-1.5">
-            <Label htmlFor="auth-username">Username</Label>
+            <Label htmlFor="auth-username">用户名</Label>
             <Input
               id="auth-username"
               name="username"
@@ -289,7 +287,7 @@ export function AuthPage() {
             />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="auth-password">{claiming ? "New password" : "Password"}</Label>
+            <Label htmlFor="auth-password">{claiming ? "新密码" : "密码"}</Label>
             <Input
               id="auth-password"
               name="password"
@@ -317,7 +315,7 @@ export function AuthPage() {
               onClick={cancelClaim}
               className="w-full text-center text-xs text-muted-foreground hover:text-foreground"
             >
-              ← Back to sign in
+              ← 返回登录
             </button>
           )}
         </form>
@@ -326,7 +324,7 @@ export function AuthPage() {
 
         {oidcOnly && (
           <p className="mb-3 text-center text-sm text-muted-foreground">
-            This instance uses single sign-on.
+            本实例使用单点登录。
           </p>
         )}
 
@@ -341,7 +339,7 @@ export function AuthPage() {
                 : "mt-2 flex w-full items-center justify-center rounded-md border px-3 py-2 text-sm hover:bg-accent"
             }
           >
-            Sign in with SSO
+            通过 SSO 登录
           </a>
         )}
           </>

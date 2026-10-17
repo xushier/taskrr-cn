@@ -9,7 +9,7 @@ import { X } from "lucide-react";
 export function TagInput({
   value,
   onChange,
-  placeholder = "Add a tag",
+  placeholder = "添加标签",
 }: {
   value: string[];
   onChange: (tags: string[]) => void;
@@ -44,7 +44,7 @@ export function TagInput({
           {tag}
           <button
             type="button"
-            aria-label={`Remove ${tag}`}
+            aria-label={`移除 ${tag}`}
             onClick={() => remove(tag)}
             className="text-muted-foreground hover:text-foreground"
           >

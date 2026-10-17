@@ -1,6 +1,6 @@
 services:
   taskrr:
-    image: ghcr.io/unmaykr-a/taskrr:latest
+    image: ghcr.io/xushier/taskrr-cn:latest
     container_name: taskrr
     restart: unless-stopped
     user: "${TASKRR_UID:-1000}:${TASKRR_GID:-1000}"

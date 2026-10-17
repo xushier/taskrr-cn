@@ -279,8 +279,8 @@ export function FloatingWindow({
               <button
                 type="button"
                 onClick={() => setPeek((p) => !p)}
-                aria-label={peek ? "Unpeek" : "Peek (make translucent)"}
-                title="Peek — make the window translucent to see behind it"
+                aria-label={peek ? "取消透视" : "透视（半透明）"}
+                title="透视：使窗口半透明，查看背后内容"
                 className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
               >
                 {peek ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -288,7 +288,7 @@ export function FloatingWindow({
               <button
                 type="button"
                 onClick={() => setMaximized((m) => !m)}
-                aria-label={maximized ? "Restore" : "Maximize"}
+                aria-label={maximized ? "还原" : "最大化"}
                 className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
               >
                 {maximized ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
@@ -296,7 +296,7 @@ export function FloatingWindow({
               <button
                 type="button"
                 onClick={onMinimize}
-                aria-label="Minimize"
+                aria-label="最小化"
                 className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
               >
                 <Minus className="h-4 w-4" />
@@ -306,7 +306,7 @@ export function FloatingWindow({
           <button
             type="button"
             onClick={onClose}
-            aria-label="Close"
+            aria-label="关闭"
             className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
           >
             <X className="h-4 w-4" />
@@ -324,7 +324,7 @@ export function FloatingWindow({
         <div
           onPointerDown={startResize}
           className="absolute bottom-0 right-0 h-4 w-4 cursor-nwse-resize"
-          aria-label="Resize"
+          aria-label="调整大小"
           style={{
             background:
               "linear-gradient(135deg, transparent 0 50%, hsl(var(--border)) 50% 60%, transparent 60% 70%, hsl(var(--border)) 70% 80%, transparent 80%)",

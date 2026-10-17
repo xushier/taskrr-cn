@@ -6,12 +6,10 @@ name: Demo (GitHub Pages)
 # run and every visitor gets their own localStorage sandbox.
 #
 # Pages must be enabled for the repo (Settings -> Pages -> Source: GitHub
-# Actions). Run manually from the Actions tab (workflow_dispatch) to preview, or
-# let a push to main publish automatically.
-
+# Actions). Run manually from the Actions tab (workflow_dispatch); in this CN
+# fork it does not run on every push, so a repo without Pages enabled stays
+# green.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

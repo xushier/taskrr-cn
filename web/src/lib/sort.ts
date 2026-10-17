@@ -6,11 +6,11 @@ import type { Task } from "./api";
 export type SortKey = "smart" | "name" | "recent" | "stale" | "created";
 
 export const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: "smart", label: "Recommended" },
-  { key: "name", label: "Name (A-Z)" },
-  { key: "recent", label: "Recently done" },
-  { key: "stale", label: "Least recently done" },
-  { key: "created", label: "Newest" },
+  { key: "smart", label: "推荐" },
+  { key: "name", label: "名称 (A-Z)" },
+  { key: "recent", label: "最近做过" },
+  { key: "stale", label: "最久未做" },
+  { key: "created", label: "最新创建" },
 ];
 
 function lastDone(t: Task): number {

@@ -46,7 +46,7 @@ export function RequestsView({ animate = true }: { animate?: boolean }) {
   });
 
   if (isLoading || loadingFolders) {
-    return <p className="text-sm text-muted-foreground">Loading…</p>;
+    return <p className="text-sm text-muted-foreground">加载中…</p>;
   }
 
   const folders = folderInvites ?? [];
@@ -61,9 +61,9 @@ export function RequestsView({ animate = true }: { animate?: boolean }) {
         <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
           <Inbox className="h-6 w-6 text-muted-foreground" />
         </div>
-        <h2 className="text-base font-semibold">No requests</h2>
+        <h2 className="text-base font-semibold">暂无分享请求</h2>
         <p className="mt-1 max-w-sm text-sm text-muted-foreground">
-          When someone shares a task or a folder with you, it'll appear here to accept or decline.
+          当有人与你分享任务或文件夹时，会显示在这里供你接受或拒绝。
         </p>
       </div>
     );
@@ -81,12 +81,12 @@ export function RequestsView({ animate = true }: { animate?: boolean }) {
               <FolderTree className="h-4 w-4 shrink-0 text-muted-foreground" />
               {req.folder}
               <span className="shrink-0 rounded bg-secondary px-1.5 py-0.5 text-[10px] font-normal text-secondary-foreground">
-                folder
+                文件夹
               </span>
             </p>
             <p className="text-xs text-muted-foreground">
-              {req.taskCount} {req.taskCount === 1 ? "task" : "tasks"} from {req.ownerName} · anything
-              added later is included · {formatDateTime(req.createdAt)}
+              来自 {req.ownerName} · {req.taskCount} 个任务 ·
+              后续新增的任务也会包含 · {formatDateTime(req.createdAt)}
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
@@ -96,14 +96,14 @@ export function RequestsView({ animate = true }: { animate?: boolean }) {
               disabled={respondFolder.isPending}
               onClick={() => respondFolder.mutate({ folder: req.folder, ownerId: req.ownerId, accept: false })}
             >
-              <X /> Decline
+              <X /> 拒绝
             </Button>
             <Button
               size="sm"
               disabled={respondFolder.isPending}
               onClick={() => respondFolder.mutate({ folder: req.folder, ownerId: req.ownerId, accept: true })}
             >
-              <Check /> Accept
+              <Check /> 接受
             </Button>
           </div>
         </div>
@@ -117,7 +117,7 @@ export function RequestsView({ animate = true }: { animate?: boolean }) {
           <div className="min-w-0">
             <p className="truncate font-medium">{req.taskName}</p>
             <p className="text-xs text-muted-foreground">
-              Shared by {req.ownerName} · {formatDateTime(req.createdAt)}
+              由 {req.ownerName} 分享 · {formatDateTime(req.createdAt)}
             </p>
           </div>
           <div className="flex shrink-0 items-center gap-2">
@@ -127,14 +127,14 @@ export function RequestsView({ animate = true }: { animate?: boolean }) {
               disabled={respond.isPending}
               onClick={() => respond.mutate({ taskId: req.taskId, accept: false })}
             >
-              <X /> Decline
+              <X /> 拒绝
             </Button>
             <Button
               size="sm"
               disabled={respond.isPending}
               onClick={() => respond.mutate({ taskId: req.taskId, accept: true })}
             >
-              <Check /> Accept
+              <Check /> 接受
             </Button>
           </div>
         </div>

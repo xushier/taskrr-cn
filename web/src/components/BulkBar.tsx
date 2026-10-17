@@ -128,20 +128,20 @@ export function BulkBar({
       setTags([]);
       setFolder("");
       const labels: Record<BulkAction, string> = {
-        done: "Logged",
-        archive: "Archived",
-        unarchive: "Restored",
-        delete: "Deleted",
-        tag: "Tagged",
-        folder: "Moved",
-        snooze: "Snoozed",
-        skip: "Skipped",
-        routine: routine == null ? "Cleared the routine on" : "Set a routine on",
+        done: "已打卡",
+        archive: "已归档",
+        unarchive: "已恢复",
+        delete: "已删除",
+        tag: "已打标签",
+        folder: "已移动",
+        snooze: "已延后",
+        skip: "已跳过",
+        routine: routine == null ? "已清除周期" : "已设置周期",
       };
       // Skip only touches the routines in the selection, so it has to count
       // what it actually did rather than what was ticked.
       const count = action === "skip" ? selected.filter((t) => t.intervalSeconds != null).length : ids.length;
-      const n = `${count} ${count === 1 ? "task" : "tasks"}`;
+      const n = `${count} 个任务`;
       toast(`${labels[action]} ${n}`, { tone: "success" });
       // Tagging and moving keep the selection, so several edits can be made in
       // a row; the destructive and state-changing ones dismiss the bar.
@@ -163,16 +163,16 @@ export function BulkBar({
         prefs.animViews && "animate-in fade-in-0 slide-in-from-left-1/2 slide-in-from-bottom-4 duration-300",
       )}
     >
-      <span className="px-1 text-sm font-medium tabular-nums sm:px-2">{ids.length} selected</span>
+      <span className="px-1 text-sm font-medium tabular-nums sm:px-2">{ids.length} 项已选</span>
 
       {panel === "delete" && (
         <>
-          <span className="text-sm text-muted-foreground">Delete {ids.length}?</span>
+          <span className="text-sm text-muted-foreground">删除 {ids.length} 项？</span>
           <Button size="sm" variant="destructive" disabled={busy} onClick={() => run.mutate("delete")}>
-            {busy ? "Deleting…" : "Confirm"}
+            {busy ? "删除中…" : "确认"}
           </Button>
           <Button size="sm" variant="ghost" onClick={() => setPanel(null)}>
-            No
+            否
           </Button>
         </>
       )}
@@ -183,10 +183,10 @@ export function BulkBar({
             <TagInput value={tags} onChange={setTags} />
           </div>
           <Button size="sm" disabled={busy || tags.length === 0} onClick={() => run.mutate("tag")}>
-            {busy ? "Adding…" : "Add"}
+            {busy ? "添加中…" : "添加"}
           </Button>
           <Button size="sm" variant="ghost" onClick={() => setPanel(null)}>
-            Cancel
+            取消
           </Button>
         </>
       )}
@@ -197,10 +197,10 @@ export function BulkBar({
             <FolderInput value={folder} onChange={setFolder} suggestions={folderSuggestions} />
           </div>
           <Button size="sm" disabled={busy} onClick={() => run.mutate("folder")}>
-            {busy ? "Moving…" : folder.trim() ? "Move" : "Clear"}
+            {busy ? "移动中…" : folder.trim() ? "移动" : "清除"}
           </Button>
           <Button size="sm" variant="ghost" onClick={() => setPanel(null)}>
-            Cancel
+            取消
           </Button>
         </>
       )}
@@ -211,22 +211,22 @@ export function BulkBar({
             <IntervalField value={routine} onChange={setRoutine} />
           </div>
           <Button size="sm" disabled={busy} onClick={() => run.mutate("routine")}>
-            Apply
+            应用
           </Button>
           <Button size="sm" variant="ghost" onClick={() => setPanel(null)}>
-            Cancel
+            取消
           </Button>
         </>
       )}
 
       {panel === "snooze" && (
         <>
-          <span className="px-1 text-xs text-muted-foreground">Snooze until</span>
+          <span className="px-1 text-xs text-muted-foreground">延后至</span>
           <Select
             value={snoozeHours}
             autoFocus
             onChange={(e) => setSnoozeHours(Number(e.target.value))}
-            aria-label="Snooze for"
+            aria-label="延后时长"
             className="h-8 text-xs"
           >
             {SNOOZE_PRESETS.map((p) => (
@@ -236,10 +236,10 @@ export function BulkBar({
             ))}
           </Select>
           <Button size="sm" disabled={busy} onClick={() => run.mutate("snooze")}>
-            Snooze
+            延后
           </Button>
           <Button size="sm" variant="ghost" onClick={() => setPanel(null)}>
-            Cancel
+            取消
           </Button>
         </>
       )}
@@ -247,14 +247,14 @@ export function BulkBar({
       {panel === null && (
         <>
           {!archivedView && (
-            <BulkButton icon={<CheckCheck />} label="Done" disabled={busy} onClick={() => run.mutate("done")} />
+            <BulkButton icon={<CheckCheck />} label="打卡" disabled={busy} onClick={() => run.mutate("done")} />
           )}
           {!archivedView && (
             <>
-              <BulkButton icon={<Moon />} label="Snooze" disabled={busy} onClick={() => setPanel("snooze")} />
+              <BulkButton icon={<Moon />} label="延后" disabled={busy} onClick={() => setPanel("snooze")} />
               <BulkButton
                 icon={<SkipForward />}
-                label="Skip"
+                label="跳过"
                 // Nothing to skip when the selection is all one-offs.
                 disabled={busy || !selected.some((t) => t.intervalSeconds != null)}
                 onClick={() => run.mutate("skip")}
@@ -262,22 +262,22 @@ export function BulkBar({
             </>
           )}
           {!archivedView && (
-            <BulkButton icon={<Repeat />} label="Routine" disabled={busy} onClick={() => setPanel("routine")} />
+            <BulkButton icon={<Repeat />} label="周期" disabled={busy} onClick={() => setPanel("routine")} />
           )}
-          <BulkButton icon={<Tag />} label="Tag" disabled={busy} onClick={() => setPanel("tag")} />
-          <BulkButton icon={<FolderIcon />} label="Folder" disabled={busy} onClick={() => setPanel("folder")} />
+          <BulkButton icon={<Tag />} label="标签" disabled={busy} onClick={() => setPanel("tag")} />
+          <BulkButton icon={<FolderIcon />} label="文件夹" disabled={busy} onClick={() => setPanel("folder")} />
           {archivedView ? (
             <BulkButton
               icon={<ArchiveRestore />}
-              label="Restore"
+              label="恢复"
               disabled={busy}
               onClick={() => run.mutate("unarchive")}
             />
           ) : (
-            <BulkButton icon={<Archive />} label="Archive" disabled={busy} onClick={() => run.mutate("archive")} />
+            <BulkButton icon={<Archive />} label="归档" disabled={busy} onClick={() => run.mutate("archive")} />
           )}
-          <BulkButton icon={<Trash2 />} label="Delete" disabled={busy} onClick={() => setPanel("delete")} />
-          <Button size="icon" variant="ghost" className="h-8 w-8" aria-label="Clear selection" onClick={onClear}>
+          <BulkButton icon={<Trash2 />} label="删除" disabled={busy} onClick={() => setPanel("delete")} />
+          <Button size="icon" variant="ghost" className="h-8 w-8" aria-label="清除选择" onClick={onClear}>
             <X />
           </Button>
         </>

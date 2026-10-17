@@ -32,7 +32,7 @@ export function CompleteTaskPanel({ task, onClose }: { task: Task; onClose: () =
       queryClient.invalidateQueries({ queryKey: ["completions", task.id] });
       queryClient.invalidateQueries({ queryKey: ["activity"] });
       onClose();
-      toast("Logged", { tone: "success" });
+      toast("已打卡", { tone: "success" });
     },
   });
 
@@ -45,16 +45,16 @@ export function CompleteTaskPanel({ task, onClose }: { task: Task; onClose: () =
       className="space-y-4"
     >
       <div className="space-y-2">
-        <Label>When</Label>
+        <Label>时间</Label>
         <DateTimePicker value={when} onChange={setWhen} max={new Date()} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor={noteId}>Note (optional)</Label>
+        <Label htmlFor={noteId}>备注（可选）</Label>
         <Textarea
           id={noteId}
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          placeholder="e.g. used the new filter"
+          placeholder="例如：换了新滤芯"
           rows={3}
         />
       </div>
@@ -63,7 +63,7 @@ export function CompleteTaskPanel({ task, onClose }: { task: Task; onClose: () =
       )}
       <div className="flex justify-end">
         <Button type="submit" disabled={mutation.isPending}>
-          <Check /> {mutation.isPending ? "Logging…" : "Log it"}
+          <Check /> {mutation.isPending ? "打卡中…" : "打卡"}
         </Button>
       </div>
     </form>

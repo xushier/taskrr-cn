@@ -92,8 +92,8 @@ export function parseQuickAdd(input: string): QuickAdd {
 /** A short human description of what was understood, for the hint under the box. */
 export function describeQuickAdd(parsed: QuickAdd, formatInterval: (seconds: number) => string): string {
   const parts: string[] = [];
-  if (parsed.intervalSeconds != null) parts.push(`every ${formatInterval(parsed.intervalSeconds)}`);
-  if (parsed.folder) parts.push(`in ${parsed.folder}`);
+  if (parsed.intervalSeconds != null) parts.push(`每 ${formatInterval(parsed.intervalSeconds)}`);
+  if (parsed.folder) parts.push(`位于 ${parsed.folder}`);
   if (parsed.tags.length > 0) parts.push(parsed.tags.map((t) => `#${t}`).join(" "));
   return parts.join(" · ");
 }

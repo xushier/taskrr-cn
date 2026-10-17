@@ -24,7 +24,7 @@ declare const __APP_VERSION__: string;
  * to fill. Without one the window sizes to its content and the whole thing —
  * nav, divider and all — scrolls as a single sheet.
  */
-export const SETTINGS_WINDOW = { title: "Settings", width: 640, height: 560 };
+export const SETTINGS_WINDOW = { title: "设置", width: 640, height: 560 };
 
 type Section = "account" | "preferences" | "shortcuts" | "theme" | "admin";
 
@@ -52,13 +52,13 @@ export function SettingsPanel({ initial = "account" }: { initial?: Section }) {
     adminOnly?: boolean;
     hidden?: boolean;
   }[] = [
-    { id: "account", label: "Account", icon: User },
-    { id: "preferences", label: "Preferences", icon: SlidersHorizontal },
+    { id: "account", label: "账户", icon: User },
+    { id: "preferences", label: "偏好设置", icon: SlidersHorizontal },
     // Only worth a page of its own when the shortcuts are actually running;
     // otherwise it would offer to configure something switched off.
-    { id: "shortcuts", label: "Shortcuts", icon: Keyboard, hidden: !prefs.keyboardShortcuts },
-    { id: "theme", label: "Theme", icon: Palette },
-    { id: "admin", label: "Admin", icon: Shield, adminOnly: true },
+    { id: "shortcuts", label: "快捷键", icon: Keyboard, hidden: !prefs.keyboardShortcuts },
+    { id: "theme", label: "主题", icon: Palette },
+    { id: "admin", label: "管理", icon: Shield, adminOnly: true },
   ];
   const visible = items.filter((i) => !i.hidden && (!i.adminOnly || user?.role === "admin"));
   const active = visible.some((i) => i.id === section) ? section : "account";
@@ -97,7 +97,7 @@ export function SettingsPanel({ initial = "account" }: { initial?: Section }) {
           <button
             type="button"
             onClick={() => setChangelogOpen(true)}
-            title={release ? `Released ${formatReleaseDate(release.date)}` : undefined}
+            title={release ? `发布于 ${formatReleaseDate(release.date)}` : undefined}
             className="settings-version shrink-0 px-2.5 py-2 text-left text-[11px] text-muted-foreground transition-colors hover:text-foreground"
           >
             v{__APP_VERSION__}

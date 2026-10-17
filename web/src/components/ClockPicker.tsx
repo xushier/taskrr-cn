@@ -131,14 +131,14 @@ export function ClockPicker({
               onClick={() => onChange(hours % 12, minutes)}
               className={cn("rounded px-1", !isPM ? "bg-primary/15 text-primary" : "text-muted-foreground")}
             >
-              AM
+              上午
             </button>
             <button
               type="button"
               onClick={() => onChange((hours % 12) + 12, minutes)}
               className={cn("rounded px-1", isPM ? "bg-primary/15 text-primary" : "text-muted-foreground")}
             >
-              PM
+              下午
             </button>
           </div>
         )}
@@ -184,7 +184,7 @@ export function ClockPicker({
         })}
       </div>
       <p className="text-xs text-muted-foreground">
-        {mode === "hour" ? "Pick the hour" : "Pick the minute"}
+        {mode === "hour" ? "选择小时" : "选择分钟"}
       </p>
     </div>
   );

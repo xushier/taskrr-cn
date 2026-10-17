@@ -303,10 +303,10 @@ export function csvToImportDocument(
 
   table.rows.forEach((row, i) => {
     // +2: one for the header, one because people count rows from 1.
-    const where = `Row ${i + 2}`;
+    const where = `第 ${i + 2} 行`;
     const name = cell(row, mapping.name);
     if (!name) {
-      skipped.push(`${where}: no name`);
+      skipped.push(`${where}：缺少名称`);
       return;
     }
 
@@ -338,15 +338,15 @@ export function csvToImportDocument(
     const rawInterval = cell(row, mapping.interval);
     if (rawInterval) {
       const seconds = parseCsvInterval(rawInterval, bareIntervalUnit);
-      if (seconds == null) skipped.push(`${where}: couldn't read "${rawInterval}" as a routine`);
+      if (seconds == null) skipped.push(`${where}：无法将“${rawInterval}”识别为周期`);
       else task.intervalSeconds = seconds;
     }
 
     const rawDate = cell(row, mapping.lastDone);
     if (rawDate) {
       const when = parseCsvDate(rawDate, dayFirstDates);
-      if (when == null) skipped.push(`${where}: couldn't read "${rawDate}" as a date`);
-      else if (when.getTime() > Date.now()) skipped.push(`${where}: "${rawDate}" is in the future`);
+      if (when == null) skipped.push(`${where}：无法将“${rawDate}”识别为日期`);
+      else if (when.getTime() > Date.now()) skipped.push(`${where}：“${rawDate}”是未来时间`);
       else task.completions = [{ completedAt: when.toISOString() }];
     }
 

@@ -26,12 +26,12 @@ export interface StalenessStyle {
 // Visual + label mapping. Semantic colours (green→red) are intentionally
 // independent of the app's rose accent.
 const STYLES: Record<Staleness, StalenessStyle> = {
-  none: { key: "none", label: "Never done", bar: "bg-zinc-500/50", dot: "bg-zinc-400", text: "text-zinc-400" },
-  snoozed: { key: "snoozed", label: "Snoozed", bar: "bg-zinc-500/50", dot: "bg-zinc-400", text: "text-zinc-400" },
-  fresh: { key: "fresh", label: "Fresh", bar: "bg-emerald-500", dot: "bg-emerald-500", text: "text-emerald-400" },
-  ok: { key: "ok", label: "On track", bar: "bg-sky-500", dot: "bg-sky-500", text: "text-sky-400" },
-  "due-soon": { key: "due-soon", label: "Due soon", bar: "bg-amber-500", dot: "bg-amber-500", text: "text-amber-400" },
-  overdue: { key: "overdue", label: "Overdue", bar: "bg-rose-500", dot: "bg-rose-500", text: "text-rose-400" },
+  none: { key: "none", label: "从未做过", bar: "bg-zinc-500/50", dot: "bg-zinc-400", text: "text-zinc-400" },
+  snoozed: { key: "snoozed", label: "已延后", bar: "bg-zinc-500/50", dot: "bg-zinc-400", text: "text-zinc-400" },
+  fresh: { key: "fresh", label: "刚做过", bar: "bg-emerald-500", dot: "bg-emerald-500", text: "text-emerald-400" },
+  ok: { key: "ok", label: "正常", bar: "bg-sky-500", dot: "bg-sky-500", text: "text-sky-400" },
+  "due-soon": { key: "due-soon", label: "即将到期", bar: "bg-amber-500", dot: "bg-amber-500", text: "text-amber-400" },
+  overdue: { key: "overdue", label: "已逾期", bar: "bg-rose-500", dot: "bg-rose-500", text: "text-rose-400" },
 };
 
 // --- Tunable thresholds -----------------------------------------------------

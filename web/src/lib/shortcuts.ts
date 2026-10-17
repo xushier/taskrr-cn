@@ -20,10 +20,10 @@ export interface ShortcutAction {
 }
 
 export const SHORTCUT_ACTIONS: ShortcutAction[] = [
-  { id: "new", label: "New task", defaultKey: "n" },
-  { id: "search", label: "Search tasks", defaultKey: "/" },
-  { id: "help", label: "Show the shortcut list", defaultKey: "?" },
-  { id: "clear", label: "Clear search and selection", defaultKey: "Escape" },
+  { id: "new", label: "新建任务", defaultKey: "n" },
+  { id: "search", label: "搜索任务", defaultKey: "/" },
+  { id: "help", label: "显示快捷键列表", defaultKey: "?" },
+  { id: "clear", label: "清除搜索与选择", defaultKey: "Escape" },
 ];
 
 /** Digits switch views, so they can't be taken by anything else. */
@@ -74,7 +74,7 @@ export function checkKey(
 
 /** How to write a key on screen. */
 export function describeKey(key: string): string {
-  if (key === " ") return "Space";
+  if (key === " ") return "空格";
   if (key === "Escape") return "Esc";
   if (key === "ArrowUp") return "↑";
   if (key === "ArrowDown") return "↓";
@@ -85,13 +85,13 @@ export function describeKey(key: string): string {
 export function explainProblem(p: { problem: KeyProblem; takenBy?: string }): string {
   switch (p.problem) {
     case "modifier":
-      return "That's a modifier on its own — press the key you want to use.";
+      return "这只是单独按下的修饰键——请按你想使用的按键。";
     case "reserved":
-      return "The number keys switch views, so they can't be reassigned.";
+      return "数字键用于切换视图，不能重新分配。";
     case "unprintable":
-      return "That key can't be used as a shortcut.";
+      return "该键不能用作快捷键。";
     case "taken":
-      return `Already used by "${p.takenBy}".`;
+      return `已被“${p.takenBy}”占用。`;
   }
 }
 

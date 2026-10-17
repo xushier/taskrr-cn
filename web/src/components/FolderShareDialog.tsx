@@ -55,7 +55,7 @@ export function FolderShareDialog({
     onSuccess: () => {
       setUsername("");
       invalidate();
-      toast("Invitation sent", { tone: "success" });
+      toast("邀请已发送", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -64,7 +64,7 @@ export function FolderShareDialog({
     mutationFn: (userId: number) => api.unshareFolder(folder, userId),
     onSuccess: () => {
       invalidate();
-      toast("Removed", { tone: "success" });
+      toast("已移除", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -74,12 +74,10 @@ export function FolderShareDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <FolderTree className="h-4 w-4 shrink-0" /> Share "{folder}"
+            <FolderTree className="h-4 w-4 shrink-0" /> 分享“{folder}”
           </DialogTitle>
           <DialogDescription>
-            Everyone you add sees all {taskCount} {taskCount === 1 ? "task" : "tasks"} in this folder,
-            and anything you put in it later. They can log and edit history, but the folder and its
-            tasks stay yours.
+            你添加的每个人都能看到此文件夹中的全部 {taskCount} 个任务，以及你之后放入的任何任务。他们可以打卡和编辑历史记录，但文件夹及其任务仍归你所有。
           </DialogDescription>
         </DialogHeader>
 
@@ -93,12 +91,12 @@ export function FolderShareDialog({
           <Input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Share with username"
+            placeholder="输入用户名以分享"
             className="min-w-0 flex-1 basis-40"
             autoFocus
           />
           <Button type="submit" size="sm" disabled={share.isPending || !username.trim()}>
-            <UserPlus className="h-3.5 w-3.5" /> {share.isPending ? "Sending…" : "Share"}
+            <UserPlus className="h-3.5 w-3.5" /> {share.isPending ? "发送中…" : "分享"}
           </Button>
         </form>
 
@@ -108,12 +106,12 @@ export function FolderShareDialog({
               <li key={m.userId} className="flex items-center justify-between gap-2 rounded-md border px-2 py-1.5 text-sm">
                 <span className="truncate">{m.username}</span>
                 <span className="flex shrink-0 items-center gap-2">
-                  <span className="text-xs capitalize text-muted-foreground">{m.status}</span>
+                  <span className="text-xs capitalize text-muted-foreground">{m.status === "owner" ? "所有者" : m.status === "pending" ? "待接受" : "已接受"}</span>
                   <Button
                     size="icon"
                     variant="ghost"
                     className="h-6 w-6 hover:text-destructive"
-                    aria-label={`Remove ${m.username}`}
+                    aria-label={`移除 ${m.username}`}
                     disabled={remove.isPending}
                     onClick={() => remove.mutate(m.userId)}
                   >
@@ -124,7 +122,7 @@ export function FolderShareDialog({
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-muted-foreground">Nobody else is on this folder yet.</p>
+          <p className="text-sm text-muted-foreground">此文件夹还没有其他成员。</p>
         )}
       </DialogContent>
     </Dialog>

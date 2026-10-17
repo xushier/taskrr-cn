@@ -64,10 +64,10 @@ export function ChangelogDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Changelog</DialogTitle>
+          <DialogTitle>更新日志</DialogTitle>
           {/* Radix wires this to aria-describedby, so a screen reader announces
               what the dialog is rather than just its title. */}
-          <DialogDescription>Every release so far, newest first.</DialogDescription>
+          <DialogDescription>迄今所有版本，最新在前。</DialogDescription>
         </DialogHeader>
         <div className="-mr-2 max-h-[55vh] space-y-5 overflow-y-auto pr-2">
           {RELEASES.map((r) => (
@@ -92,7 +92,7 @@ export function ChangelogDialog({
             className="inline-flex items-center gap-1.5 transition-colors hover:text-foreground"
           >
             <Heart className="h-3.5 w-3.5" />
-            Support on Ko-fi
+            在 Ko-fi 上支持我们
           </a>
         </div>
       </DialogContent>
@@ -112,14 +112,14 @@ function UpdateCheck() {
     try {
       const { latest } = await api.checkLatestVersion();
       if (!latest) {
-        setResult("Couldn't check for updates right now.");
+        setResult("暂时无法检查更新。");
       } else if (compareVersions(latest, CURRENT_VERSION) > 0) {
-        setResult(`Update available: v${latest} (you have v${CURRENT_VERSION}).`);
+        setResult(`有可用更新：v${latest}（当前为 v${CURRENT_VERSION}）。`);
       } else {
-        setResult(`You're on the latest version (v${CURRENT_VERSION}).`);
+        setResult(`你已是最新版本（v${CURRENT_VERSION}）。`);
       }
     } catch {
-      setResult("Couldn't check for updates right now.");
+      setResult("暂时无法检查更新。");
     } finally {
       setState("idle");
     }
@@ -129,7 +129,7 @@ function UpdateCheck() {
     <div className="flex flex-wrap items-center gap-3 border-t pt-3 text-xs">
       <Button variant="outline" size="sm" disabled={state === "checking"} onClick={check}>
         <RefreshCw className={state === "checking" ? "animate-spin" : undefined} />
-        {state === "checking" ? "Checking…" : "Check for updates"}
+        {state === "checking" ? "检查中…" : "检查更新"}
       </Button>
       {result && <span className="text-muted-foreground">{result}</span>}
     </div>

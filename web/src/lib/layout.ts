@@ -25,9 +25,9 @@
 export type AppLayout = "sidebar" | "topbar" | "rail";
 
 export const APP_LAYOUTS: { value: AppLayout; label: string; hint: string }[] = [
-  { value: "sidebar", label: "Sidebar", hint: "The full left column, with folders" },
-  { value: "rail", label: "Icon rail", hint: "A narrow column of icons" },
-  { value: "topbar", label: "Top bar", hint: "Views as tabs, full-width content" },
+  { value: "sidebar", label: "侧边栏", hint: "完整左栏，含文件夹" },
+  { value: "rail", label: "图标栏", hint: "只显示图标的窄栏" },
+  { value: "topbar", label: "顶栏", hint: "视图变标签页，内容全宽" },
 ];
 
 /** Which layout actually renders: the account's choice, then the instance's,

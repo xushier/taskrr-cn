@@ -184,7 +184,7 @@ export function WindowManagerProvider({ children }: { children: ReactNode }) {
               <button
                 type="button"
                 onClick={allMinimized ? restoreAll : minimizeAll}
-                title={allMinimized ? "Bring all up" : "Minimise all"}
+                title={allMinimized ? "全部还原" : "全部最小化"}
                 className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
               >
                 {allMinimized ? (
@@ -196,7 +196,7 @@ export function WindowManagerProvider({ children }: { children: ReactNode }) {
               <button
                 type="button"
                 onClick={closeAll}
-                title="Close all"
+                title="全部关闭"
                 className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
               >
                 <XSquare className="h-3.5 w-3.5" />
@@ -218,7 +218,7 @@ export function WindowManagerProvider({ children }: { children: ReactNode }) {
                   type="button"
                   onClick={() => focus(w.id)}
                   className="flex items-center gap-1.5 hover:text-foreground"
-                  title={isMin ? "Restore" : "Bring to front"}
+                  title={isMin ? "还原" : "移至最前"}
                 >
                   <Square className={cn("h-3 w-3", isTop && "fill-primary text-primary")} />
                   <span className="max-w-[40vw] truncate sm:max-w-[180px]">{w.title}</span>
@@ -226,7 +226,7 @@ export function WindowManagerProvider({ children }: { children: ReactNode }) {
                 <button
                   type="button"
                   onClick={() => close(w.id)}
-                  aria-label={`Close ${w.title}`}
+                  aria-label={`关闭 ${w.title}`}
                   className="rounded p-0.5 hover:bg-accent hover:text-foreground"
                 >
                   <X className="h-3 w-3" />

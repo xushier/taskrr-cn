@@ -67,14 +67,14 @@ describe("checkKey", () => {
   it("refuses a key another action already has, and says which", () => {
     const got = checkKey("/", "new", {});
     expect(got?.problem).toBe("taken");
-    expect(got?.takenBy).toBe("Search tasks");
+    expect(got?.takenBy).toBe("搜索任务");
   });
 
   it("sees a clash against an override, not just a default", () => {
     // "t" isn't anyone's default, but it is bound here.
     const got = checkKey("t", "new", { search: "t" });
     expect(got?.problem).toBe("taken");
-    expect(got?.takenBy).toBe("Search tasks");
+    expect(got?.takenBy).toBe("搜索任务");
   });
 
   it("lets an action keep the key it already has", () => {
@@ -90,7 +90,7 @@ describe("checkKey", () => {
 
 describe("describeKey", () => {
   it("names the keys that have no glyph", () => {
-    expect(describeKey(" ")).toBe("Space");
+    expect(describeKey(" ")).toBe("空格");
     expect(describeKey("Escape")).toBe("Esc");
   });
   it("leaves an ordinary key alone", () => {

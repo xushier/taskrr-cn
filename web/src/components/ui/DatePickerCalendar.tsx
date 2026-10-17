@@ -4,10 +4,21 @@ import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-const MONTH_LABELS = Array.from({ length: 12 }, (_, m) =>
-  new Date(2000, m, 1).toLocaleDateString(undefined, { month: "short" }),
-);
+const WEEKDAYS = ["日", "一", "二", "三", "四", "五", "六"];
+const MONTH_LABELS = [
+  "一月",
+  "二月",
+  "三月",
+  "四月",
+  "五月",
+  "六月",
+  "七月",
+  "八月",
+  "九月",
+  "十月",
+  "十一月",
+  "十二月",
+];
 const pad = (n: number) => String(n).padStart(2, "0");
 const key = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
@@ -65,7 +76,7 @@ export function DatePickerCalendar({
             setPickerOpen((o) => !o);
           }}
           aria-expanded={pickerOpen}
-          title="Pick a month and year"
+          title="选择月份和年份"
           className="group flex items-center gap-1 rounded text-sm font-semibold transition-colors hover:text-primary"
         >
           {view.toLocaleDateString(undefined, { month: "long", year: "numeric" })}
@@ -77,11 +88,11 @@ export function DatePickerCalendar({
           />
         </button>
         <div className="flex gap-1">
-          <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Previous month"
+          <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="上个月"
             onClick={() => { setPickerOpen(false); setView(new Date(year, month - 1, 1)); }}>
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Next month"
+          <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="下个月"
             onClick={() => { setPickerOpen(false); setView(new Date(year, month + 1, 1)); }}>
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -91,12 +102,12 @@ export function DatePickerCalendar({
       {pickerOpen ? (
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Previous year"
+            <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="上一年"
               onClick={() => setPickerYear((y) => y - 1)}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <span className="text-sm font-medium tabular-nums">{pickerYear}</span>
-            <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="Next year"
+            <Button variant="ghost" size="icon" className="h-7 w-7" aria-label="下一年"
               onClick={() => setPickerYear((y) => y + 1)}>
               <ChevronRight className="h-4 w-4" />
             </Button>

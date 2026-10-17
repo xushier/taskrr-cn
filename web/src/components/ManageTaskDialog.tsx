@@ -54,7 +54,7 @@ export function ManageTaskPanel({ task, onClose }: { task: Task; onClose: () => 
     <div className="space-y-4">
       {isOwner ? (
         <>
-          <p className="text-sm text-muted-foreground">Edit the task, review its history, or delete it.</p>
+          <p className="text-sm text-muted-foreground">编辑任务、查看历史或将其删除。</p>
           <EditSection task={task} onDone={onClose} />
         </>
       ) : (
@@ -62,7 +62,7 @@ export function ManageTaskPanel({ task, onClose }: { task: Task; onClose: () => 
           <h3 className="text-base font-semibold">{task.name}</h3>
           {task.description && <p className="mt-0.5 text-sm text-muted-foreground">{task.description}</p>}
           <p className="mt-1 text-xs text-muted-foreground">
-            Shared with you — log it and review the history, or leave it below.
+            已共享给你——可打卡、查看历史，或在下方退出。
           </p>
         </div>
       )}
@@ -101,21 +101,21 @@ function ScheduleSection({ task }: { task: Task }) {
     <div className="space-y-2">
       <hr className="border-border/60" />
       <p className="flex items-center gap-1.5 text-sm font-medium">
-        <Moon className="h-4 w-4" /> Scheduling
+        <Moon className="h-4 w-4" /> 时间安排
       </p>
 
       {snoozed && task.snoozedUntil ? (
         <div className="flex flex-wrap items-center justify-between gap-2 rounded-md border px-2 py-1.5 text-sm">
           <span className="text-muted-foreground">
-            Snoozed until <span className="font-medium text-foreground">{formatDateTime(task.snoozedUntil)}</span>
+            已延后至 <span className="font-medium text-foreground">{formatDateTime(task.snoozedUntil)}</span>
           </span>
           <Button size="sm" variant="outline" onClick={() => actions.wake.mutate(task)}>
-            Wake up now
+            立即唤醒
           </Button>
         </div>
       ) : (
         <div className="space-y-2">
-          <Label className="text-xs text-muted-foreground">Snooze until</Label>
+          <Label className="text-xs text-muted-foreground">延后至</Label>
           <DateTimePicker value={until} onChange={setUntil} />
           <Button
             size="sm"
@@ -123,7 +123,7 @@ function ScheduleSection({ task }: { task: Task }) {
             disabled={actions.snoozeUntil.isPending}
             onClick={() => actions.snoozeUntil.mutate({ task, until })}
           >
-            {actions.snoozeUntil.isPending ? "Snoozing…" : "Snooze"}
+            {actions.snoozeUntil.isPending ? "延后中…" : "延后"}
           </Button>
         </div>
       )}
@@ -131,7 +131,7 @@ function ScheduleSection({ task }: { task: Task }) {
       {task.intervalSeconds != null && (
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-xs text-muted-foreground">
-            Skip this cycle — moves the next due date on by one routine without logging anything.
+            跳过本轮——把下次到期时间顺延一个周期，且不记录任何打卡。
           </p>
           <Button
             size="sm"
@@ -139,7 +139,7 @@ function ScheduleSection({ task }: { task: Task }) {
             disabled={actions.skip.isPending}
             onClick={() => actions.skip.mutate(task)}
           >
-            <SkipForward className="h-3.5 w-3.5" /> Skip
+            <SkipForward className="h-3.5 w-3.5" /> 跳过
           </Button>
         </div>
       )}
@@ -170,7 +170,7 @@ function ShareSection({ task, isOwner, onLeft }: { task: Task; isOwner: boolean;
     onSuccess: () => {
       setUsername("");
       invalidate();
-      toast("Invitation sent", { tone: "success" });
+      toast("邀请已发送", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -181,7 +181,7 @@ function ShareSection({ task, isOwner, onLeft }: { task: Task; isOwner: boolean;
     mutationFn: (userId: number) => api.removeMember(task.id, userId),
     onSuccess: () => {
       invalidate();
-      toast("Removed", { tone: "success" });
+      toast("已移除", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -191,7 +191,7 @@ function ShareSection({ task, isOwner, onLeft }: { task: Task; isOwner: boolean;
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["activity"] });
-      toast("You left the task", { tone: "success" });
+      toast("已退出任务", { tone: "success" });
       onLeft();
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
@@ -203,7 +203,7 @@ function ShareSection({ task, isOwner, onLeft }: { task: Task; isOwner: boolean;
     <div className="space-y-2">
       <hr className="border-border/60" />
       <p className="flex items-center gap-1.5 text-sm font-medium">
-        <Users className="h-4 w-4" /> Sharing
+        <Users className="h-4 w-4" /> 共享
       </p>
 
       {members && members.length > 0 && (
@@ -213,14 +213,14 @@ function ShareSection({ task, isOwner, onLeft }: { task: Task; isOwner: boolean;
               <span className="truncate">{m.username}</span>
               <span className="flex shrink-0 items-center gap-2">
                 <span className="text-xs capitalize text-muted-foreground">
-                  {m.status === "pending" ? "invited" : m.status}
+                  {m.status === "owner" ? "所有者" : m.status === "pending" ? "已邀请" : "成员"}
                 </span>
                 {isOwner && m.status !== "owner" && (
                   <Button
                     size="icon"
                     variant="ghost"
                     className="h-6 w-6 hover:text-destructive"
-                    aria-label={`Remove ${m.username}`}
+                    aria-label={`移除 ${m.username}`}
                     disabled={remove.isPending}
                     onClick={() => remove.mutate(m.userId)}
                   >
@@ -244,17 +244,17 @@ function ShareSection({ task, isOwner, onLeft }: { task: Task; isOwner: boolean;
           <Input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Share with username"
-            aria-label="Username to share with"
+            placeholder="输入用户名以共享"
+            aria-label="要共享给的用户名"
           />
           <Button type="submit" size="sm" disabled={!username.trim() || share.isPending}>
-            <UserPlus /> Share
+            <UserPlus /> 共享
           </Button>
         </form>
       ) : (
         <div className="pt-1">
           <Button variant="outline" size="sm" disabled={leave.isPending} onClick={() => leave.mutate()}>
-            <LogOut /> Leave task
+            <LogOut /> 退出任务
           </Button>
         </div>
       )}
@@ -265,12 +265,12 @@ function ShareSection({ task, isOwner, onLeft }: { task: Task; isOwner: boolean;
 // Matches the account-wide options in RemindersSection, so a per-task override
 // is picked from the same vocabulary rather than a second, subtly different one.
 const REMINDER_LEADS: { label: string; value: number }[] = [
-  { label: "When it's due", value: 0 },
-  { label: "1 hour before", value: 3600 },
-  { label: "6 hours before", value: 21600 },
-  { label: "1 day before", value: 86400 },
-  { label: "3 days before", value: 259200 },
-  { label: "1 week before", value: 604800 },
+  { label: "到期时", value: 0 },
+  { label: "提前 1 小时", value: 3600 },
+  { label: "提前 6 小时", value: 21600 },
+  { label: "提前 1 天", value: 86400 },
+  { label: "提前 3 天", value: 259200 },
+  { label: "提前 1 周", value: 604800 },
 ];
 
 function EditSection({ task, onDone }: { task: Task; onDone: () => void }) {
@@ -310,7 +310,7 @@ function EditSection({ task, onDone }: { task: Task; onDone: () => void }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onDone();
-      toast("Task saved", { tone: "success" });
+      toast("任务已保存", { tone: "success" });
     },
   });
 
@@ -323,11 +323,11 @@ function EditSection({ task, onDone }: { task: Task; onDone: () => void }) {
       className="space-y-3"
     >
       <div className="space-y-2">
-        <Label htmlFor={nameId}>Name</Label>
+        <Label htmlFor={nameId}>名称</Label>
         <Input id={nameId} value={name} onChange={(e) => setName(e.target.value)} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor={descId}>Description</Label>
+        <Label htmlFor={descId}>描述</Label>
         <Textarea
           id={descId}
           value={description}
@@ -341,14 +341,14 @@ function EditSection({ task, onDone }: { task: Task; onDone: () => void }) {
           is nothing to be early for otherwise — so it appears with one. */}
       {intervalSeconds != null && (
         <div className="space-y-1">
-          <Label>Remind me</Label>
+          <Label>提醒我</Label>
           <select
             className="h-9 w-full rounded-md border border-input bg-transparent px-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             value={reminderLead == null ? "" : String(reminderLead)}
             onChange={(e) => setReminderLead(e.target.value === "" ? null : Number(e.target.value))}
           >
             <option value="" className="bg-background">
-              Use my account setting
+              使用我的账号设置
             </option>
             {REMINDER_LEADS.map((o) => (
               <option key={o.value} value={o.value} className="bg-background">
@@ -357,7 +357,7 @@ function EditSection({ task, onDone }: { task: Task; onDone: () => void }) {
             ))}
           </select>
           <p className="text-[11px] text-muted-foreground">
-            Only applies when reminders are switched on in your account.
+            仅在账号中开启提醒后生效。
           </p>
         </div>
       )}
@@ -366,42 +366,42 @@ function EditSection({ task, onDone }: { task: Task; onDone: () => void }) {
           so it appears on shared tasks and nowhere else. */}
       {task.shared && (
         <ToggleRow
-          label="Take turns"
-          hint="Shows whose turn it is, moving to the next person each time someone logs it"
+          label="轮流"
+          hint="显示当前轮到谁，每次有人打卡后移到下一人"
           checked={rotate}
           onChange={(v) => setRotate(v)}
         />
       )}
 
       <ToggleRow
-          label="Pin to top"
-          hint="Keeps this task first, whatever the list is sorted by"
+          label="置顶"
+          hint="无论列表如何排序，都让此任务排在最前"
           checked={pinned}
           onChange={(v) => setPinned(v)}
         />
 
       <div className="space-y-2">
-        <Label>Tags</Label>
+        <Label>标签</Label>
         <TagInput value={tags} onChange={setTags} />
       </div>
 
       <div className="space-y-2">
-        <Label>Folder</Label>
+        <Label>文件夹</Label>
         <FolderInput value={folder} onChange={setFolder} suggestions={folderSuggestions} />
       </div>
 
       <div className="space-y-2">
-        <Label>Colours</Label>
+        <Label>颜色</Label>
         <div className="grid grid-cols-2 gap-2">
           <ColorField
-            label="Recent"
+            label="最近"
             value={colorFresh ?? prefs.taskColorFresh}
             isDefault={colorFresh == null}
             onChange={setColorFresh}
             onClear={() => setColorFresh(null)}
           />
           <ColorField
-            label="Overdue"
+            label="已逾期"
             value={colorOverdue ?? prefs.taskColorOverdue}
             isDefault={colorOverdue == null}
             onChange={setColorOverdue}
@@ -419,8 +419,8 @@ function EditSection({ task, onDone }: { task: Task; onDone: () => void }) {
           }}
         />
         <ToggleRow
-          label="Freeze colour"
-          hint="Stay at the recent colour — never fades to overdue"
+          label="冻结颜色"
+          hint="保持为最近颜色，不会渐变为逾期色"
           checked={freezeColor}
           onChange={(v) => setFreezeColor(v)}
         />
@@ -431,7 +431,7 @@ function EditSection({ task, onDone }: { task: Task; onDone: () => void }) {
       )}
       <div className="flex justify-end">
         <Button type="submit" size="sm" disabled={!name.trim() || mutation.isPending}>
-          {mutation.isPending ? "Saving…" : "Save changes"}
+          {mutation.isPending ? "保存中…" : "保存更改"}
         </Button>
       </div>
     </form>
@@ -468,25 +468,25 @@ function StatsSection({ task }: { task: Task }) {
   const trend = stats.gaps.length >= 2;
   const tiles: { label: string; value: string; hint?: string }[] = [
     {
-      label: trend ? "Typically every" : "Last gap",
+      label: trend ? "通常间隔" : "上次间隔",
       value: formatGap(stats.typicalGapMs!),
       hint: trend
-        ? "The median gap between completions — one holiday won't skew it"
-        : "The single gap so far; a pattern needs one more completion",
+        ? "两次打卡间隔的中位数——一次假期不会带偏它"
+        : "目前仅有的一次间隔；再打卡一次才能看出规律",
     },
     {
-      label: "Logged",
+      label: "已打卡",
       value: `${stats.count}×`,
-      hint: `First logged ${formatDate(stats.first!)}`,
+      hint: `首次打卡 ${formatDate(stats.first!)}`,
     },
   ];
   if (trend) {
-    tiles.push({ label: "Longest gap", value: formatGap(stats.longestGapMs!) });
+    tiles.push({ label: "最长间隔", value: formatGap(stats.longestGapMs!) });
     if (stats.onTimeRate != null) {
       tiles.push({
-        label: "On time",
+        label: "按时",
         value: `${Math.round(stats.onTimeRate * 100)}%`,
-        hint: "Share of gaps that came in within the routine",
+        hint: "在周期内完成打卡的间隔占比",
       });
     }
   }
@@ -496,7 +496,7 @@ function StatsSection({ task }: { task: Task }) {
   return (
     <div className="space-y-2">
       <p className="flex items-center gap-1.5 text-sm font-medium">
-        <BarChart3 className="h-4 w-4" /> Stats
+        <BarChart3 className="h-4 w-4" /> 统计
       </p>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
         {tiles.map((t) => (
@@ -508,8 +508,8 @@ function StatsSection({ task }: { task: Task }) {
       </div>
       {verdict && task.intervalSeconds && (
         <p className="text-xs text-muted-foreground">
-          You do this <span className="font-medium text-foreground">{PACE_LABELS[verdict]}</span> — every{" "}
-          {formatGap(stats.typicalGapMs!)}, against a routine of {formatGap(task.intervalSeconds * 1000)}.
+          你这件事做得<span className="font-medium text-foreground">{PACE_LABELS[verdict]}</span>——每{" "}
+          {formatGap(stats.typicalGapMs!)}，而周期为 {formatGap(task.intervalSeconds * 1000)}。
         </p>
       )}
     </div>
@@ -542,11 +542,11 @@ function HistorySection({ task }: { task: Task }) {
 
   return (
     <div className="space-y-2">
-      <p className="text-sm font-medium">History</p>
+      <p className="text-sm font-medium">历史</p>
       <div className="max-h-48 space-y-2 overflow-y-auto pr-1">
-        {isLoading && <p className="text-sm text-muted-foreground">Loading…</p>}
+        {isLoading && <p className="text-sm text-muted-foreground">加载中…</p>}
         {completions && completions.length === 0 && (
-          <p className="text-sm text-muted-foreground">No completions logged yet.</p>
+          <p className="text-sm text-muted-foreground">还没有打卡记录。</p>
         )}
         {completions?.map((c) => (
           <HistoryRow
@@ -595,7 +595,7 @@ function HistoryRow({
           value={note}
           onChange={(e) => setNote(e.target.value)}
           rows={2}
-          placeholder="Note (optional)"
+          placeholder="备注（可选）"
         />
         {save.isError && <p className="text-xs text-destructive">{(save.error as Error).message}</p>}
         <div className="flex justify-end gap-2">
@@ -608,10 +608,10 @@ function HistoryRow({
               setNote(c.note);
             }}
           >
-            Cancel
+            取消
           </Button>
           <Button size="sm" disabled={save.isPending} onClick={() => save.mutate()}>
-            {save.isPending ? "Saving…" : "Save"}
+            {save.isPending ? "保存中…" : "保存"}
           </Button>
         </div>
       </div>
@@ -623,7 +623,7 @@ function HistoryRow({
       <div className="min-w-0">
         <p className="text-sm font-medium">
           {formatDateTime(c.completedAt)}
-          {author && <span className="font-normal text-muted-foreground"> · by {author}</span>}
+          {author && <span className="font-normal text-muted-foreground"> · 由 {author} 打卡</span>}
         </p>
         {c.note && <p className="mt-0.5 break-words text-sm text-muted-foreground">{c.note}</p>}
       </div>
@@ -632,7 +632,7 @@ function HistoryRow({
           variant="ghost"
           size="icon"
           className="h-7 w-7"
-          aria-label="Edit this entry"
+          aria-label="编辑此记录"
           onClick={() => setEditing(true)}
         >
           <Pencil className="h-4 w-4 text-muted-foreground" />
@@ -641,7 +641,7 @@ function HistoryRow({
           variant="ghost"
           size="icon"
           className="h-7 w-7"
-          aria-label="Delete this entry"
+          aria-label="删除此记录"
           disabled={del.isPending}
           onClick={() => del.mutate()}
         >
@@ -664,7 +664,7 @@ function DangerZone({ task, onDeleted }: { task: Task; onDeleted: () => void }) 
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["activity"] });
       onDeleted();
-      toast("Task deleted", { tone: "success" });
+      toast("任务已删除", { tone: "success" });
     },
   });
 
@@ -673,7 +673,7 @@ function DangerZone({ task, onDeleted }: { task: Task; onDeleted: () => void }) 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       onDeleted();
-      toast(archived ? "Task restored" : "Task archived", { tone: "success" });
+      toast(archived ? "任务已恢复" : "任务已归档", { tone: "success" });
     },
   });
 
@@ -681,10 +681,10 @@ function DangerZone({ task, onDeleted }: { task: Task; onDeleted: () => void }) 
     return (
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" size="sm" disabled={archive.isPending} onClick={() => archive.mutate()}>
-          {archived ? <ArchiveRestore /> : <Archive />} {archived ? "Restore" : "Archive"}
+          {archived ? <ArchiveRestore /> : <Archive />} {archived ? "恢复" : "归档"}
         </Button>
         <Button variant="outline" size="sm" onClick={() => setConfirming(true)}>
-          <Trash2 /> Delete task
+          <Trash2 /> 删除任务
         </Button>
       </div>
     );
@@ -693,12 +693,11 @@ function DangerZone({ task, onDeleted }: { task: Task; onDeleted: () => void }) 
   return (
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground">
-        Delete “{task.name}” and its {task.completionCount} logged completion
-        {task.completionCount === 1 ? "" : "s"}? This can’t be undone.
+        删除“{task.name}”及其 {task.completionCount} 条打卡记录？此操作无法撤销。
       </p>
       <div className="flex gap-2">
         <Button variant="outline" size="sm" onClick={() => setConfirming(false)}>
-          Cancel
+          取消
         </Button>
         <Button
           variant="destructive"
@@ -706,7 +705,7 @@ function DangerZone({ task, onDeleted }: { task: Task; onDeleted: () => void }) 
           disabled={mutation.isPending}
           onClick={() => mutation.mutate()}
         >
-          {mutation.isPending ? "Deleting…" : "Yes, delete"}
+          {mutation.isPending ? "删除中…" : "确认删除"}
         </Button>
       </div>
     </div>

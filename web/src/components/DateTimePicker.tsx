@@ -54,7 +54,7 @@ export function DateTimePicker({
   const displayHour = hour12 ? ((hours + 11) % 12) + 1 : hours;
   const isPM = hours >= 12;
   const timeLabel = hour12
-    ? `${displayHour}:${pad(minutes)} ${isPM ? "PM" : "AM"}`
+    ? `${isPM ? "下午" : "上午"} ${displayHour}:${pad(minutes)}`
     : `${pad(hours)}:${pad(minutes)}`;
   const dateLabel = value.toLocaleDateString(undefined, { dateStyle: "medium" });
 
@@ -73,7 +73,7 @@ export function DateTimePicker({
         ) : (
           <input
             type="date"
-            aria-label="Date"
+            aria-label="日期"
             className={INPUT}
             value={toDateInput(value)}
             max={max ? toDateInput(max) : undefined}
@@ -93,7 +93,7 @@ export function DateTimePicker({
         ) : (
           <input
             type="time"
-            aria-label="Time"
+            aria-label="时间"
             className={INPUT}
             value={`${pad(hours)}:${pad(minutes)}`}
             onChange={(e) => {

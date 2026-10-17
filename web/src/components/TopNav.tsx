@@ -67,7 +67,7 @@ export function TopNav({
         type="button"
         onClick={() => onFilterChange("all")}
         title={branding.name}
-        aria-label={`${branding.name} — all tasks`}
+        aria-label={`${branding.name} — 全部任务`}
         className="shrink-0"
       >
         {branding.icon ? (
@@ -125,7 +125,7 @@ export function TopNav({
             button becomes the icon it already is on the rest of the screen. */}
         <CreateTaskDialog
           trigger={
-            <Button size="icon" className="sm:hidden" aria-label="New task" title="New task">
+            <Button size="icon" className="sm:hidden" aria-label="新建任务" title="新建任务">
               <Plus />
             </Button>
           }
@@ -136,8 +136,8 @@ export function TopNav({
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Settings"
-          title="Settings"
+          aria-label="设置"
+          title="设置"
           onClick={() =>
             windows.open({ id: "settings", ...SETTINGS_WINDOW, content: <SettingsPanel /> })
           }
@@ -147,8 +147,8 @@ export function TopNav({
         <Button
           variant="ghost"
           size="icon"
-          aria-label="Sign out"
-          title={user ? `Sign out (${user.username})` : "Sign out"}
+          aria-label="退出登录"
+          title={user ? `退出登录（${user.username}）` : "退出登录"}
           disabled={logout.isPending}
           onClick={() => logout.mutate()}
         >

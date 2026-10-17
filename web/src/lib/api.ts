@@ -389,7 +389,7 @@ async function request<T>(url: string, options?: RequestInit): Promise<T> {
   });
 
   if (!res.ok) {
-    let message = `Request failed (${res.status})`;
+    let message = `请求失败 (${res.status})`;
     try {
       const data = await res.json();
       if (data && typeof data.error === "string") message = data.error;
@@ -631,7 +631,7 @@ const httpApi = {
    *  building the file in the browser. */
   exportData: async (format: "json" | "csv"): Promise<Blob> => {
     const res = await fetch(`/api/me/export?format=${format}`);
-    if (!res.ok) throw new Error(`Export failed (${res.status})`);
+    if (!res.ok) throw new Error(`导出失败 (${res.status})`);
     return res.blob();
   },
 
@@ -760,7 +760,7 @@ const httpApi = {
     fd.append("file", file);
     const res = await fetch("/api/admin/restore-upload", { method: "POST", body: fd });
     if (!res.ok) {
-      let message = `Request failed (${res.status})`;
+      let message = `请求失败 (${res.status})`;
       try {
         const d = await res.json();
         if (d && typeof d.error === "string") message = d.error;

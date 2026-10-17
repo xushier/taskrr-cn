@@ -24,20 +24,20 @@ import { Select } from "@/components/ui/select";
  */
 
 const FIELDS: { key: keyof CsvMapping; label: string; hint?: string }[] = [
-  { key: "name", label: "Name", hint: "required" },
-  { key: "description", label: "Description" },
-  { key: "folder", label: "Folder" },
-  { key: "tags", label: "Tags", hint: "split on , ; |" },
-  { key: "interval", label: "Routine" },
-  { key: "lastDone", label: "Last done" },
+  { key: "name", label: "名称", hint: "必填" },
+  { key: "description", label: "描述" },
+  { key: "folder", label: "文件夹" },
+  { key: "tags", label: "标签", hint: "以 , ; | 分隔" },
+  { key: "interval", label: "周期" },
+  { key: "lastDone", label: "上次打卡" },
 ];
 
 const BARE_UNITS = [
-  { value: "hour", label: "hours" },
-  { value: "day", label: "days" },
-  { value: "week", label: "weeks" },
-  { value: "month", label: "months" },
-  { value: "year", label: "years" },
+  { value: "hour", label: "小时" },
+  { value: "day", label: "天" },
+  { value: "week", label: "周" },
+  { value: "month", label: "月" },
+  { value: "year", label: "年" },
 ] as const;
 
 export function CsvMapper({
@@ -82,10 +82,9 @@ export function CsvMapper({
   return (
     <div className="space-y-3 rounded-md border p-3">
       <div>
-        <p className="text-sm font-medium">Match up the columns</p>
+        <p className="text-sm font-medium">匹配各列</p>
         <p className="text-xs text-muted-foreground">
-          {fileName} — {table.rows.length} {table.rows.length === 1 ? "row" : "rows"},{" "}
-          {table.headers.length} {table.headers.length === 1 ? "column" : "columns"}.
+          {fileName} —— {table.rows.length} 行、{table.headers.length} 列。
         </p>
       </div>
 
@@ -102,11 +101,11 @@ export function CsvMapper({
               className="h-8 min-w-0 flex-1 text-xs"
             >
               <option value={-1}>
-                — skip —
+                — 跳过 —
               </option>
               {table.headers.map((h, i) => (
                 <option key={i} value={i}>
-                  {h || `Column ${i + 1}`}
+                  {h || `第 ${i + 1} 列`}
                 </option>
               ))}
             </Select>
@@ -118,7 +117,7 @@ export function CsvMapper({
         <div className="flex flex-wrap items-center gap-3 border-t pt-2 text-xs">
           {hasBareNumbers && (
             <label className="flex items-center gap-1.5">
-              Plain numbers in Routine are
+              周期列中的纯数字单位：
               <Select
                 value={bareUnit}
                 onChange={(e) => setBareUnit(e.target.value as typeof bareUnit)}
@@ -135,7 +134,7 @@ export function CsvMapper({
           {hasAmbiguousDates && (
             <label className="flex items-center gap-1.5">
               <input type="checkbox" checked={dayFirst} onChange={(e) => setDayFirst(e.target.checked)} />
-              Dates are day/month/year
+              日期为日/月/年顺序
             </label>
           )}
         </div>
@@ -143,19 +142,19 @@ export function CsvMapper({
 
       {preview.length > 0 && (
         <div className="space-y-1 border-t pt-2 text-xs">
-          <p className="text-muted-foreground">This is what the first few rows become:</p>
+          <p className="text-muted-foreground">前几行将导入为：</p>
           <ul className="space-y-0.5">
             {preview.map((t, i) => (
               <li key={i} className="truncate">
                 <span className="font-medium">{t.name}</span>
                 {t.intervalSeconds != null && (
-                  <span className="text-muted-foreground"> · every {formatInterval(t.intervalSeconds)}</span>
+                  <span className="text-muted-foreground"> · 每 {formatInterval(t.intervalSeconds)}</span>
                 )}
-                {t.folder && <span className="text-muted-foreground"> · in {t.folder}</span>}
+                {t.folder && <span className="text-muted-foreground"> · 位于 {t.folder}</span>}
                 {t.tags?.length ? (
                   <span className="text-muted-foreground"> · {t.tags.map((x) => `#${x}`).join(" ")}</span>
                 ) : null}
-                {t.completions?.length ? <span className="text-muted-foreground"> · 1 completion</span> : null}
+                {t.completions?.length ? <span className="text-muted-foreground"> · 1 条打卡</span> : null}
               </li>
             ))}
           </ul>
@@ -163,13 +162,13 @@ export function CsvMapper({
       )}
 
       {mapping.name < 0 && (
-        <p className="text-xs text-destructive">Pick the column holding the task name to continue.</p>
+        <p className="text-xs text-destructive">请先选择任务名称所在的列。</p>
       )}
 
       {skipped.length > 0 && (
         <details className="text-xs">
           <summary className="cursor-pointer text-muted-foreground">
-            {skipped.length} {skipped.length === 1 ? "problem" : "problems"} to look at first
+            {skipped.length} 个问题需要先处理
           </summary>
           <ul className="mt-1 max-h-24 list-disc space-y-0.5 overflow-y-auto pl-4 text-muted-foreground">
             {skipped.slice(0, 30).map((m, i) => (
@@ -185,12 +184,10 @@ export function CsvMapper({
           disabled={!ready || busy}
           onClick={() => onImport(JSON.stringify(document))}
         >
-          {busy
-            ? "Importing…"
-            : `Import ${document.tasks.length} ${document.tasks.length === 1 ? "task" : "tasks"}`}
+          {busy ? "导入中…" : `导入 ${document.tasks.length} 个任务`}
         </Button>
         <Button size="sm" variant="ghost" onClick={onCancel}>
-          Cancel
+          取消
         </Button>
       </div>
     </div>

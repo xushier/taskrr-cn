@@ -60,14 +60,16 @@
        theme, rather than a static CSS starfield. */
     font-family: var(
       --font-app,
-      ui-monospace,
-      "JetBrains Mono",
-      "SFMono-Regular",
-      Menlo,
-      Consolas,
-      "Liberation Mono",
-      monospace
+      ui-sans-serif,
+      system-ui,
+      "PingFang SC",
+      "Microsoft YaHei UI",
+      "Microsoft YaHei",
+      "Noto Sans CJK SC",
+      sans-serif
     );
+    /* 中文字体按苹方中等粗细渲染，避免过细发虚；英文数字也保持清晰可读。 */
+    font-weight: 500;
     -webkit-font-smoothing: antialiased;
   }
 

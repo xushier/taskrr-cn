@@ -21,7 +21,7 @@ export function FolderInput({
       <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder="No folder"
+        placeholder="无文件夹"
         list={listId}
         autoComplete="off"
       />

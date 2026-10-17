@@ -111,7 +111,7 @@ export function Sidebar({
         </div>
         {/* Close button only matters in the mobile drawer. */}
         {onClose && (
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={onClose} aria-label="Close menu">
+          <Button variant="ghost" size="icon" className="md:hidden" onClick={onClose} aria-label="关闭菜单">
             <X />
           </Button>
         )}
@@ -123,8 +123,8 @@ export function Sidebar({
             size="icon"
             className="hidden shrink-0 md:inline-flex"
             onClick={onCollapse}
-            aria-label="Collapse menu"
-            title="Collapse menu"
+            aria-label="收起菜单"
+            title="收起菜单"
           >
             <PanelLeftClose />
           </Button>
@@ -137,7 +137,7 @@ export function Sidebar({
         <CreateTaskDialog
           trigger={
             rail ? (
-              <Button size="icon" className="h-11 w-11" aria-label="New task" title="New task">
+              <Button size="icon" className="h-11 w-11" aria-label="新建任务" title="新建任务">
                 <Plus />
               </Button>
             ) : undefined
@@ -239,7 +239,7 @@ export function Sidebar({
           <div className="mb-1 flex items-center justify-between gap-2 px-3">
             <span className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               <FolderIcon className="h-3 w-3" />
-              Folders
+              文件夹
             </span>
             {/* Only while one is picked: says the list is narrowed, and undoes it
                 without having to remember which folder is on. */}
@@ -249,7 +249,7 @@ export function Sidebar({
                 onClick={() => onFolderChange?.(null)}
                 className="text-[11px] font-medium text-muted-foreground hover:text-foreground"
               >
-                clear
+                清除
               </button>
             )}
           </div>
@@ -289,8 +289,8 @@ export function Sidebar({
               onClick={() =>
                 windows.open({ id: "settings", ...SETTINGS_WINDOW, content: <SettingsPanel /> })
               }
-              aria-label="Settings"
-              title="Settings"
+              aria-label="设置"
+              title="设置"
             >
               <Settings />
             </Button>
@@ -298,8 +298,8 @@ export function Sidebar({
               variant="ghost"
               size="icon"
               className="h-11 w-11"
-              aria-label="Sign out"
-              title={user ? `Sign out (${user.username})` : "Sign out"}
+              aria-label="退出登录"
+              title={user ? `退出登录（${user.username}）` : "退出登录"}
               disabled={logout.isPending}
               onClick={() => logout.mutate()}
             >
@@ -319,7 +319,7 @@ export function Sidebar({
             variant="ghost"
             size="icon"
             className="h-7 w-7 shrink-0"
-            aria-label="Sign out"
+            aria-label="退出登录"
             disabled={logout.isPending}
             onClick={() => logout.mutate()}
           >
@@ -331,7 +331,7 @@ export function Sidebar({
           <button
             type="button"
             onClick={() => setChangelogOpen(true)}
-            title={release ? `Released ${formatReleaseDate(release.date)}` : undefined}
+            title={release ? `发布于 ${formatReleaseDate(release.date)}` : undefined}
             className="inline-flex items-center gap-1.5 text-[11px] text-muted-foreground transition-colors hover:text-foreground"
           >
             v{__APP_VERSION__}
@@ -347,7 +347,7 @@ export function Sidebar({
               })
             }
           >
-            <Settings /> Settings
+            <Settings /> 设置
           </Button>
         </div>
         <ChangelogDialog open={changelogOpen} onOpenChange={setChangelogOpen} />

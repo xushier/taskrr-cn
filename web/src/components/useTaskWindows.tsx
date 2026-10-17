@@ -16,7 +16,7 @@ export function useTaskWindows() {
     const id = `manage-${task.id}`;
     windows.open({
       id,
-      title: `Manage “${task.name}”`,
+      title: `管理“${task.name}”`,
       content: <ManageTaskPanel task={task} onClose={() => windows.close(id)} />,
     });
   };
@@ -25,7 +25,7 @@ export function useTaskWindows() {
     const id = `complete-${task.id}`;
     windows.open({
       id,
-      title: `Log “${task.name}”`,
+      title: `打卡“${task.name}”`,
       content: <CompleteTaskPanel task={task} onClose={() => windows.close(id)} />,
     });
   };

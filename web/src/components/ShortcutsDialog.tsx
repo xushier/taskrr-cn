@@ -25,9 +25,9 @@ export function ShortcutsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Keyboard shortcuts</DialogTitle>
+          <DialogTitle>键盘快捷键</DialogTitle>
           <DialogDescription>
-            Single keys, no modifiers — and never while you're typing in a field.
+            单键触发，无需组合键——在输入框中输入时不会生效。
           </DialogDescription>
         </DialogHeader>
         <ul className="space-y-1.5">
@@ -48,8 +48,7 @@ export function ShortcutsDialog({
           ))}
         </ul>
         <p className="text-xs text-muted-foreground">
-          Change these under Settings → Shortcuts, or turn them off under Preferences →
-          Shortcuts & input.
+          可在“设置 → 快捷键”中修改，或在“偏好设置 → 快捷键与输入”中关闭。
         </p>
       </DialogContent>
     </Dialog>

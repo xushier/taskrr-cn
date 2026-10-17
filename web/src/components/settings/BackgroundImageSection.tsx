@@ -54,7 +54,7 @@ export function BackgroundImageSection() {
       // Pick what you just uploaded: nobody uploads a wallpaper in order to go
       // on looking at the old one.
       setPrefs({ bgImage: String(bg.id) });
-      toast("Background added", { tone: "success" });
+      toast("背景图片已添加", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -64,7 +64,7 @@ export function BackgroundImageSection() {
     onSuccess: (_r, id) => {
       queryClient.invalidateQueries({ queryKey: ["backgrounds"] });
       if (prefs.bgImage === String(id)) setPrefs({ bgImage: "" });
-      toast("Background removed", { tone: "success" });
+      toast("背景图片已删除", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -77,26 +77,25 @@ export function BackgroundImageSection() {
   return (
     <SettingsGroup
       id="theme.bgimage"
-      title="Background image"
+      title="背景图片"
       icon={<ImageIcon />}
-      summary={showing ? "On" : "Off"}
+      summary={showing ? "开启" : "关闭"}
     >
       <p className="text-xs text-muted-foreground">
-        A picture behind the app, under whichever effect is running. Yours alone —
-        nobody else sees it.
+        在应用背后、当前效果之下显示一张图片。仅你自己可见，其他人看不到。
       </p>
 
       <Select
         value={prefs.bgImage}
         onChange={(e) => setPrefs({ bgImage: e.target.value })}
-        aria-label="Background image"
+        aria-label="背景图片"
       >
         {/* "" means "whatever the instance uses", which reads differently
             depending on whether the admin actually set one. */}
         <option value="">
-          {branding.background > 0 ? "Instance background" : "None (no instance background set)"}
+          {branding.background > 0 ? "实例背景" : "无（未设置实例背景）"}
         </option>
-        <option value="none">None</option>
+        <option value="none">无</option>
         {list.map((b: BackgroundImage) => (
           <option key={b.id} value={String(b.id)}>
             {b.name}
@@ -123,10 +122,10 @@ export function BackgroundImageSection() {
           disabled={upload.isPending}
           onClick={() => fileRef.current?.click()}
         >
-          <Upload className="h-3.5 w-3.5" /> {upload.isPending ? "Uploading…" : "Upload"}
+          <Upload className="h-3.5 w-3.5" /> {upload.isPending ? "上传中…" : "上传"}
         </Button>
         <span className="text-[11px] text-muted-foreground">
-          PNG, JPEG, WebP, AVIF{limits?.allowSVG ? ", GIF or SVG" : " or GIF"}, up to{" "}
+          PNG、JPEG、WebP、AVIF{limits?.allowSVG ? "、GIF 或 SVG" : " 或 GIF"}，最大{" "}
           {limits?.imageMB ?? 8} MB
         </span>
       </div>
@@ -157,13 +156,13 @@ export function BackgroundImageSection() {
                 </button>
                 <button
                   type="button"
-                  aria-label={`Delete ${b.name}`}
+                  aria-label={`删除 ${b.name}`}
                   disabled={remove.isPending}
                   onClick={async () => {
                     const ok = await confirm({
-                      title: "Delete background",
-                      description: `"${b.name}" is removed for good. Anywhere it's in use falls back to the instance background.`,
-                      confirmText: "Delete",
+                      title: "删除背景图片",
+                      description: `"${b.name}"将被永久删除。正在使用它的地方会回退到实例背景。`,
+                      confirmText: "删除",
                       destructive: true,
                     });
                     if (ok) remove.mutate(b.id);
@@ -181,20 +180,20 @@ export function BackgroundImageSection() {
       {showing && (
         <>
           <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Fit</Label>
+            <Label className="text-xs text-muted-foreground">适应方式</Label>
             <Select
               value={prefs.bgImageFit}
               onChange={(e) => setPrefs({ bgImageFit: e.target.value as BackgroundFit })}
             >
-              <option value="cover">Fill the screen</option>
-              <option value="contain">Fit inside</option>
-              <option value="tile">Tile</option>
+              <option value="cover">铺满屏幕</option>
+              <option value="contain">完整显示</option>
+              <option value="tile">平铺</option>
             </Select>
           </div>
           <div className="space-y-1">
             {/* The dial that makes a photograph a surface you can read text on. */}
             <Label className="text-xs text-muted-foreground">
-              Dim: {Math.round(prefs.bgImageDim * 100)}%
+              变暗：{Math.round(prefs.bgImageDim * 100)}%
             </Label>
             <input
               type="range"
@@ -204,7 +203,7 @@ export function BackgroundImageSection() {
               value={prefs.bgImageDim}
               onChange={(e) => setPrefs({ bgImageDim: Number(e.target.value) })}
               className="w-full accent-primary"
-              aria-label="Background image dim"
+              aria-label="背景图片变暗程度"
             />
           </div>
         </>

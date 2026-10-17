@@ -66,11 +66,11 @@ export function WhatsNew() {
     <Dialog open={open} onOpenChange={(o) => !o && close()}>
       <DialogContent className="sm:max-w-2xl">
         <DialogHeader>
-          <DialogTitle>What's new in v{CURRENT_VERSION}</DialogTitle>
+          <DialogTitle>v{CURRENT_VERSION} 最新更新</DialogTitle>
           <DialogDescription>
             {updates.length === 1
-              ? "Everything that changed in this update."
-              : `Everything that changed across the last ${updates.length} updates.`}
+              ? "本次更新的全部变更。"
+              : `最近 ${updates.length} 次更新的全部变更。`}
           </DialogDescription>
         </DialogHeader>
         <div className="-mr-2 max-h-[60vh] space-y-5 overflow-y-auto pr-2">
@@ -79,7 +79,7 @@ export function WhatsNew() {
           ))}
         </div>
         <DialogFooter>
-          <Button onClick={close}>Got it</Button>
+          <Button onClick={close}>知道了</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

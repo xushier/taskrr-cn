@@ -35,7 +35,7 @@ function TaskRow({
   return <ContextMenu entries={menu(task)}>{children}</ContextMenu>;
 }
 
-const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+const WEEKDAYS = ["日", "一", "二", "三", "四", "五", "六"];
 // Localised short month names for the month/year picker.
 const MONTH_LABELS = Array.from({ length: 12 }, (_, m) =>
   new Date(2000, m, 1).toLocaleDateString(undefined, { month: "short" }),
@@ -134,7 +134,7 @@ export function Calendar({
       queryClient.invalidateQueries({ queryKey: ["activity"] });
       setLogOpen(false);
       setLogTaskId("");
-      toast("Logged", { tone: "success" });
+      toast("已打卡", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -268,7 +268,7 @@ export function Calendar({
             setPickerOpen((o) => !o);
           }}
           aria-expanded={pickerOpen}
-          title="Pick a month and year"
+          title="选择月份与年份"
           className="group flex items-center gap-1 rounded text-sm font-semibold transition-colors hover:text-primary"
         >
           {/* Keyed by the month so the label fades in alongside the sliding grid. */}
@@ -292,18 +292,18 @@ export function Calendar({
             variant="ghost"
             size="sm"
             className="h-7 px-2 text-xs"
-            aria-label="Go to today"
-            title="Go to today"
+            aria-label="回到今天"
+            title="回到今天"
             disabled={onToday}
             onClick={goToday}
           >
-            Today
+            今天
           </Button>
           <Button
             variant="ghost"
             size="icon"
             className="h-7 w-7"
-            aria-label="Previous month"
+            aria-label="上个月"
             onClick={() => {
               setSelected(null);
               setNavDir("left");
@@ -317,7 +317,7 @@ export function Calendar({
             variant="ghost"
             size="icon"
             className="h-7 w-7"
-            aria-label="Next month"
+            aria-label="下个月"
             onClick={() => {
               setSelected(null);
               setNavDir("right");
@@ -337,7 +337,7 @@ export function Calendar({
               variant="ghost"
               size="icon"
               className="h-7 w-7"
-              aria-label="Previous year"
+              aria-label="上一年"
               onClick={() => setPickerYear((y) => y - 1)}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -347,7 +347,7 @@ export function Calendar({
               variant="ghost"
               size="icon"
               className="h-7 w-7"
-              aria-label="Next year"
+              aria-label="下一年"
               onClick={() => setPickerYear((y) => y + 1)}
             >
               <ChevronRight className="h-4 w-4" />
@@ -384,7 +384,7 @@ export function Calendar({
             }}
             className="w-full rounded-md py-1 text-center text-xs text-muted-foreground transition-colors hover:text-primary"
           >
-            Jump to today
+            跳转到今天
           </button>
         </div>
       )}
@@ -450,7 +450,7 @@ export function Calendar({
               {dues.length > 0 && (
                 <span
                   className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-amber-500"
-                  title={`${dues.length} due`}
+                  title={`${dues.length} 项到期`}
                 />
               )}
             </button>
@@ -466,9 +466,9 @@ export function Calendar({
             type="button"
             onClick={() => openTask(nextUp.task.id)}
             className="w-full rounded-md text-left text-muted-foreground transition-colors hover:text-foreground"
-            title="Open task"
+            title="打开任务"
           >
-            <span className="font-medium text-foreground">Next up:</span> {nextUp.task.name}{" "}
+            <span className="font-medium text-foreground">下一个：</span> {nextUp.task.name}{" "}
             {/* Matches the task cards: the user's own overdue colour, nudged to
                 stay readable on the panel rather than a fixed pale rose. */}
             <span style={formatDue(nextUp.due).overdue ? { color: overdueColor } : undefined}>
@@ -476,7 +476,7 @@ export function Calendar({
             </span>
           </button>
         ) : (
-          <p className="text-muted-foreground">No routines scheduled yet.</p>
+          <p className="text-muted-foreground">暂无周期任务安排。</p>
         )}
       </div>
 
@@ -510,7 +510,7 @@ export function Calendar({
                 type="button"
                 onClick={() => openTask(a.taskId)}
                 className="flex w-full gap-2 rounded-md p-1 text-left transition-colors hover:bg-accent"
-                title="Open task"
+                title="打开任务"
               >
                 <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
                 <div className="min-w-0">
@@ -533,11 +533,11 @@ export function Calendar({
                 type="button"
                 onClick={() => openTask(t.id)}
                 className="flex w-full items-center gap-2 rounded-md p-1 text-left transition-colors hover:bg-accent"
-                title="Open task"
+                title="打开任务"
               >
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-amber-500" />
                 <span className="font-medium">{t.name}</span>
-                <span className="text-muted-foreground">due</span>
+                <span className="text-muted-foreground">到期</span>
               </button>
             </TaskRow>
           ))}
@@ -553,11 +553,11 @@ export function Calendar({
                     value={logTaskId}
                     autoFocus
                     onChange={(e) => setLogTaskId(e.target.value ? Number(e.target.value) : "")}
-                    aria-label="Task to log"
+                    aria-label="要打卡的任务"
                     className="h-8 min-w-0 flex-1 basis-32 text-xs"
                   >
                     <option value="">
-                      Pick a task…
+                      选择任务…
                     </option>
                     {loggable.map((t) => (
                       <option key={t.id} value={t.id}>
@@ -571,10 +571,10 @@ export function Calendar({
                     disabled={logTaskId === "" || backdate.isPending}
                     onClick={() => backdate.mutate({ taskId: Number(logTaskId), day: detail.day })}
                   >
-                    {backdate.isPending ? "Logging…" : "Log"}
+                    {backdate.isPending ? "打卡中…" : "打卡"}
                   </Button>
                   <Button size="sm" variant="ghost" className="h-8" onClick={() => setLogOpen(false)}>
-                    Cancel
+                    取消
                   </Button>
                 </div>
               ) : (
@@ -584,7 +584,7 @@ export function Calendar({
                   className="flex w-full items-center gap-1.5 rounded-md p-1.5 text-left text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
                 >
                   <Plus className="h-3.5 w-3.5 shrink-0" />
-                  Log a task on this day
+                  补记当日打卡
                 </button>
               )}
             </div>

@@ -130,8 +130,8 @@ export function paceVerdict(paceRatio: number | null): PaceVerdict | null {
 }
 
 export const PACE_LABELS: Record<PaceVerdict, string> = {
-  ahead: "ahead of your routine",
-  "on-track": "right on your routine",
-  behind: "a little behind your routine",
-  "well-behind": "well behind your routine",
+  ahead: "领先于周期",
+  "on-track": "与周期一致",
+  behind: "略落后于周期",
+  "well-behind": "远落后于周期",
 };

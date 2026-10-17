@@ -66,7 +66,7 @@ export function AccountSection() {
       setWipeConfirm("");
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["activity"] });
-      toast("Your tasks were deleted", { tone: "success" });
+      toast("你的任务已删除", { tone: "success" });
     },
   });
 
@@ -86,7 +86,7 @@ export function AccountSection() {
       // Reflect the new name immediately and refresh the admin list if open.
       queryClient.setQueryData(["me"], updated);
       queryClient.invalidateQueries({ queryKey: ["users"] });
-      toast("Username updated", { tone: "success" });
+      toast("用户名已更新", { tone: "success" });
     },
   });
 
@@ -97,7 +97,7 @@ export function AccountSection() {
       setNext("");
       setConfirm("");
       setErr(null);
-      toast("Password updated", { tone: "success" });
+      toast("密码已更新", { tone: "success" });
     },
     onError: (e) => setErr((e as Error).message),
   });
@@ -107,37 +107,37 @@ export function AccountSection() {
     mutationFn: (allow: boolean) => api.setAllowShares(allow),
     onSuccess: (updated) => {
       queryClient.setQueryData(["me"], updated);
-      toast("Sharing preference saved", { tone: "success" });
+      toast("共享偏好已保存", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
 
   const submit = () => {
     setErr(null);
-    if (next.length < 8) return setErr("Password must be at least 8 characters.");
-    if (next !== confirm) return setErr("Passwords don't match.");
+    if (next.length < 8) return setErr("密码至少需要 8 个字符。");
+    if (next !== confirm) return setErr("两次输入的密码不一致。");
     change.mutate();
   };
 
   return (
     <div className="space-y-4">
       <section className="space-y-1">
-        <h3 className="text-sm font-semibold">Account</h3>
+        <h3 className="text-sm font-semibold">账户</h3>
         <p className="text-xs text-muted-foreground">
-          Signed in as <span className="font-medium text-foreground">{user?.username}</span>
-          {user?.role === "admin" && " · admin"}.
+          当前登录为 <span className="font-medium text-foreground">{user?.username}</span>
+          {user?.role === "admin" && " · 管理员"}。
         </p>
       </section>
 
       <SettingsGroup
         id="account.signin"
-        title="Sign-in"
+        title="登录"
         icon={<UserRound />}
         flat
       >
       <section className="space-y-2">
         <h4 className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-          <UserRound className="h-3.5 w-3.5" /> Username
+          <UserRound className="h-3.5 w-3.5" /> 用户名
         </h4>
         <div className="flex gap-2">
           <Input
@@ -151,26 +151,26 @@ export function AccountSection() {
             disabled={rename.isPending || !username.trim() || username.trim() === user?.username}
             onClick={() => rename.mutate()}
           >
-            {rename.isPending ? "Saving…" : "Rename"}
+            {rename.isPending ? "保存中…" : "重命名"}
           </Button>
         </div>
         {rename.isError && <p className="text-xs text-destructive">{(rename.error as Error).message}</p>}
-        {rename.isSuccess && <p className="text-xs text-emerald-500">Username updated.</p>}
+        {rename.isSuccess && <p className="text-xs text-emerald-500">用户名已更新。</p>}
       </section>
 
 
       <section className="space-y-2">
         <h4 className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-          <KeyRound className="h-3.5 w-3.5" /> Change password
-          {!needsCurrent && " (set one to enable username sign-in)"}
+          <KeyRound className="h-3.5 w-3.5" /> 修改密码
+          {!needsCurrent && "（设置密码后可用用户名登录）"}
         </h4>
         <p className="text-[11px] text-muted-foreground">
-          Signs out your other devices and revokes any API tokens you've made.
+          将登出你的其他设备，并吊销你创建的所有 API 令牌。
         </p>
         {needsCurrent && (
           <Input
             type="password"
-            placeholder="Current password"
+            placeholder="当前密码"
             autoComplete="current-password"
             value={current}
             onChange={(e) => setCurrent(e.target.value)}
@@ -179,7 +179,7 @@ export function AccountSection() {
         )}
         <Input
           type="password"
-          placeholder="New password"
+          placeholder="新密码"
           autoComplete="new-password"
           value={next}
           onChange={(e) => setNext(e.target.value)}
@@ -187,21 +187,21 @@ export function AccountSection() {
         />
         <Input
           type="password"
-          placeholder="Confirm new password"
+          placeholder="确认新密码"
           autoComplete="new-password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
           className="h-8"
         />
         {err && <p className="text-xs text-destructive">{err}</p>}
-        {change.isSuccess && <p className="text-xs text-emerald-500">Password updated.</p>}
+        {change.isSuccess && <p className="text-xs text-emerald-500">密码已更新。</p>}
         <div className="flex justify-end">
           <Button
             size="sm"
             disabled={change.isPending || !next || !confirm || (needsCurrent && !current)}
             onClick={submit}
           >
-            {change.isPending ? "Saving…" : "Change password"}
+            {change.isPending ? "保存中…" : "修改密码"}
           </Button>
         </div>
       </section>
@@ -213,15 +213,15 @@ export function AccountSection() {
       {(config?.oidc || user?.oidcLinked) && (
         <section className="space-y-2">
           <h4 className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground">
-            <Link2 className="h-3.5 w-3.5" /> Connected sign-in
+            <Link2 className="h-3.5 w-3.5" /> 关联登录
           </h4>
           {user?.oidcLinked ? (
             <div className="space-y-2 rounded-md border border-border/60 p-3">
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                 <div className="min-w-0">
-                  <p className="text-sm font-medium">Single sign-on</p>
+                  <p className="text-sm font-medium">单点登录</p>
                   <p className="text-xs text-muted-foreground">
-                    Single sign-on is connected to this account.
+                    此账户已关联单点登录。
                   </p>
                 </div>
                 <Button
@@ -232,12 +232,12 @@ export function AccountSection() {
                   onClick={() => unlink.mutate()}
                 >
                   <Link2Off className="h-3.5 w-3.5" />
-                  {unlink.isPending ? "Disconnecting…" : "Disconnect"}
+                  {unlink.isPending ? "正在断开…" : "断开"}
                 </Button>
               </div>
               {!user?.passwordSet && (
                 <p className="text-xs text-muted-foreground">
-                  Set a password above first — otherwise you'd have no way to sign in.
+                  请先在上方设置密码，否则断开后将无法登录。
                 </p>
               )}
               {unlink.isError && (
@@ -247,11 +247,11 @@ export function AccountSection() {
           ) : (
             <div className="space-y-2 rounded-md border border-border/60 p-3">
               <p className="text-xs text-muted-foreground">
-                Connect single sign-on so you can also sign in through your identity provider.
+                关联单点登录后，你也可以通过身份提供方登录。
               </p>
               <Button size="sm" variant="outline" asChild>
                 <a href="/api/auth/oidc/link">
-                  <Link2 className="h-3.5 w-3.5" /> Connect SSO
+                  <Link2 className="h-3.5 w-3.5" /> 关联 SSO
                 </a>
               </Button>
             </div>
@@ -263,10 +263,10 @@ export function AccountSection() {
       {/* Sharing is a multi-user idea: with lite mode on, or sharing disabled
           instance-wide, there is nothing here to decide. */}
       {config?.tasksShareable && !config?.lite && (
-        <SettingsGroup id="account.sharing" title="Sharing" icon={<Users />} summary="Who can send you tasks">
+        <SettingsGroup id="account.sharing" title="共享" icon={<Users />} summary="谁可以发任务给你">
           <ToggleRow
-            label="Let others share tasks with me"
-            hint="When off, people can't send you tasks."
+            label="允许他人共享任务给我"
+            hint="关闭后，其他人无法向你发送任务。"
             checked={user?.allowShares ?? true}
             disabled={allowShares.isPending}
             onChange={(v) => allowShares.mutate(v)}
@@ -278,18 +278,18 @@ export function AccountSection() {
 
       <SettingsGroup
         id="account.data"
-        title="Your data"
+        title="我的数据"
         icon={<Download />}
-        summary="Export, import"
+        summary="导出、导入"
       >
         <ExportSection />
       </SettingsGroup>
 
       <SettingsGroup
         id="account.tokens"
-        title="API tokens"
+        title="API 令牌"
         icon={<Terminal />}
-        summary="For scripts and automations"
+        summary="用于脚本和自动化"
       >
         <APITokensSection />
       </SettingsGroup>
@@ -297,20 +297,19 @@ export function AccountSection() {
       {/* Advanced: the irreversible self-service actions live here (each gated by
           re-typing the account's own username), under a "Danger zone" label.
           Shut by default so it's tucked away. */}
-      <SettingsGroup id="account.advanced" title="Advanced" icon={<AlertTriangle />}>
+      <SettingsGroup id="account.advanced" title="高级" icon={<AlertTriangle />}>
         <div className="flex items-center gap-1.5 text-xs font-semibold text-destructive">
-          <AlertTriangle className="h-3.5 w-3.5" /> Danger zone
+          <AlertTriangle className="h-3.5 w-3.5" /> 危险区
         </div>
         <div className="space-y-2">
           <p className="text-xs text-muted-foreground">
-            Delete all your tasks and their history. Your account and settings stay.
-            This can't be undone.
+            删除你的全部任务及其历史记录，账户和设置会保留。此操作无法撤销。
           </p>
           <div className="flex gap-2">
             <Input
               value={wipeConfirm}
               onChange={(e) => setWipeConfirm(e.target.value)}
-              placeholder={`Type "${user?.username}" to confirm`}
+              placeholder={`输入"${user?.username}"以确认`}
               className="h-8"
             />
             <Button
@@ -320,28 +319,27 @@ export function AccountSection() {
               onClick={() => wipe.mutate()}
             >
               <Trash2 className="h-3.5 w-3.5" />
-              {wipe.isPending ? "Deleting…" : "Delete tasks"}
+              {wipe.isPending ? "删除中…" : "删除任务"}
             </Button>
           </div>
           {wipe.isError && <p className="text-xs text-destructive">{(wipe.error as Error).message}</p>}
-          {wipe.isSuccess && <p className="text-xs text-emerald-500">All your tasks were deleted.</p>}
+          {wipe.isSuccess && <p className="text-xs text-emerald-500">你的所有任务已删除。</p>}
         </div>
 
         {user?.protected ? (
           <p className="border-t pt-3 text-xs text-muted-foreground">
-            This is the primary admin account and can't be deleted.
+            这是主管理员账户，无法删除。
           </p>
         ) : (
           <div className="space-y-2 border-t pt-3">
             <p className="text-xs text-muted-foreground">
-              Permanently delete your account and everything in it. You'll be signed
-              out immediately. This can't be undone.
+              永久删除你的账户及其中的所有数据，你会立即退出登录。此操作无法撤销。
             </p>
             <div className="flex gap-2">
               <Input
                 value={deleteConfirm}
                 onChange={(e) => setDeleteConfirm(e.target.value)}
-                placeholder={`Type "${user?.username}" to confirm`}
+                placeholder={`输入"${user?.username}"以确认`}
                 className="h-8"
               />
               <Button
@@ -351,7 +349,7 @@ export function AccountSection() {
                 onClick={() => del.mutate()}
               >
                 <Trash2 className="h-3.5 w-3.5" />
-                {del.isPending ? "Deleting…" : "Delete account"}
+                {del.isPending ? "删除中…" : "删除账户"}
               </Button>
             </div>
             {del.isError && <p className="text-xs text-destructive">{(del.error as Error).message}</p>}
@@ -395,15 +393,14 @@ function ExportSection() {
   return (
     <section className="space-y-2">
       <p className="text-xs text-muted-foreground">
-        Every task you own or share, with its full history. JSON keeps the structure;
-        CSV opens in a spreadsheet.
+        你拥有或共享的全部任务及其完整历史。JSON 保留结构，CSV 可用表格软件打开。
       </p>
       <div className="flex flex-wrap gap-2">
         <Button size="sm" variant="outline" disabled={busy !== null} onClick={() => download("json")}>
-          {busy === "json" ? "Preparing…" : "Download JSON"}
+          {busy === "json" ? "准备中…" : "下载 JSON"}
         </Button>
         <Button size="sm" variant="outline" disabled={busy !== null} onClick={() => download("csv")}>
-          {busy === "csv" ? "Preparing…" : "Download CSV"}
+          {busy === "csv" ? "准备中…" : "下载 CSV"}
         </Button>
       </div>
 
@@ -436,7 +433,7 @@ function ImportControls() {
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
       queryClient.invalidateQueries({ queryKey: ["activity"] });
       toast(
-        `Imported ${res.tasksCreated} ${res.tasksCreated === 1 ? "task" : "tasks"}`,
+        `已导入 ${res.tasksCreated} 个任务`,
         { tone: "success" },
       );
     },
@@ -451,7 +448,7 @@ function ImportControls() {
     if (isCsv) {
       const table = parseCsv(text);
       if (table.headers.length === 0) {
-        toast("That file looks empty", { tone: "error" });
+        toast("该文件似乎是空的", { tone: "error" });
         return;
       }
       setCsv({ table, fileName: file.name });
@@ -464,10 +461,10 @@ function ImportControls() {
   const send = async (json: string) => {
     if (mode === "replace") {
       const ok = await confirm({
-        title: "Replace everything?",
+        title: "替换全部数据？",
         description:
-          "This deletes all of your current tasks and their history first, then restores the file. This can't be undone.",
-        confirmText: "Delete and restore",
+          "将先删除你当前的所有任务及其历史记录，再从文件恢复。此操作无法撤销。",
+        confirmText: "删除并恢复",
         destructive: true,
       });
       if (!ok) return;
@@ -478,17 +475,17 @@ function ImportControls() {
   return (
     <div className="space-y-2 pt-1">
       <h4 className="flex items-center gap-1.5 text-sm font-medium">
-        <Upload className="h-3.5 w-3.5" /> Restore from a file
+        <Upload className="h-3.5 w-3.5" /> 从文件恢复
       </h4>
       <div className="flex flex-wrap items-center gap-2">
         <select
           value={mode}
           onChange={(e) => setMode(e.target.value as "merge" | "replace")}
-          aria-label="Import mode"
+          aria-label="导入模式"
           className="h-9 rounded-md border border-input bg-transparent px-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <option value="merge" className="bg-background">Add to my tasks</option>
-          <option value="replace" className="bg-background">Replace everything</option>
+          <option value="merge" className="bg-background">添加到我的任务</option>
+          <option value="replace" className="bg-background">替换全部数据</option>
         </select>
         <input
           ref={fileRef}
@@ -503,12 +500,11 @@ function ImportControls() {
           }}
         />
         <Button size="sm" variant="outline" disabled={run.isPending} onClick={() => fileRef.current?.click()}>
-          {run.isPending ? "Importing…" : "Choose a file…"}
+          {run.isPending ? "导入中…" : "选择文件…"}
         </Button>
       </div>
       <p className="text-xs text-muted-foreground">
-        A Taskrr JSON export restores as-is. A CSV from another tracker asks which column is which
-        first.
+        Taskrr 的 JSON 导出文件按原样恢复；来自其他追踪应用的 CSV 会先让你匹配各列的含义。
       </p>
 
       {csv && (
@@ -524,14 +520,13 @@ function ImportControls() {
       {result && (
         <div className="space-y-1 rounded-md border p-2 text-xs">
           <p className="text-foreground">
-            Restored {result.tasksCreated} {result.tasksCreated === 1 ? "task" : "tasks"} and{" "}
-            {result.completionsAdded} {result.completionsAdded === 1 ? "completion" : "completions"}
-            {result.tasksDeleted > 0 && `, after removing ${result.tasksDeleted}`}.
+            已恢复 {result.tasksCreated} 个任务、{result.completionsAdded} 条打卡记录
+            {result.tasksDeleted > 0 && `（此前删除了 ${result.tasksDeleted} 个）`}。
           </p>
           {result.skipped.length > 0 && (
             <>
               <p className="text-muted-foreground">
-                {result.skipped.length} {result.skipped.length === 1 ? "entry" : "entries"} couldn't be restored:
+                有 {result.skipped.length} 条记录无法恢复：
               </p>
               <ul className="max-h-24 list-disc space-y-0.5 overflow-y-auto pl-4 text-muted-foreground">
                 {result.skipped.slice(0, 20).map((m, i) => (
@@ -566,7 +561,7 @@ function APITokensSection() {
   const [fresh, setFresh] = useState<string | null>(null);
 
   const create = useMutation({
-    mutationFn: () => api.createAPIToken(name.trim() || "API token"),
+    mutationFn: () => api.createAPIToken(name.trim() || "API 令牌"),
     onSuccess: (t) => {
       setFresh(t.token);
       setName("");
@@ -579,7 +574,7 @@ function APITokensSection() {
     mutationFn: (id: number) => api.deleteAPIToken(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["api-tokens"] });
-      toast("Token revoked", { tone: "success" });
+      toast("令牌已吊销", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -590,7 +585,7 @@ function APITokensSection() {
     mutationFn: api.deleteAllAPITokens,
     onSuccess: (r) => {
       queryClient.invalidateQueries({ queryKey: ["api-tokens"] });
-      toast(r.revoked === 1 ? "1 token revoked" : `${r.revoked} tokens revoked`, { tone: "success" });
+      toast(r.revoked === 1 ? "已吊销 1 个令牌" : `已吊销 ${r.revoked} 个令牌`, { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -598,11 +593,11 @@ function APITokensSection() {
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      toast("Copied", { tone: "success" });
+      toast("已复制", { tone: "success" });
     } catch {
       // Clipboard access needs a secure context, which a LAN instance on plain
       // HTTP won't have — the token stays selectable on screen either way.
-      toast("Copy failed — select the token and copy it manually", { tone: "error" });
+      toast("复制失败——请手动选中令牌复制", { tone: "error" });
     }
   };
 
@@ -611,18 +606,17 @@ function APITokensSection() {
   return (
     <section className="space-y-2">
       <p className="text-xs text-muted-foreground">
-        Log a task from a script, an NFC tag, or your home automation. A token reaches
-        your tasks and history only — never the admin area or your password.
+        用脚本、NFC 标签或家庭自动化打卡。令牌只能访问你的任务和历史，绝不会触达管理区或你的密码。
       </p>
 
       {fresh && (
         <div className="space-y-1.5 rounded-lg border border-primary/40 bg-primary/10 p-2">
-          <p className="text-xs font-medium">Copy this now — it isn't shown again.</p>
+          <p className="text-xs font-medium">请立即复制——它不会再次显示。</p>
           <div className="flex items-center gap-1.5">
             <code className="min-w-0 flex-1 select-all break-all rounded bg-background/60 px-1.5 py-1 text-[11px]">
               {fresh}
             </code>
-            <Button size="icon" variant="outline" className="h-7 w-7 shrink-0" aria-label="Copy token" onClick={() => copy(fresh)}>
+            <Button size="icon" variant="outline" className="h-7 w-7 shrink-0" aria-label="复制令牌" onClick={() => copy(fresh)}>
               <Copy className="h-3.5 w-3.5" />
             </Button>
           </div>
@@ -630,7 +624,7 @@ function APITokensSection() {
             curl -H &quot;Authorization: Bearer {fresh.slice(0, 8)}…&quot; {window.location.origin}/api/tasks
           </p>
           <Button size="sm" variant="ghost" className="h-7" onClick={() => setFresh(null)}>
-            Done
+            完成
           </Button>
         </div>
       )}
@@ -639,12 +633,12 @@ function APITokensSection() {
         <Input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Where will it live? e.g. kitchen tablet"
+          placeholder="用在哪里？例如：厨房平板"
           className="min-w-0 flex-1 basis-48"
           onKeyDown={(e) => e.key === "Enter" && !create.isPending && create.mutate()}
         />
         <Button size="sm" disabled={create.isPending} onClick={() => create.mutate()}>
-          <Plus className="h-3.5 w-3.5" /> {create.isPending ? "Creating…" : "New token"}
+          <Plus className="h-3.5 w-3.5" /> {create.isPending ? "创建中…" : "新建令牌"}
         </Button>
       </div>
 
@@ -655,20 +649,20 @@ function APITokensSection() {
               <div className="min-w-0">
                 <p className="truncate text-sm">{t.name}</p>
                 <p className="truncate text-[11px] text-muted-foreground">
-                  {t.lastUsedAt ? `Last used ${formatDateTime(t.lastUsedAt)}` : "Never used"}
+                  {t.lastUsedAt ? `上次使用：${formatDateTime(t.lastUsedAt)}` : "从未使用"}
                 </p>
               </div>
               <Button
                 size="icon"
                 variant="ghost"
                 className="h-7 w-7 shrink-0 hover:text-destructive"
-                aria-label={`Revoke ${t.name}`}
+                aria-label={`吊销 ${t.name}`}
                 disabled={revoke.isPending}
                 onClick={async () => {
                   const ok = await confirm({
-                    title: "Revoke token",
-                    description: `Anything using "${t.name}" stops working immediately. This can't be undone.`,
-                    confirmText: "Revoke",
+                    title: "吊销令牌",
+                    description: `正在使用"${t.name}"的一切都会立即失效。此操作无法撤销。`,
+                    confirmText: "吊销",
                     destructive: true,
                   });
                   if (ok) revoke.mutate(t.id);
@@ -687,16 +681,16 @@ function APITokensSection() {
           disabled={revokeAll.isPending}
           onClick={async () => {
             const ok = await confirm({
-              title: "Revoke every token",
-              description: `All ${tokens.length} tokens stop working immediately, and anything using them stops with them. This can't be undone.`,
-              confirmText: "Revoke all",
+              title: "吊销全部令牌",
+              description: `全部 ${tokens.length} 个令牌都会立即失效，正在使用它们的一切也会随之中断。此操作无法撤销。`,
+              confirmText: "全部吊销",
               destructive: true,
             });
             if (ok) revokeAll.mutate();
           }}
           className="text-[11px] font-medium text-muted-foreground transition-colors hover:text-destructive"
         >
-          Revoke every token
+          吊销全部令牌
         </button>
       )}
     </section>

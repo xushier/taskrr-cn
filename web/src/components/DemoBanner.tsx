@@ -26,7 +26,7 @@ export function DemoBanner() {
   const switchSeason = (next: Season) => {
     if (next === season) return;
     const ok = window.confirm(
-      `Load the ${next} task list?\n\nThis replaces the demo data, so anything you've changed here will go.`,
+      `加载 ${next} 任务列表？\n\n这会替换演示数据，你在这里所做的更改将会丢失。`,
     );
     if (!ok) return;
     setSeason(next);
@@ -59,17 +59,17 @@ export function DemoBanner() {
       <div className="flex items-start gap-2.5">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
         <div className="min-w-0 text-xs">
-          <p className="font-medium text-foreground">You're viewing the Taskrr demo</p>
+          <p className="font-medium text-foreground">你正在浏览 Taskrr 演示</p>
           <p className="mt-0.5 text-muted-foreground">
-            There's no server here — everything you do is saved only in this browser.
+            这里没有服务器——你的所有操作仅保存在此浏览器中。
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <label className="inline-flex items-center gap-1.5">
-              <span className="text-muted-foreground">Season</span>
+              <span className="text-muted-foreground">季节</span>
               <select
                 value={season}
                 onChange={(e) => switchSeason(e.target.value as Season)}
-                aria-label="Demo season"
+                aria-label="演示季节"
                 className="h-7 rounded-md border border-input bg-transparent px-1.5 text-xs shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {SEASONS.map((s) => (
@@ -80,7 +80,7 @@ export function DemoBanner() {
               </select>
             </label>
             <Button variant="outline" size="sm" className="h-7 px-2 text-xs" onClick={reset}>
-              <RotateCcw className="h-3.5 w-3.5" /> Reset demo
+              <RotateCcw className="h-3.5 w-3.5" /> 重置演示
             </Button>
             <a
               href="https://github.com/unmaykr-a/taskrr"
@@ -88,13 +88,13 @@ export function DemoBanner() {
               rel="noreferrer"
               className="inline-flex h-7 items-center gap-1.5 rounded-md border px-2 text-xs hover:bg-accent"
             >
-              <Github className="h-3.5 w-3.5" /> Source
+              <Github className="h-3.5 w-3.5" /> 源代码
             </a>
           </div>
         </div>
         <button
           type="button"
-          aria-label="Dismiss"
+          aria-label="关闭"
           onClick={() => setDismissed(true)}
           className="-mr-1 -mt-1 rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
         >

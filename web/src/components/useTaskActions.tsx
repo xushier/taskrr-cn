@@ -36,10 +36,10 @@ import { useTaskWindows } from "@/components/useTaskWindows";
 
 /** The snooze durations the menu offers, plus how to describe them. */
 export const SNOOZE_PRESETS: { label: string; hours: number }[] = [
-  { label: "1 hour", hours: 1 },
-  { label: "Tomorrow", hours: 24 },
-  { label: "3 days", hours: 72 },
-  { label: "1 week", hours: 168 },
+  { label: "1 小时", hours: 1 },
+  { label: "明天", hours: 24 },
+  { label: "3 天", hours: 72 },
+  { label: "1 周", hours: 168 },
 ];
 
 export function useTaskActions() {
@@ -68,13 +68,13 @@ export function useTaskActions() {
    * a log changes.
    */
   const undoCompletion = (completionId: number, taskId: number) => ({
-    label: "Undo",
+    label: "撤销",
     onSelect: () => {
       api
         .deleteCompletion(completionId)
         .then(() => {
           refresh(taskId);
-          toast("Log undone");
+          toast("已撤销打卡");
         })
         .catch(fail);
     },
@@ -84,7 +84,7 @@ export function useTaskActions() {
     mutationFn: (task: Task) => api.quickComplete(task.id),
     onSuccess: (completion, task) => {
       refresh(task.id);
-      toast("Logged", { tone: "success", action: undoCompletion(completion.id, task.id) });
+      toast("已打卡", { tone: "success", action: undoCompletion(completion.id, task.id) });
     },
     onError: fail,
   });
@@ -95,7 +95,7 @@ export function useTaskActions() {
     onSuccess: (updated) => {
       refresh();
       const until = updated.snoozedUntil ? new Date(updated.snoozedUntil) : null;
-      toast(until ? `Snoozed until ${until.toLocaleString()}` : "Snoozed", { tone: "success" });
+      toast(until ? `已延后至 ${until.toLocaleString()}` : "已延后", { tone: "success" });
     },
     onError: fail,
   });
@@ -105,7 +105,7 @@ export function useTaskActions() {
       api.snoozeTask(task.id, until.toISOString()),
     onSuccess: () => {
       refresh();
-      toast("Snoozed", { tone: "success" });
+      toast("已延后", { tone: "success" });
     },
     onError: fail,
   });
@@ -114,7 +114,7 @@ export function useTaskActions() {
     mutationFn: (task: Task) => api.snoozeTask(task.id, null),
     onSuccess: () => {
       refresh();
-      toast("Snooze cleared", { tone: "success" });
+      toast("已取消延后", { tone: "success" });
     },
     onError: fail,
   });
@@ -124,7 +124,7 @@ export function useTaskActions() {
     onSuccess: (updated) => {
       refresh();
       const due = nextDue(updated);
-      toast(due ? `Skipped — next due ${due.toLocaleDateString()}` : "Cycle skipped", { tone: "success" });
+      toast(due ? `已跳过，下次到期 ${due.toLocaleDateString()}` : "已跳过本轮", { tone: "success" });
     },
     onError: fail,
   });
@@ -133,7 +133,7 @@ export function useTaskActions() {
     mutationFn: ({ task, pinned }: { task: Task; pinned: boolean }) => api.pinTask(task.id, pinned),
     onSuccess: (updated) => {
       refresh();
-      toast(updated.pinned ? "Pinned to the top" : "Unpinned", { tone: "success" });
+      toast(updated.pinned ? "已置顶" : "已取消置顶", { tone: "success" });
     },
     onError: fail,
   });
@@ -142,7 +142,7 @@ export function useTaskActions() {
     mutationFn: (task: Task) => api.duplicateTask(task.id),
     onSuccess: (copy) => {
       refresh();
-      toast(`Created "${copy.name}"`, { tone: "success" });
+      toast(`已创建“${copy.name}”`, { tone: "success" });
     },
     onError: fail,
   });
@@ -152,7 +152,7 @@ export function useTaskActions() {
       archived ? api.archiveTask(task.id) : api.unarchiveTask(task.id),
     onSuccess: (_d, { archived }) => {
       refresh();
-      toast(archived ? "Archived" : "Restored", { tone: "success" });
+      toast(archived ? "已归档" : "已取消归档", { tone: "success" });
     },
     onError: fail,
   });
@@ -161,7 +161,7 @@ export function useTaskActions() {
     mutationFn: (task: Task) => api.deleteTask(task.id),
     onSuccess: () => {
       refresh();
-      toast("Deleted", { tone: "success" });
+      toast("已删除", { tone: "success" });
     },
     onError: fail,
   });
@@ -173,14 +173,12 @@ export function useTaskActions() {
    */
   const confirmDelete = async (task: Task) => {
     const ok = await confirm({
-      title: `Delete "${task.name}"?`,
+      title: `删除“${task.name}”？`,
       description:
         task.completionCount > 0
-          ? `This removes the task and its ${task.completionCount} logged ${
-              task.completionCount === 1 ? "completion" : "completions"
-            }. This can't be undone.`
-          : "This removes the task. This can't be undone.",
-      confirmText: "Delete",
+          ? `将删除该任务及其 ${task.completionCount} 条打卡记录，此操作无法撤销。`
+          : "将删除该任务，此操作无法撤销。",
+      confirmText: "删除",
       destructive: true,
     });
     if (ok) remove.mutate(task);
@@ -194,15 +192,15 @@ export function useTaskActions() {
    */
   const saveAsTemplate = async (task: Task) => {
     const name = await prompt({
-      title: "Save as template",
-      description: "New tasks can start from this setup — routine, tags and folder, but not history.",
+      title: "保存为模板",
+      description: "新任务可基于此设置创建——包含周期、标签和文件夹，不含历史。",
       defaultValue: task.name,
-      confirmText: "Save",
+      confirmText: "保存",
     });
     const trimmed = (name ?? "").trim();
     if (!trimmed) return;
     setPrefs({ taskTemplates: saveTemplate(prefs.taskTemplates, templateFromTask(task, trimmed)) });
-    toast(`Saved "${trimmed}" as a template`, { tone: "success" });
+    toast(`已将“${trimmed}”保存为模板`, { tone: "success" });
   };
 
   return {
@@ -236,26 +234,26 @@ export function useTaskMenu() {
 
     const entries: ContextMenuEntry[] = [];
     if (!archived) {
-      entries.push({ label: "Quick log", icon: <Zap />, onSelect: () => actions.quickLog.mutate(task) });
-      entries.push({ label: "Log with time…", icon: <Clock />, onSelect: () => openComplete(task) });
+      entries.push({ label: "快速打卡", icon: <Zap />, onSelect: () => actions.quickLog.mutate(task) });
+      entries.push({ label: "带时间打卡…", icon: <Clock />, onSelect: () => openComplete(task) });
     }
-    entries.push({ label: "Manage…", icon: <Settings2 />, onSelect: () => openManage(task) });
+    entries.push({ label: "管理…", icon: <Settings2 />, onSelect: () => openManage(task) });
 
     if (isOwner && !archived) {
       entries.push({ separator: true });
       if (snoozed) {
-        entries.push({ label: "Wake up now", icon: <BellOff />, onSelect: () => actions.wake.mutate(task) });
+        entries.push({ label: "立即唤醒", icon: <BellOff />, onSelect: () => actions.wake.mutate(task) });
       } else {
         for (const preset of SNOOZE_PRESETS) {
           entries.push({
-            label: `Snooze ${preset.label}`,
+            label: `延后 ${preset.label}`,
             icon: <Moon />,
             onSelect: () => actions.snooze.mutate({ task, hours: preset.hours }),
           });
         }
       }
       entries.push({
-        label: "Skip this cycle",
+        label: "跳过本轮",
         icon: <SkipForward />,
         // Only a routine has a cycle to skip; shown-but-disabled explains why
         // the action exists without pretending it applies here.
@@ -267,25 +265,25 @@ export function useTaskMenu() {
     if (isOwner) {
       entries.push({ separator: true });
       entries.push({
-        label: task.pinned ? "Unpin" : "Pin to top",
+        label: task.pinned ? "取消置顶" : "置顶",
         icon: task.pinned ? <PinOff /> : <Pin />,
         onSelect: () => actions.pin.mutate({ task, pinned: !task.pinned }),
       });
-      entries.push({ label: "Duplicate", icon: <Copy />, onSelect: () => actions.duplicate.mutate(task) });
+      entries.push({ label: "复制", icon: <Copy />, onSelect: () => actions.duplicate.mutate(task) });
       entries.push({
-        label: "Save as template",
+        label: "保存为模板",
         icon: <BookmarkPlus />,
         onSelect: () => void actions.saveAsTemplate(task),
       });
       entries.push({
-        label: archived ? "Restore" : "Archive",
+        label: archived ? "取消归档" : "归档",
         icon: archived ? <ArchiveRestore /> : <Archive />,
         onSelect: () => actions.archive.mutate({ task, archived: !archived }),
       });
       entries.push({ separator: true });
     }
     entries.push({
-      label: isOwner ? "Delete" : "Leave task",
+      label: isOwner ? "删除" : "退出任务",
       icon: <Trash2 />,
       destructive: true,
       onSelect: () => void actions.confirmDelete(task),

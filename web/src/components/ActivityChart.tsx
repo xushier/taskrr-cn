@@ -14,10 +14,10 @@ export const ACTIVITY_RANGES = [7, 30, 90, 365] as const;
 export type ActivityRange = (typeof ACTIVITY_RANGES)[number];
 
 const RANGE_LABELS: Record<ActivityRange, string> = {
-  7: "7d",
-  30: "30d",
-  90: "90d",
-  365: "1y",
+  7: "7 天",
+  30: "30 天",
+  90: "90 天",
+  365: "1 年",
 };
 
 /**
@@ -99,7 +99,7 @@ export function ActivityChart({
   // while ordinary days stay visible (1-of-50 still renders at ~14% height).
   const scaled = (count: number) => Math.sqrt(count / max) * 100;
   const todayKey = dayKey(new Date());
-  const unit = bucket === 1 ? "day" : "week";
+  const unit = bucket === 1 ? "天" : "周";
   // Tight ranges can afford a gap between bars; a year's worth cannot.
   const gapClass = bars.length > 60 ? "gap-px" : "gap-[2px]";
 
@@ -107,15 +107,15 @@ export function ActivityChart({
     const fmt = (d: Date) =>
       d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
     const when = bucket === 1 ? fmt(b.date) : `${fmt(b.date)} – ${fmt(b.end)}`;
-    return `${when}: ${b.count} ${b.count === 1 ? "completion" : "completions"}`;
+    return `${when}：${b.count} 次打卡`;
   };
 
   return (
     <div className={cn("rounded-xl border bg-card p-4", className)}>
       <div className="mb-2 flex items-baseline justify-between gap-2">
-        <h2 className="text-sm font-semibold">Activity</h2>
+        <h2 className="text-sm font-semibold">活跃度</h2>
         <span className="truncate text-xs text-muted-foreground">
-          {total} in {RANGE_LABELS[days as ActivityRange] ?? `${days}d`} · peak {max}/{unit}
+          近 {RANGE_LABELS[days as ActivityRange] ?? `${days} 天`} {total} 次 · 峰值 {max}/{unit}
         </span>
       </div>
 
@@ -149,7 +149,7 @@ export function ActivityChart({
             honest rather than hidden. */}
         <div
           className="flex h-20 flex-col justify-between py-px text-right text-[10px] leading-none tabular-nums text-muted-foreground"
-          title="Bar heights use a square-root scale, so one unusually busy period doesn't flatten the rest"
+          title="柱高采用平方根比例，避免个别异常繁忙的时段压扁其余柱形"
         >
           <span>{max}</span>
           {max >= 8 && <span className="opacity-70">{Math.round(max / 4)}</span>}
@@ -164,7 +164,7 @@ export function ActivityChart({
               <div
                 className="pointer-events-none absolute inset-x-0 border-t border-dashed border-primary/40"
                 style={{ bottom: `${scaled(avg)}%` }}
-                title={`Average ${avg.toFixed(1)}/${unit} on active ${unit}s`}
+                title={`活跃${unit}平均值 ${avg.toFixed(1)}/${unit}`}
               />
             )}
             <div className={cn("flex h-20 items-end", gapClass)}>
@@ -194,10 +194,10 @@ export function ActivityChart({
               {bars[0]?.date.toLocaleDateString(undefined, { month: "short", day: "numeric" })}
             </span>
             <span className="truncate">
-              {active} active {active === 1 ? unit : `${unit}s`}
-              {active > 0 && ` · avg ${avg.toFixed(avg >= 10 ? 0 : 1)}`}
+              {active} 个活跃{unit}
+              {active > 0 && ` · 平均 ${avg.toFixed(avg >= 10 ? 0 : 1)}`}
             </span>
-            <span className="shrink-0">today</span>
+            <span className="shrink-0">今天</span>
           </div>
         </div>
       </div>

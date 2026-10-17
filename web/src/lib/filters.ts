@@ -16,20 +16,20 @@ export type Filter =
   | "requests";
 
 export const FILTERS: { key: Filter; label: string }[] = [
-  { key: "all", label: "All tasks" },
-  { key: "due-soon", label: "Due soon" },
-  { key: "overdue", label: "Overdue" },
-  { key: "none", label: "Never done" },
-  { key: "snoozed", label: "Snoozed" },
-  { key: "archived", label: "Archived" },
+  { key: "all", label: "全部任务" },
+  { key: "due-soon", label: "即将到期" },
+  { key: "overdue", label: "已逾期" },
+  { key: "none", label: "从未做过" },
+  { key: "snoozed", label: "已延后" },
+  { key: "archived", label: "已归档" },
 ];
 
 /** Extra views shown only when task sharing is enabled. "shared" groups tasks
  *  with collaborators; "requests" is not a task filter — the app renders its own
  *  list of incoming invites — so callers gate it specially. */
 export const SHARE_FILTERS: { key: Filter; label: string }[] = [
-  { key: "shared", label: "Shared" },
-  { key: "requests", label: "Requests" },
+  { key: "shared", label: "共享" },
+  { key: "requests", label: "分享请求" },
 ];
 
 /**

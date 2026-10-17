@@ -91,11 +91,11 @@ function LogsView({ fill = false }: { fill?: boolean }) {
     <div className={cn("space-y-2", fill && "flex h-full flex-col")}>
       <div className="flex items-center justify-between gap-2">
         <p className="text-[11px] text-muted-foreground">
-          Recent server and access logs, kept in memory since the last restart.
+          自上次重启以来的服务器与访问日志，仅保存在内存中。
         </p>
         <label className="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-muted-foreground">
           <input type="checkbox" checked={live} onChange={(e) => setLive(e.target.checked)} />
-          Live
+          实时
         </label>
       </div>
       <div
@@ -105,7 +105,7 @@ function LogsView({ fill = false }: { fill?: boolean }) {
           fill ? "min-h-0 flex-1" : "h-64",
         )}
       >
-        {logs?.length === 0 && <p className="text-muted-foreground">No log lines yet.</p>}
+        {logs?.length === 0 && <p className="text-muted-foreground">暂无日志。</p>}
         {logs?.map((e) => (
           <div key={e.seq} className="whitespace-pre-wrap break-all text-muted-foreground">
             {e.text}
@@ -123,18 +123,18 @@ function LogsSection() {
   const [open, setOpen] = useState(false);
   const windows = useWindows();
   const popOut = () =>
-    windows.open({ id: "logs", title: "Logs", width: 560, content: <LogsView fill /> });
+    windows.open({ id: "logs", title: "日志", width: 560, content: <LogsView fill /> });
 
   return (
-    <SettingsGroup id="admin.logs" title="Logs" icon={<ScrollText />} summary="Server and access" onOpenChange={setOpen}>
+    <SettingsGroup id="admin.logs" title="日志" icon={<ScrollText />} summary="服务器与访问" onOpenChange={setOpen}>
         <div className="flex justify-end">
           <button
             type="button"
             onClick={popOut}
-            title="Open logs in a floating window"
+            title="在悬浮窗口中打开日志"
             className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
           >
-            <ExternalLink className="h-3.5 w-3.5" /> Pop out
+            <ExternalLink className="h-3.5 w-3.5" /> 弹出
           </button>
         </div>
         {open && <LogsView />}
@@ -199,7 +199,7 @@ function BrandingSettings() {
     onSuccess: (next) => {
       queryClient.setQueryData(["settings"], next);
       queryClient.invalidateQueries({ queryKey: ["auth-config"] }); // refresh live branding
-      toast("Branding saved", { tone: "success" });
+      toast("品牌设置已保存", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -212,7 +212,7 @@ function BrandingSettings() {
     onSuccess: (bg) => {
       setBackground(String(bg.id));
       queryClient.invalidateQueries({ queryKey: ["backgrounds"] });
-      toast("Uploaded — save to apply it", { tone: "success" });
+      toast("已上传，保存后生效", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
@@ -236,28 +236,28 @@ function BrandingSettings() {
         ctx.drawImage(img, (sizePx - w) / 2, (sizePx - h) / 2, w, h);
         setIcon(c.toDataURL("image/png"));
       };
-      img.onerror = () => toast("That file isn't an image", { tone: "error" });
+      img.onerror = () => toast("该文件不是图片", { tone: "error" });
       img.src = reader.result as string;
     };
     reader.readAsDataURL(file);
   }
 
   return (
-    <SettingsGroup id="admin.branding" title="Branding" icon={<Palette />} summary="Name, icon, login page">
+    <SettingsGroup id="admin.branding" title="品牌" icon={<Palette />} summary="名称、图标、登录页">
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Name</Label>
+          <Label className="text-xs text-muted-foreground">名称</Label>
           <Input value={name} placeholder="Taskrr" onChange={(e) => setName(e.target.value)} className="h-8" />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Browser tab title</Label>
-          <Input value={title} placeholder="(defaults to the name)" onChange={(e) => setTitle(e.target.value)} className="h-8" />
+          <Label className="text-xs text-muted-foreground">浏览器标签页标题</Label>
+          <Input value={title} placeholder="（默认为名称）" onChange={(e) => setTitle(e.target.value)} className="h-8" />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Tagline</Label>
-          <Input value={tagline} placeholder="last-done tracker" onChange={(e) => setTagline(e.target.value)} className="h-8" />
+          <Label className="text-xs text-muted-foreground">标语</Label>
+          <Input value={tagline} placeholder="上次完成时间追踪" onChange={(e) => setTagline(e.target.value)} className="h-8" />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Icon</Label>
+          <Label className="text-xs text-muted-foreground">图标</Label>
           <div className="flex items-center gap-2">
             {icon ? (
               <img src={icon} alt="" className="h-9 w-9 shrink-0 rounded-lg object-cover" />
@@ -267,7 +267,7 @@ function BrandingSettings() {
               </div>
             )}
             <Button type="button" variant="outline" size="sm" onClick={() => fileRef.current?.click()}>
-              Upload
+              上传
             </Button>
             {icon && (
               <button
@@ -275,7 +275,7 @@ function BrandingSettings() {
                 onClick={() => setIcon("")}
                 className="text-xs text-muted-foreground hover:text-destructive"
               >
-                remove
+                移除
               </button>
             )}
             <input
@@ -291,21 +291,21 @@ function BrandingSettings() {
             />
           </div>
           <p className="text-[11px] text-muted-foreground">
-            Used for the tab icon, the sidebar, and the login card. Square images work best.
+            用于标签页图标、侧边栏和登录卡片。建议使用正方形图片。
           </p>
         </div>
         <ToggleRow
-          label="Hide icon on the login page"
+          label="在登录页隐藏图标"
           checked={hideIcon}
           onChange={(v) => setHideIcon(v)}
         />
         <ToggleRow
-          label="Hide name &amp; tagline on the login page"
+          label="在登录页隐藏名称和标语"
           checked={hideText}
           onChange={(v) => setHideText(v)}
         />
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Background image</Label>
+          <Label className="text-xs text-muted-foreground">背景图片</Label>
           <div className="flex flex-wrap items-center gap-2">
             {background ? (
               <img
@@ -315,7 +315,7 @@ function BrandingSettings() {
               />
             ) : (
               <div className="flex h-9 w-16 shrink-0 items-center justify-center rounded border text-[10px] text-muted-foreground">
-                none
+                无
               </div>
             )}
             <Button
@@ -325,7 +325,7 @@ function BrandingSettings() {
               disabled={uploadBackground.isPending}
               onClick={() => bgRef.current?.click()}
             >
-              {uploadBackground.isPending ? "Uploading…" : "Upload"}
+              {uploadBackground.isPending ? "上传中…" : "上传"}
             </Button>
             {background && (
               <button
@@ -333,7 +333,7 @@ function BrandingSettings() {
                 onClick={() => setBackground("")}
                 className="text-xs text-muted-foreground hover:text-destructive"
               >
-                remove
+                移除
               </button>
             )}
             <input
@@ -349,9 +349,7 @@ function BrandingSettings() {
             />
           </div>
           <p className="text-[11px] text-muted-foreground">
-            Shown behind the app and on the login page, for anyone who hasn&apos;t
-            picked their own. Save to apply; removing it here leaves the file in
-            your own backgrounds.
+            显示在应用与登录页背后，适用于尚未自选背景的用户。保存后生效；在此移除不会删除你个人背景中的文件。
           </p>
         </div>
         {/* The instance's own look. Experimental, so the controls only exist
@@ -360,22 +358,20 @@ function BrandingSettings() {
         {config?.experimental && (
           <>
             <div className="space-y-1">
-              <Label className="text-xs text-muted-foreground">Interface style</Label>
+              <Label className="text-xs text-muted-foreground">界面风格</Label>
               <Select value={style} onChange={(e) => setStyle(e.target.value)}>
-                <option value="">Soft (default)</option>
-                <option value="soft">Soft</option>
-                <option value="flat">Flat</option>
+                <option value="">柔和（默认）</option>
+                <option value="soft">柔和</option>
+                <option value="flat">扁平</option>
               </Select>
               <p className="text-[11px] text-muted-foreground">
-                Applies to the sign-in page and to everyone who hasn&apos;t chosen a
-                style of their own. Flat squares off the corners and drops the
-                shadows and frosted glass.
+                应用于登录页及尚未自选风格的用户。扁平风格会去掉圆角、阴影和毛玻璃效果。
               </p>
             </div>
             <div className="space-y-1">
-              <Label className="text-xs text-muted-foreground">Layout</Label>
+              <Label className="text-xs text-muted-foreground">布局</Label>
               <Select value={appLayout} onChange={(e) => setAppLayout(e.target.value)}>
-                <option value="">Sidebar (default)</option>
+                <option value="">侧边栏（默认）</option>
                 {APP_LAYOUTS.map((l) => (
                   <option key={l.value} value={l.value}>
                     {l.label} — {l.hint}
@@ -383,32 +379,29 @@ function BrandingSettings() {
                 ))}
               </Select>
               <p className="text-[11px] text-muted-foreground">
-                Where the navigation lives, for accounts that haven&apos;t picked.
-                The rail and the top bar work on a phone too; the full sidebar is
-                a drawer there.
+                导航所在的位置，供尚未自选的账户使用。侧栏和顶栏在手机上同样可用；完整侧边栏在手机上以抽屉形式呈现。
               </p>
             </div>
           </>
         )}
         <div className="space-y-1">
-          <Label>Login page layout</Label>
+          <Label>登录页布局</Label>
           <Select
            
             value={layout}
             onChange={(e) => setLayout(e.target.value as LoginLayout)}
           >
-            <option value="centered">Centred card</option>
-            <option value="left">Panel on the left</option>
-            <option value="right">Panel on the right</option>
+            <option value="centered">居中卡片</option>
+            <option value="left">面板居左</option>
+            <option value="right">面板居右</option>
           </Select>
           <p className="text-[11px] text-muted-foreground">
-            A side panel gives the background effect the rest of the screen. Phones get the same
-            full-width form whichever you pick.
+            侧边面板让背景效果占据其余屏幕。无论选择哪种，手机上都是相同的全宽表单。
           </p>
         </div>
         <div className="flex justify-end">
           <Button size="sm" disabled={save.isPending} onClick={() => save.mutate()}>
-            {save.isPending ? "Saving…" : "Save branding"}
+            {save.isPending ? "保存中…" : "保存品牌设置"}
           </Button>
         </div>
     </SettingsGroup>
@@ -434,24 +427,22 @@ function SessionsSection() {
     mutationFn: (userId: number) => api.terminateSessions(userId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["sessions"] });
-      toast("Signed out everywhere, tokens revoked", { tone: "success" });
+      toast("已在所有设备退出登录，令牌已吊销", { tone: "success" });
     },
   });
 
   return (
     <SettingsGroup
       id="admin.sessions"
-      title="Active sessions"
+      title="活跃会话"
       icon={<MonitorSmartphone />}
       summary={sessions && sessions.length > 0 ? String(sessions.length) : undefined}
       onOpenChange={setOpen}
     >
         <p className="text-[11px] text-muted-foreground">
-          Who's signed in and when they last opened the site. "Terminate" signs a
-          user out on every device and revokes their API tokens, so a leaked
-          account is closed off in one go.
+          显示谁已登录及最近访问时间。“终止”会让该用户在所有设备退出登录并吊销其 API 令牌，一次性封死泄露的账户。
         </p>
-        {sessions?.length === 0 && <p className="text-xs text-muted-foreground">No active sessions.</p>}
+        {sessions?.length === 0 && <p className="text-xs text-muted-foreground">暂无活跃会话。</p>}
         <div className="space-y-1.5">
           {sessions?.map((s) => {
             // The primary admin can't be signed out by another admin.
@@ -465,18 +456,18 @@ function SessionsSection() {
                 <div className="flex min-w-0 flex-1 items-center gap-1.5">
                   <span className="min-w-0 flex-1 truncate font-medium">{s.username}</span>
                   {s.role === "admin" && (
-                    <span className="shrink-0 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">admin</span>
+                    <span className="shrink-0 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary">管理员</span>
                   )}
                 </div>
                 <div className="flex shrink-0 items-center gap-2">
                   <span
                     className="text-xs text-muted-foreground"
-                    title={`Last opened ${new Date(s.lastSeen).toLocaleString()}`}
+                    title={`最近访问 ${new Date(s.lastSeen).toLocaleString()}`}
                   >
                     {timeSince(s.lastSeen)}
                   </span>
                   <span className="text-[11px] text-muted-foreground">
-                    {s.sessions} {s.sessions === 1 ? "session" : "sessions"}
+                    {s.sessions} 个会话
                   </span>
                   <button
                     type="button"
@@ -484,14 +475,14 @@ function SessionsSection() {
                     disabled={locked || terminate.isPending}
                     title={
                       locked
-                        ? "Primary admin — protected from other admins"
+                        ? "主管理员——受保护，其他管理员无法操作"
                         : isSelf
-                          ? "This signs you out too, and revokes your tokens"
-                          : "Sign out on all devices and revoke API tokens"
+                          ? "这也会让你退出登录，并吊销你的令牌"
+                          : "在所有设备退出登录并吊销 API 令牌"
                     }
                     className="whitespace-nowrap text-xs text-destructive hover:underline disabled:opacity-40 disabled:no-underline"
                   >
-                    {isSelf ? "Sign out" : "Terminate"}
+                    {isSelf ? "退出登录" : "终止"}
                   </button>
                 </div>
               </div>
@@ -531,7 +522,7 @@ function MergeAccounts() {
       queryClient.invalidateQueries(); // users + tasks/activity may have moved
       setSourceId("");
       setTargetId("");
-      toast("Accounts merged", { tone: "success" });
+      toast("账户已合并", { tone: "success" });
     },
   });
 
@@ -546,15 +537,15 @@ function MergeAccounts() {
   const confirmMerge = async () => {
     if (!ready) return;
     const kept = keepUsername === "source" ? source!.username : target!.username;
-    const dataMsg = moveData ? `move "${source!.username}"'s tasks into "${target!.username}"` : `discard "${source!.username}"'s tasks`;
+    const dataMsg = moveData ? `将“${source!.username}”的任务移入“${target!.username}”` : `丢弃“${source!.username}”的任务`;
     if (
       await confirm({
-        title: "Merge accounts",
+        title: "合并账户",
         description:
-          `Merge "${source!.username}" into "${target!.username}"?\n\nThis will ${dataMsg}, move its sign-in ` +
-          `(including any OIDC link) to "${target!.username}", keep the username "${kept}", and DELETE ` +
-          `"${source!.username}". This can't be undone.`,
-        confirmText: "Merge",
+          `将“${source!.username}”合并到“${target!.username}”？\n\n` +
+          `${dataMsg}，并把其登录方式（含 OIDC 绑定）转移到“${target!.username}”，` +
+          `保留用户名“${kept}”，最后删除“${source!.username}”。此操作不可撤销。`,
+        confirmText: "合并",
         destructive: true,
       })
     ) {
@@ -563,62 +554,60 @@ function MergeAccounts() {
   };
 
   return (
-    <SettingsGroup id="admin.merge" title="Merge accounts" icon={<UserCheck />} summary="Fold one account into another">
+    <SettingsGroup id="admin.merge" title="合并账户" icon={<UserCheck />} summary="将一个账户并入另一个">
       <p className="text-xs text-muted-foreground">
-        Fold one account into another — e.g. an OIDC-provisioned account into a local one, so either sign-in
-        reaches the same account.
+        将一个账户并入另一个——例如把 OIDC 创建的账户并入本地账户，这样两种登录方式进入的是同一账户。
       </p>
       <div className="flex flex-wrap items-center gap-2 text-xs">
-        <span className="text-muted-foreground">Merge</span>
+        <span className="text-muted-foreground">合并</span>
         <Select
           value={sourceId}
           onChange={(e) => setSourceId(e.target.value ? Number(e.target.value) : "")}
           className={MERGE_SELECT}
         >
-          <option value="">account…</option>
+          <option value="">账户…</option>
           {sourceOptions.map((u) => (
             <option key={u.id} value={u.id}>{u.username}</option>
           ))}
         </Select>
-        <span className="text-muted-foreground">into</span>
+        <span className="text-muted-foreground">并入</span>
         <Select
           value={targetId}
           onChange={(e) => setTargetId(e.target.value ? Number(e.target.value) : "")}
           className={MERGE_SELECT}
         >
-          <option value="">account…</option>
+          <option value="">账户…</option>
           {targetOptions.map((u) => (
             <option key={u.id} value={u.id}>{u.username}</option>
           ))}
         </Select>
       </div>
       <ToggleRow
-          label="Move the merged account's tasks over"
+          label="迁移被合并账户的任务"
           checked={moveData}
           onChange={(v) => setMoveData(v)}
         />
       <div className="flex items-center gap-2 text-xs">
-        <span className="text-muted-foreground">Keep username:</span>
+        <span className="text-muted-foreground">保留用户名：</span>
         <Select
           value={keepUsername}
           onChange={(e) => setKeepUsername(e.target.value as "target" | "source")}
           className={MERGE_SELECT}
           disabled={!ready}
         >
-          <option value="target">{target?.username ?? "kept account"}</option>
-          <option value="source">{source?.username ?? "merged account"}</option>
+          <option value="target">{target?.username ?? "保留的账户"}</option>
+          <option value="source">{source?.username ?? "被合并的账户"}</option>
         </Select>
       </div>
       {/* An account holds one OIDC link, so when both sides have one the
           merged account's identity is dropped — warn before the confirm. */}
       {ready && source?.oidcLinked && target?.oidcLinked && (
         <p className="text-xs text-amber-500">
-          Both accounts have an OIDC identity. "{target?.username}" keeps its own; "{source?.username}"'s
-          OIDC sign-in will no longer work after the merge.
+          两个账户都绑定了 OIDC 身份。合并后“{target?.username}”保留自己的绑定，“{source?.username}”的 OIDC 登录将失效。
         </p>
       )}
       {merge.isError && <p className="text-xs text-destructive">{(merge.error as Error).message}</p>}
-      {merge.isSuccess && <p className="text-xs text-emerald-500">Accounts merged.</p>}
+      {merge.isSuccess && <p className="text-xs text-emerald-500">账户已合并。</p>}
       <Button
         variant="outline"
         size="sm"
@@ -626,7 +615,7 @@ function MergeAccounts() {
         disabled={merge.isPending || !ready}
         onClick={confirmMerge}
       >
-        {merge.isPending ? "Merging…" : "Merge"}
+        {merge.isPending ? "合并中…" : "合并"}
       </Button>
     </SettingsGroup>
   );
@@ -644,14 +633,14 @@ function BackupsSection() {
     mutationFn: () => api.createBackup(),
     onSuccess: () => {
       invalidate();
-      toast("Backup created", { tone: "success" });
+      toast("备份已创建", { tone: "success" });
     },
   });
   const del = useMutation({
     mutationFn: (name: string) => api.deleteBackup(name),
     onSuccess: () => {
       invalidate();
-      toast("Backup deleted", { tone: "success" });
+      toast("备份已删除", { tone: "success" });
     },
   });
 
@@ -680,11 +669,11 @@ function BackupsSection() {
   const confirmRestore = async (label: string, run: () => void) => {
     if (
       await confirm({
-        title: "Restore backup",
+        title: "恢复备份",
         description:
-          `Restore from ${label}?\n\nThis REPLACES all current data with the backup and restarts the server. ` +
-          `A safety backup of the current data is taken first. Everyone is signed out.\n\nContinue?`,
-        confirmText: "Restore",
+          `从 ${label} 恢复？\n\n这将用备份替换所有当前数据并重启服务器。会先为当前数据创建一份安全备份。` +
+          `所有人都会退出登录。\n\n继续吗？`,
+        confirmText: "恢复",
         destructive: true,
       })
     ) {
@@ -695,11 +684,11 @@ function BackupsSection() {
   if (restarting) {
     return (
       <section className="space-y-2">
-        <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Backups</h4>
+        <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">备份</h4>
         <div className="rounded-md border border-primary/40 bg-primary/10 p-3 text-sm">
-          <p className="font-medium">Restoring…</p>
+          <p className="font-medium">恢复中…</p>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            The server is restarting with the restored database. This page will reload in a few seconds.
+            服务器正在以恢复后的数据库重启。本页面将在几秒后自动刷新。
           </p>
         </div>
       </section>
@@ -710,14 +699,13 @@ function BackupsSection() {
 
   return (
     <section className="space-y-2">
-      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Backups</h4>
+      <h4 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">备份</h4>
       <p className="text-[11px] text-muted-foreground">
-        A complete database snapshot saved in <code>data/backups</code>. Restoring replaces all data and
-        restarts the server (a safety backup is taken first).
+        完整的数据库快照，保存在 <code>data/backups</code>。恢复会替换所有数据并重启服务器（会先创建安全备份）。
       </p>
       <div className="flex flex-wrap gap-2">
         <Button variant="outline" size="sm" disabled={create.isPending} onClick={() => create.mutate()}>
-          {create.isPending ? "Backing up…" : "Create backup"}
+          {create.isPending ? "备份中…" : "创建备份"}
         </Button>
         <Button
           variant="outline"
@@ -725,7 +713,7 @@ function BackupsSection() {
           disabled={busy}
           onClick={() => fileRef.current?.click()}
         >
-          Restore from file…
+          从文件恢复…
         </Button>
         <input
           ref={fileRef}
@@ -735,7 +723,7 @@ function BackupsSection() {
           onChange={(e) => {
             const f = e.target.files?.[0];
             e.target.value = "";
-            if (f) confirmRestore(`uploaded file "${f.name}"`, () => restoreUpload.mutate(f));
+            if (f) confirmRestore(`上传的文件“${f.name}”`, () => restoreUpload.mutate(f));
           }}
         />
       </div>
@@ -748,7 +736,7 @@ function BackupsSection() {
               <span className="min-w-0 flex-1 truncate font-mono">{b.name}</span>
               <span className="shrink-0 text-muted-foreground">{Math.max(1, Math.round(b.size / 1024))} KB</span>
               <a href={api.backupURL(b.name)} download className="shrink-0 text-primary hover:underline">
-                download
+                下载
               </a>
               <button
                 type="button"
@@ -756,18 +744,18 @@ function BackupsSection() {
                 onClick={() => confirmRestore(b.name, () => restoreExisting.mutate(b.name))}
                 className="shrink-0 text-primary hover:underline disabled:opacity-50"
               >
-                restore
+                恢复
               </button>
               <button
                 type="button"
-                aria-label={`Delete backup ${b.name}`}
+                aria-label={`删除备份 ${b.name}`}
                 disabled={del.isPending}
                 onClick={async () => {
                   if (
                     await confirm({
-                      title: "Delete backup",
-                      description: `Delete backup ${b.name}? This can't be undone.`,
-                      confirmText: "Delete",
+                      title: "删除备份",
+                      description: `删除备份 ${b.name}？此操作不可撤销。`,
+                      confirmText: "删除",
                       destructive: true,
                     })
                   )
@@ -815,23 +803,21 @@ function BackgroundLimits() {
       queryClient.invalidateQueries({ queryKey: ["auth-config"] });
       setImage(String(next.bg_max_image_mb));
       setTotal(String(next.bg_max_total_mb));
-      toast("Saved", { tone: "success" });
+      toast("已保存", { tone: "success" });
     },
     onError: (e) => toast((e as Error).message, { tone: "error" }),
   });
 
   return (
     <section className="space-y-2">
-      <p className="text-xs font-semibold">Background images</p>
+      <p className="text-xs font-semibold">背景图片</p>
       <p className="text-[11px] text-muted-foreground">
-        Uploads are stored in the database, so these are also how much of your
-        backup they can become. Out-of-range values are clamped rather than
-        refused (1–128 MB an image, 1–4096 MB an account).
+        上传的图片保存在数据库中，因此这些限制也决定了备份可能达到的大小。超出范围的值会被自动调整到范围内（单张图片 1–128 MB，每账户 1–4096 MB）。
       </p>
       <div className="grid grid-cols-2 gap-2">
         <div className="space-y-1">
           <Label htmlFor={imageId} className="text-xs text-muted-foreground">
-            Per image (MB)
+            单张图片（MB）
           </Label>
           <Input
             id={imageId}
@@ -845,7 +831,7 @@ function BackgroundLimits() {
         </div>
         <div className="space-y-1">
           <Label htmlFor={totalId} className="text-xs text-muted-foreground">
-            Per account (MB)
+            每账户（MB）
           </Label>
           <Input
             id={totalId}
@@ -859,8 +845,8 @@ function BackgroundLimits() {
         </div>
       </div>
       <ToggleRow
-        label="Accept SVG uploads"
-        hint="Off by default: an SVG can carry script, and these files are shown to other people. Allowed, they're served under a policy that sandboxes them into an origin of their own, so the script can't reach this instance — but a raster image is still the boring choice."
+        label="接受 SVG 上传"
+        hint="默认关闭：SVG 可能携带脚本，且这些文件会展示给其他用户。开启后，SVG 会在相互隔离的源下提供，脚本无法访问本实例——但位图图片仍是更稳妥的选择。"
         checked={data?.bg_allow_svg ?? false}
         onChange={(v) => save.mutate({ bg_allow_svg: v })}
       />
@@ -872,7 +858,7 @@ function BackgroundLimits() {
             save.mutate({ bg_max_image_mb: Number(image) || 1, bg_max_total_mb: Number(total) || 1 })
           }
         >
-          {save.isPending ? "Saving…" : "Save limits"}
+          {save.isPending ? "保存中…" : "保存限制"}
         </Button>
       </div>
     </section>
@@ -894,16 +880,16 @@ function AdvancedSettings() {
         return;
       }
       queryClient.invalidateQueries();
-      setMsg(vars.users ? `Done — removed ${res.deletedUsers} user(s) and their data.` : "Done — all tasks wiped.");
+      setMsg(vars.users ? `完成——已删除 ${res.deletedUsers} 个用户及其数据。` : "完成——所有任务已清空。");
     },
     onError: (e) => setMsg((e as Error).message),
   });
   const confirmWipe = async (opts: { tasks?: boolean; users?: boolean; everything?: boolean }, label: string) => {
     if (
       await confirm({
-        title: "Confirm deletion",
-        description: `This permanently deletes ${label}.\n\nThis cannot be undone. Continue?`,
-        confirmText: "Delete",
+        title: "确认删除",
+        description: `这将永久删除${label}。\n\n此操作不可撤销。继续吗？`,
+        confirmText: "删除",
         destructive: true,
       })
     ) {
@@ -914,14 +900,14 @@ function AdvancedSettings() {
   const danger = "border-destructive/50 text-destructive hover:bg-destructive/10";
 
   return (
-    <SettingsGroup id="admin.advanced" title="Advanced" icon={<Wrench />} summary="Limits, backups, danger zone">
+    <SettingsGroup id="admin.advanced" title="高级" icon={<Wrench />} summary="限制、备份、危险区域">
         <BackgroundLimits />
         <hr className="border-border/60" />
         <BackupsSection />
         <hr className="border-destructive/30" />
-        <p className="text-xs font-semibold text-destructive">Danger zone</p>
+        <p className="text-xs font-semibold text-destructive">危险区域</p>
         <p className="text-xs text-muted-foreground">
-          Irreversible. Your own admin account is always kept.
+          操作不可逆。你自己的管理员账户始终保留。
         </p>
         <div className="flex flex-wrap gap-2">
           <Button
@@ -929,18 +915,18 @@ function AdvancedSettings() {
             size="sm"
             className={danger}
             disabled={wipe.isPending}
-            onClick={() => confirmWipe({ tasks: true }, "ALL tasks and history for every user")}
+            onClick={() => confirmWipe({ tasks: true }, "所有用户的全部任务和历史")}
           >
-            Wipe all tasks
+            清空所有任务
           </Button>
           <Button
             variant="outline"
             size="sm"
             className={danger}
             disabled={wipe.isPending}
-            onClick={() => confirmWipe({ users: true }, "ALL non-admin users and their data")}
+            onClick={() => confirmWipe({ users: true }, "所有非管理员用户及其数据")}
           >
-            Delete non-admin users
+            删除非管理员用户
           </Button>
           <Button
             variant="outline"
@@ -950,11 +936,11 @@ function AdvancedSettings() {
             onClick={() =>
               confirmWipe(
                 { everything: true },
-                "EVERYTHING — every other account, all tasks and history, all settings (including OIDC), preferences and reminders. Only your admin username and password are kept",
+                "所有内容——所有其他账户、全部任务和历史、所有设置（含 OIDC）、偏好与提醒。仅保留你的管理员用户名和密码",
               )
             }
           >
-            Wipe everything
+            清空所有内容
           </Button>
         </div>
         {msg && <p className="text-xs text-muted-foreground">{msg}</p>}
@@ -971,20 +957,20 @@ function RegistrationSettings() {
   });
 
   return (
-    <SettingsGroup id="admin.registration" title="Registration" icon={<UserRoundPlus />} flat>
+    <SettingsGroup id="admin.registration" title="注册" icon={<UserRoundPlus />} flat>
       <ToggleRow
-        label="Allow local sign-ups (Register tab)"
+        label="允许本地注册（“注册”标签页）"
         checked={data?.reg_local ?? false}
         onChange={(v) => save.mutate({ reg_local: v })}
       />
       <ToggleRow
-        label="Auto-create accounts on OIDC sign-in"
+        label="OIDC 登录时自动创建账户"
         checked={data?.reg_oidc ?? true}
         onChange={(v) => save.mutate({ reg_oidc: v })}
       />
       <ToggleRow
-        label="Require admin approval for sign-ups"
-        hint="New local accounts wait in a queue until you approve them"
+        label="注册需管理员审批"
+        hint="新注册的本地账户会进入队列，等待你批准"
         checked={data?.reg_approval ?? false}
         onChange={(v) => save.mutate({ reg_approval: v })}
       />
@@ -1008,24 +994,24 @@ function SharingSettings() {
     },
   });
   return (
-    <SettingsGroup id="admin.sharing" title="What users may do" icon={<Share2 />} summary="Sharing, backgrounds, tokens">
+    <SettingsGroup id="admin.sharing" title="用户可执行的操作" icon={<Share2 />} summary="共享、背景、令牌">
       <ToggleRow
-        label="Let users share tasks"
-        hint="Adds a Share action and the Shared / Requests views. Users can opt out individually."
+        label="允许用户共享任务"
+        hint="会增加“共享”操作和“共享 / 分享请求”视图。用户可单独退出。"
         checked={data?.tasks_shareable ?? false}
         onChange={(v) => save.mutate({ tasks_shareable: v })}
       />
 
       <ToggleRow
-        label="Let users set their own background"
-        hint="Each account can upload pictures and pick one to sit behind the app. Off hides the section entirely and keeps everyone on the instance background."
+        label="允许用户设置自己的背景"
+        hint="每个账户都可上传图片并选择一张作为应用背景。关闭后将完全隐藏该设置区，所有人都使用实例背景。"
         checked={data?.user_backgrounds ?? true}
         onChange={(v) => save.mutate({ user_backgrounds: v })}
       />
 
       <ToggleRow
-        label="Let users create API tokens"
-        hint="For scripts and home automation. A token reaches tasks and history only — never the admin area. Turning this off stops new tokens; existing ones keep working until revoked."
+        label="允许用户创建 API 令牌"
+        hint="供脚本和智能家居使用。令牌只能访问任务和历史——无法进入管理区域。关闭后不能再创建新令牌；已有令牌在被吊销前继续有效。"
         checked={data?.api_tokens ?? true}
         onChange={(v) => save.mutate({ api_tokens: v })}
       />
@@ -1050,14 +1036,14 @@ function PendingUsers() {
     mutationFn: (v: { id: number; role: "admin" | "user" }) => api.approveUser(v.id, v.role),
     onSuccess: () => {
       invalidate();
-      toast("User approved", { tone: "success" });
+      toast("已批准用户", { tone: "success" });
     },
   });
   const deny = useMutation({
     mutationFn: (id: number) => api.adminDeleteUser(id),
     onSuccess: () => {
       invalidate();
-      toast("Request denied", { tone: "success" });
+      toast("已拒绝请求", { tone: "success" });
     },
   });
 
@@ -1066,9 +1052,9 @@ function PendingUsers() {
   return (
     <SettingsGroup
       id="admin.pending"
-      title="Pending approval"
+      title="待批准"
       icon={<UserCheck />}
-      summary={<span className="text-amber-500">{pending.length} waiting</span>}
+      summary={<span className="text-amber-500">{pending.length} 人待审批</span>}
       defaultOpen
     >
       <div className="space-y-1.5">
@@ -1106,11 +1092,11 @@ function PendingRow({
         onChange={(e) => setRole(e.target.value as "admin" | "user")}
         className="h-7 rounded px-1 text-xs"
       >
-        <option value="user">user</option>
-        <option value="admin">admin</option>
+        <option value="user">用户</option>
+        <option value="admin">管理员</option>
       </Select>
       <Button size="sm" disabled={busy} onClick={() => onApprove(role)}>
-        Approve
+        批准
       </Button>
       <button
         type="button"
@@ -1118,7 +1104,7 @@ function PendingRow({
         onClick={onDeny}
         className="text-xs text-muted-foreground hover:text-destructive disabled:opacity-50"
       >
-        Deny
+        拒绝
       </button>
     </div>
   );
@@ -1140,7 +1126,7 @@ function OIDCSettings() {
       queryClient.setQueryData(["settings"], next);
       setForm({});
       setSecret("");
-      if (extra === undefined) toast("OIDC settings saved", { tone: "success" });
+      if (extra === undefined) toast("OIDC 设置已保存", { tone: "success" });
     },
   });
 
@@ -1164,52 +1150,51 @@ function OIDCSettings() {
   return (
     <SettingsGroup
       id="admin.oidc"
-      title="Single sign-on (OIDC)"
+      title="单点登录（OIDC）"
       icon={<Link2 />}
       badge={
         <span className={data?.oidc_enabled ? "text-emerald-400" : "text-muted-foreground"}>
-          {data?.oidc_enabled ? "enabled" : "not configured"}
+          {data?.oidc_enabled ? "已启用" : "未配置"}
         </span>
       }
       flat
     >
-      {field("oidc_issuer", "Issuer URL", "https://auth.example.com/application/o/taskrr/")}
+      {field("oidc_issuer", "签发方 URL", "https://auth.example.com/application/o/taskrr/")}
       <div className="grid grid-cols-2 gap-2">
-        {field("oidc_client_id", "Client ID")}
+        {field("oidc_client_id", "客户端 ID")}
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Client secret</Label>
+          <Label className="text-xs text-muted-foreground">客户端密钥</Label>
           <Input
             type="password"
             value={secret}
-            placeholder={data?.oidc_client_secret_set ? "•••••• (set)" : ""}
+            placeholder={data?.oidc_client_secret_set ? "••••••（已设置）" : ""}
             onChange={(e) => setSecret(e.target.value)}
             className="h-8"
           />
         </div>
       </div>
-      {field("oidc_redirect_url", "Redirect URL (optional)", "auto-detected from this site")}
+      {field("oidc_redirect_url", "回调 URL（可选）", "根据本站点自动检测")}
       <p className="text-[11px] text-muted-foreground">
-        Leave blank to auto-detect (<code>https://&lt;this-site&gt;/api/auth/oidc/callback</code>). Whatever
-        you use must be listed in the provider's allowed redirect URIs.
+        留空则自动检测（<code>https://&lt;this-site&gt;/api/auth/oidc/callback</code>）。所填地址必须已列入身份提供方的允许回调 URI 列表。
       </p>
-      {field("oidc_admin_group", "Admin group (optional)", "taskrr-admins")}
+      {field("oidc_admin_group", "管理员组（可选）", "taskrr-admins")}
       <ToggleRow
-        label="Link by username on first sign-in"
-        hint="Off (recommended): a first SSO sign-in matching an existing local username is refused — users connect SSO themselves from Settings. On: it attaches to that account automatically."
+        label="首次登录时按用户名关联账户"
+        hint="关闭（推荐）：首次 SSO 登录若与已有本地用户名相同则会被拒绝——用户可在设置中自行绑定 SSO。开启：将自动关联到该账户。"
         checked={data?.oidc_link_username ?? false}
         onChange={(v) => save.mutate({ oidc_link_username: v })}
       />
       {data?.oidc_enabled && (
         <ToggleRow
-        label="SSO sign-in only"
-        hint="Hides local sign-in; everyone uses single sign-on. The primary admin can still sign in with its password, so a provider outage can't lock you out."
+        label="仅允许 SSO 登录"
+        hint="隐藏本地登录，所有人使用单点登录。主管理员仍可用密码登录，因此服务方故障不会把你锁在门外。"
         checked={data?.oidc_only ?? false}
         onChange={(v) => save.mutate({ oidc_only: v })}
       />
       )}
       <div className="flex justify-end">
         <Button size="sm" disabled={save.isPending} onClick={() => save.mutate(undefined)}>
-          {save.isPending ? "Saving…" : "Save OIDC"}
+          {save.isPending ? "保存中…" : "保存 OIDC 设置"}
         </Button>
       </div>
       {save.isError && <p className="text-xs text-destructive">{(save.error as Error).message}</p>}
@@ -1247,7 +1232,7 @@ function Users() {
       api.adminUpdateUser(v.id, { role: v.role, password: v.password }),
     onSuccess: () => {
       invalidate();
-      toast("Saved", { tone: "success" });
+      toast("已保存", { tone: "success" });
     },
   });
   // A link that lapsed, never arrived, or belongs to an account made before
@@ -1264,11 +1249,11 @@ function Users() {
   const copyInvite = async (link: string) => {
     try {
       await navigator.clipboard.writeText(link);
-      toast("Invitation link copied", { tone: "success" });
+      toast("邀请链接已复制", { tone: "success" });
     } catch {
       // Clipboard access needs a secure context, which a LAN instance on plain
       // HTTP won't have — the link stays selectable on screen either way.
-      toast("Copy failed — select the link and copy it manually", { tone: "error" });
+      toast("复制失败——请手动选中链接复制", { tone: "error" });
     }
   };
 
@@ -1276,17 +1261,17 @@ function Users() {
     mutationFn: (id: number) => api.adminDeleteUser(id),
     onSuccess: () => {
       invalidate();
-      toast("User deleted", { tone: "success" });
+      toast("用户已删除", { tone: "success" });
     },
   });
 
   const resetPassword = async (u: User) => {
     const next = await prompt({
-      title: "Reset password",
-      description: `New password for ${u.username} (min 8 chars). Signs them out everywhere and revokes their API tokens:`,
+      title: "重置密码",
+      description: `为 ${u.username} 设置新密码（至少 8 个字符）。这会让他们在所有设备退出登录并吊销其 API 令牌：`,
       inputType: "password",
-      placeholder: "New password",
-      confirmText: "Set password",
+      placeholder: "新密码",
+      confirmText: "设置密码",
     });
     if (next) update.mutate({ id: u.id, password: next });
   };
@@ -1294,7 +1279,7 @@ function Users() {
   return (
     <SettingsGroup
       id="admin.users"
-      title="Users"
+      title="用户"
       icon={<UsersRound />}
       summary={users && users.length > 0 ? String(users.length) : undefined}
     >
@@ -1307,17 +1292,16 @@ function Users() {
       >
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-1">
-            <Label className="text-xs">Username</Label>
+            <Label className="text-xs">用户名</Label>
             <Input value={name} onChange={(e) => setName(e.target.value)} className="h-8" />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs">Password (optional)</Label>
+            <Label className="text-xs">密码（可选）</Label>
             <Input type="password" value={pw} onChange={(e) => setPw(e.target.value)} className="h-8" />
           </div>
         </div>
         <p className="text-[11px] text-muted-foreground">
-          Leave the password blank to get an invitation link instead — whoever opens it chooses
-          their own password.
+          密码留空则改为生成邀请链接——打开链接的人可自行设置密码。
         </p>
         <div className="flex flex-wrap items-center gap-2">
           <Select
@@ -1325,11 +1309,11 @@ function Users() {
             onChange={(e) => setRole(e.target.value as "admin" | "user")}
             className="h-8"
           >
-            <option value="user">user</option>
-            <option value="admin">admin</option>
+            <option value="user">用户</option>
+            <option value="admin">管理员</option>
           </Select>
           <Button type="submit" size="sm" className="shrink-0" disabled={create.isPending || !name.trim()}>
-            <UserPlus /> Add user
+            <UserPlus /> 添加用户
           </Button>
         </div>
         {create.isError && <p className="text-xs text-destructive">{(create.error as Error).message}</p>}
@@ -1338,7 +1322,7 @@ function Users() {
       {invite && (
         <div className="space-y-1.5 rounded-lg border border-primary/40 bg-primary/10 p-2">
           <p className="text-xs font-medium">
-            Send this to {invite.username} — it isn't shown again.
+            把这个发给 {invite.username}——它只显示一次。
           </p>
           <div className="flex items-center gap-1.5">
             <code className="min-w-0 flex-1 select-all break-all rounded bg-background/60 px-1.5 py-1 text-[11px]">
@@ -1348,18 +1332,17 @@ function Users() {
               size="icon"
               variant="outline"
               className="h-7 w-7 shrink-0"
-              aria-label="Copy invitation link"
+              aria-label="复制邀请链接"
               onClick={() => copyInvite(invite.link.url)}
             >
               <Copy className="h-3.5 w-3.5" />
             </Button>
           </div>
           <p className="text-[11px] text-muted-foreground">
-            Works once, and only until {new Date(invite.link.expiresAt).toLocaleDateString()}. You
-            can issue a new one from the list below at any time.
+            仅可使用一次，且 {new Date(invite.link.expiresAt).toLocaleDateString()} 前有效。你可以随时从下方列表重新签发。
           </p>
           <Button size="sm" variant="ghost" className="h-7" onClick={() => setInvite(null)}>
-            Done
+            完成
           </Button>
         </div>
       )}
@@ -1383,9 +1366,9 @@ function Users() {
                 {u.protected && (
                   <span
                     className="shrink-0 rounded bg-primary/15 px-1.5 py-0.5 text-[10px] text-primary"
-                    title="Primary admin — protected from changes by other admins"
+                    title="主管理员——其他管理员无法更改"
                   >
-                    primary
+                    主管理员
                   </span>
                 )}
                 {!u.passwordSet && !u.oidcLinked && (
@@ -1393,15 +1376,15 @@ function Users() {
                     className="shrink-0 rounded bg-amber-500/15 px-1.5 py-0.5 text-[10px] text-amber-500"
                     title={
                       inviteLive(u)
-                        ? `Invited — the link works until ${new Date(u.inviteExpiresAt as string).toLocaleString()}`
-                        : "Waiting to be set up, with no usable invitation — send a new link"
+                        ? `已邀请——链接 ${new Date(u.inviteExpiresAt as string).toLocaleString()} 前有效`
+                        : "等待设置且没有可用邀请——请发送新链接"
                     }
                   >
-                    {inviteLive(u) ? "invited" : "needs a link"}
+                    {inviteLive(u) ? "已邀请" : "需要链接"}
                   </span>
                 )}
                 {u.oidcLinked && (
-                  <span className="shrink-0 rounded bg-sky-500/15 px-1.5 py-0.5 text-[10px] text-sky-500" title="Linked to an OIDC identity">
+                  <span className="shrink-0 rounded bg-sky-500/15 px-1.5 py-0.5 text-[10px] text-sky-500" title="已绑定 OIDC 身份">
                     oidc
                   </span>
                 )}
@@ -1413,19 +1396,19 @@ function Users() {
                   onChange={(e) => update.mutate({ id: u.id, role: e.target.value as "admin" | "user" })}
                   className="h-7 rounded px-1 text-xs disabled:opacity-50"
                 >
-                  <option value="user">user</option>
-                  <option value="admin">admin</option>
+                  <option value="user">用户</option>
+                  <option value="admin">管理员</option>
                 </Select>
                 {!u.passwordSet && !u.oidcLinked && (
                   <button
                     type="button"
                     onClick={() => reinvite.mutate(u)}
                     disabled={locked || reinvite.isPending}
-                    title="Create a new invitation link (retires the previous one)"
-                    aria-label={`New invitation link for ${u.username}`}
+                    title="创建新的邀请链接（旧链接随之失效）"
+                    aria-label={`为 ${u.username} 创建新邀请链接`}
                     className="whitespace-nowrap text-xs text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:hover:text-muted-foreground"
                   >
-                    invite link
+                    邀请链接
                   </button>
                 )}
                 <button
@@ -1434,13 +1417,13 @@ function Users() {
                   disabled={locked}
                   className="whitespace-nowrap text-xs text-muted-foreground hover:text-foreground disabled:opacity-40 disabled:hover:text-muted-foreground"
                 >
-                  reset pw
+                  重置密码
                 </button>
                 <button
                   type="button"
                   onClick={() => remove.mutate(u.id)}
                   disabled={isSelf || locked}
-                  aria-label={`Delete ${u.username}`}
+                  aria-label={`删除 ${u.username}`}
                   className="rounded p-1 text-muted-foreground hover:text-destructive disabled:opacity-30 disabled:hover:text-muted-foreground"
                 >
                   <Trash2 className="h-4 w-4" />

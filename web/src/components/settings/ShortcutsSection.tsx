@@ -77,10 +77,9 @@ export function ShortcutsSection() {
 
   return (
     <div className="space-y-2" ref={boxRef}>
-      <SettingsGroup id="shortcuts.keys" title="Keys" flat>
+      <SettingsGroup id="shortcuts.keys" title="按键" flat>
         <p className="text-xs text-muted-foreground">
-          Click a key, then press the one you'd rather use. Shortcuts never fire while you're typing
-          in a field.
+          点击一个按键，然后按下你想使用的键。在输入框中打字时快捷键不会触发。
         </p>
         {SHORTCUT_ACTIONS.map((a) => {
           const key = resolveKey(overrides, a.id);
@@ -94,7 +93,7 @@ export function ShortcutsSection() {
                   {changed && (
                     <button
                       type="button"
-                      title={`Back to ${describeKey(a.defaultKey)}`}
+                      title={`恢复为 ${describeKey(a.defaultKey)}`}
                       onClick={() => {
                         const next = { ...overrides };
                         delete next[a.id];
@@ -102,7 +101,7 @@ export function ShortcutsSection() {
                       }}
                       className="text-xs text-muted-foreground hover:text-foreground"
                     >
-                      reset
+                      重置
                     </button>
                   )}
                   <button
@@ -111,7 +110,7 @@ export function ShortcutsSection() {
                       setProblem(null);
                       setRecording(listening ? null : a.id);
                     }}
-                    aria-label={`Change the key for ${a.label}`}
+                    aria-label={`更改 ${a.label} 的按键`}
                     className={cn(
                       "min-w-[4.5rem] rounded-md border px-2 py-1 font-mono text-xs transition-colors",
                       listening
@@ -119,7 +118,7 @@ export function ShortcutsSection() {
                         : "hover:bg-accent",
                     )}
                   >
-                    {listening ? "press a key…" : describeKey(key)}
+                    {listening ? "按下按键…" : describeKey(key)}
                   </button>
                 </div>
               </div>
@@ -136,18 +135,16 @@ export function ShortcutsSection() {
             className="w-full"
             onClick={() => setPrefs({ shortcutKeys: {} })}
           >
-            <RotateCcw className="h-3.5 w-3.5" /> Reset all to defaults
+            <RotateCcw className="h-3.5 w-3.5" /> 全部恢复默认
           </Button>
         )}
       </SettingsGroup>
 
-      <SettingsGroup id="shortcuts.views" title="Switching views" flat>
+      <SettingsGroup id="shortcuts.views" title="切换视图" flat>
         <p className="text-xs text-muted-foreground">
           <span className="font-mono">{RESERVED_KEYS[0]}</span>–
-          <span className="font-mono">{RESERVED_KEYS[RESERVED_KEYS.length - 1]}</span> jump to the
-          views in the sidebar, in the order they appear there. They aren't rebindable: the list
-          changes when sharing is on, so a key bound to "the fourth one" would quietly start meaning
-          something else.
+          <span className="font-mono">{RESERVED_KEYS[RESERVED_KEYS.length - 1]}</span>{" "}
+          按侧边栏中的排列顺序切换到对应视图。这些按键无法改绑：开启共享后列表会变化，绑定“第四个”的键会悄悄变成别的含义。
         </p>
       </SettingsGroup>
     </div>

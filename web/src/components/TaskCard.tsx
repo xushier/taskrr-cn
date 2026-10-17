@@ -116,7 +116,7 @@ export function TaskCard({
       queryClient.invalidateQueries({ queryKey: ["activity"] });
       // The card already shows a check and a pulse, so the toast is here purely
       // to carry Undo — this is the tap that goes wrong most often.
-      toast("Logged", { tone: "success", action: actions.undoCompletion(completion.id, task.id) });
+      toast("已打卡", { tone: "success", action: actions.undoCompletion(completion.id, task.id) });
     },
   });
 
@@ -159,11 +159,11 @@ export function TaskCard({
               </span>
             )}
             {task.pinned && (
-              <Pin className="h-3.5 w-3.5 shrink-0 text-primary" aria-label="Pinned" />
+              <Pin className="h-3.5 w-3.5 shrink-0 text-primary" aria-label="已置顶" />
             )}
             <CardTitle className="truncate text-base">{task.name}</CardTitle>
             {task.shared && (
-              <Users className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-label="Shared task" />
+              <Users className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-label="共享任务" />
             )}
           </div>
           {/* Keyed by the count so each new log pops the badge in. */}
@@ -171,7 +171,7 @@ export function TaskCard({
             key={task.completionCount}
             variant="secondary"
             className={cn("shrink-0", prefs.animFeedback && "animate-in zoom-in-50 duration-300")}
-            title="Times logged"
+            title="打卡次数"
           >
             {task.completionCount}×
           </Badge>
@@ -201,7 +201,7 @@ export function TaskCard({
             )}
           >
             <Repeat className="h-3 w-3 shrink-0" />
-            {myTurn ? "Your turn" : `${turn}'s turn`}
+            {myTurn ? "轮到你了" : `轮到 ${turn}`}
           </p>
         )}
 
@@ -209,7 +209,7 @@ export function TaskCard({
           <p className="pl-[18px] text-xs text-muted-foreground">
             {formatDateTime(task.lastCompletedAt)}
             {task.shared && task.lastCompletedBy && (
-              <span> · by {task.lastCompletedBy}</span>
+              <span> · 由 {task.lastCompletedBy}</span>
             )}
           </p>
         )}
@@ -232,12 +232,12 @@ export function TaskCard({
             {!compact && snoozed && task.snoozedUntil && (
               <p className="flex items-center gap-1 text-xs text-muted-foreground">
                 <Moon className="h-3 w-3 shrink-0" />
-                snoozed until {formatDate(new Date(task.snoozedUntil))}
+                已延后至 {formatDate(new Date(task.snoozedUntil))}
               </p>
             )}
             {!compact && !snoozed && (
               <p className="text-xs text-muted-foreground">
-                every {formatInterval(task.intervalSeconds)}
+                每 {formatInterval(task.intervalSeconds)}
                 {due && (
                   <>
                     {" · "}
@@ -262,7 +262,7 @@ export function TaskCard({
         {!compact && snoozed && task.snoozedUntil && task.intervalSeconds == null && (
           <p className="flex items-center gap-1 pl-[18px] text-xs text-muted-foreground">
             <Moon className="h-3 w-3 shrink-0" />
-            snoozed until {formatDate(new Date(task.snoozedUntil))}
+            已延后至 {formatDate(new Date(task.snoozedUntil))}
           </p>
         )}
 
@@ -310,20 +310,20 @@ export function TaskCard({
         >
           {justLogged ? (
             <>
-              <Check className={cn(prefs.animFeedback && "animate-in zoom-in-50 duration-200")} /> Logged
+              <Check className={cn(prefs.animFeedback && "animate-in zoom-in-50 duration-200")} /> 已打卡
             </>
           ) : (
             <>
-              <Zap /> {quick.isPending ? "Logging…" : "Quick log"}
+              <Zap /> {quick.isPending ? "打卡中…" : "快速打卡"}
             </>
           )}
         </Button>
         {/* 2. Advanced — pick a time / add a note (opens a window). */}
-        <Button variant="outline" size="icon" aria-label="Log with time and note" onClick={() => openComplete(task)}>
+        <Button variant="outline" size="icon" aria-label="选择时间与备注打卡" onClick={() => openComplete(task)}>
           <Clock />
         </Button>
         {/* 3. Manage — edit, history, delete (opens a window). */}
-        <Button variant="outline" size="icon" aria-label="Manage task" onClick={() => openManage(task)}>
+        <Button variant="outline" size="icon" aria-label="管理任务" onClick={() => openManage(task)}>
           <Settings2 />
         </Button>
       </CardFooter>

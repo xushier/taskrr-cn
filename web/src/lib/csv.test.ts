@@ -188,7 +188,7 @@ describe("csvToImportDocument", () => {
     const t = parseCsv("Name,Folder\n,Home\nBins,Home");
     const { document, skipped } = csvToImportDocument(t, mapping({ name: 0, folder: 1 }));
     expect(document.tasks).toHaveLength(1);
-    expect(skipped).toEqual(["Row 2: no name"]);
+    expect(skipped).toEqual(["第 2 行：缺少名称"]);
   });
 
   it("keeps the task but reports a cell it could not read", () => {
@@ -197,14 +197,14 @@ describe("csvToImportDocument", () => {
     const { document, skipped } = csvToImportDocument(t, mapping({ name: 0, interval: 1 }));
     expect(document.tasks).toHaveLength(1);
     expect(document.tasks[0].intervalSeconds).toBeUndefined();
-    expect(skipped[0]).toContain('couldn\'t read "whenever" as a routine');
+    expect(skipped[0]).toContain("无法将“whenever”识别为周期");
   });
 
   it("refuses a completion dated in the future", () => {
     const t = parseCsv("Name,Completed\nBins,2099-01-01");
     const { document, skipped } = csvToImportDocument(t, mapping({ name: 0, lastDone: 1 }));
     expect(document.tasks[0].completions).toBeUndefined();
-    expect(skipped[0]).toContain("in the future");
+    expect(skipped[0]).toContain("是未来时间");
   });
 
   it("counts rows the way a spreadsheet does", () => {

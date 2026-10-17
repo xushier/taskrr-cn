@@ -221,8 +221,8 @@ export function generateTheme(accent: string, mode: ThemeMode, harmony: Harmony)
 // --- applying a theme -------------------------------------------------------
 
 const FONT_STACKS: Record<FontChoice, string> = {
-  mono: 'ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace',
-  sans: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+  mono: 'ui-monospace, "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, "Liberation Mono", "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", monospace',
+  sans: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC", "HarmonyOS Sans SC", "MiSans", "Microsoft YaHei UI", "Microsoft YaHei", "Noto Sans CJK SC", "Noto Sans SC", "Source Han Sans SC", sans-serif',
 };
 
 /**
@@ -405,7 +405,7 @@ export function setFavicon(accent: string) {
 
 function makeTheme(p: Partial<Theme> & { name: string; colors: ThemeColors; mode: ThemeMode }): Theme {
   return {
-    font: "mono",
+    font: "sans",
     background: p.mode === "dark" ? "stars" : "none",
     intensity: 0.6,
     size: 0.5,

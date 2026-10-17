@@ -44,29 +44,29 @@ export function PreferencesSection() {
     <div className="space-y-2">
       <SettingsGroup
         id="prefs.time"
-        title="Time &amp; date"
+        title="时间与日期"
         icon={<CalendarClock />}
         flat
       >
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Clock</Label>
+          <Label className="text-xs text-muted-foreground">时钟</Label>
           <Segmented
             value={prefs.clock}
             onChange={(v: ClockChoice) => setPrefs({ clock: v })}
             options={[
-              { value: "auto", label: "Auto", title: "Follow this device's system setting" },
-              { value: "12", label: "12-hour" },
-              { value: "24", label: "24-hour" },
+              { value: "auto", label: "自动", title: "跟随此设备的系统设置" },
+              { value: "12", label: "12 小时制" },
+              { value: "24", label: "24 小时制" },
             ]}
           />
         </div>
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Date format</Label>
+          <Label className="text-xs text-muted-foreground">日期格式</Label>
           <Segmented
             value={prefs.dateFormat}
             onChange={(v: DateOrder) => setPrefs({ dateFormat: v })}
             options={[
-              { value: "auto", label: "Auto", title: "Follow this device's system setting" },
+              { value: "auto", label: "自动", title: "跟随此设备的系统设置" },
               { value: "dmy", label: "13 Jun" },
               { value: "mdy", label: "Jun 13" },
               { value: "ymd", label: "2026-06-13" },
@@ -74,27 +74,27 @@ export function PreferencesSection() {
           />
         </div>
         <p className="text-[11px] text-muted-foreground">
-          Auto follows each device's own system settings.
+          “自动”会跟随每台设备各自的系统设置。
         </p>
       </SettingsGroup>
 
       <SettingsGroup
         id="prefs.colours"
-        title="Task colours"
+        title="任务颜色"
         icon={<Palette />}
-        summary="Fresh to overdue, fading"
+        summary="由新到逾期，渐变"
       >
         <p className="text-xs text-muted-foreground">
-          Defaults for every task — each task can override these in its Manage window.
+          所有任务的默认颜色——每个任务可在其管理窗口中单独设置。
         </p>
         <div className="grid grid-cols-2 gap-2">
           <ColorField
-            label="Recent"
+            label="新近"
             value={prefs.taskColorFresh}
             onChange={(hex) => setPrefs({ taskColorFresh: hex })}
           />
           <ColorField
-            label="Overdue"
+            label="已逾期"
             value={prefs.taskColorOverdue}
             onChange={(hex) => setPrefs({ taskColorOverdue: hex })}
           />
@@ -106,15 +106,15 @@ export function PreferencesSection() {
           }}
         />
         <ToggleRow
-          label="Fade colours over time"
-          hint="Off keeps every task at its recent colour — no need for per-task freeze."
+          label="颜色随时间渐变"
+          hint="关闭后所有任务保持新近颜色，无需逐个任务冻结。"
           checked={prefs.colorFade}
           onChange={(v) => setPrefs({ colorFade: v })}
         />
         {prefs.colorFade && (
           <div className="flex items-center justify-between gap-2">
             <Label className="text-xs text-muted-foreground">
-              No-routine fade: {prefs.noRoutineFadeDays}d
+              无周期任务渐变：{prefs.noRoutineFadeDays} 天
             </Label>
             <input
               type="range"
@@ -124,7 +124,7 @@ export function PreferencesSection() {
               value={prefs.noRoutineFadeDays}
               onChange={(e) => setPrefs({ noRoutineFadeDays: Number(e.target.value) })}
               className="w-32 accent-primary"
-              aria-label="Days for a routine-less task to fade to overdue"
+              aria-label="无周期任务渐变到逾期所需天数"
             />
           </div>
         )}
@@ -136,33 +136,33 @@ export function PreferencesSection() {
 
       <SettingsGroup
         id="prefs.layout"
-        title="Layout"
+        title="布局"
         icon={<LayoutGrid />}
-        summary="Cards, columns, panels"
+        summary="卡片、分栏、面板"
       >
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1">
-            <Label className="text-xs text-muted-foreground">Card size</Label>
+            <Label className="text-xs text-muted-foreground">卡片尺寸</Label>
             <Select
               value={prefs.cardSize}
               onChange={(e) => setPrefs({ cardSize: e.target.value as CardSize })}
             >
-              <option value="comfortable">Comfortable</option>
-              <option value="compact">Compact</option>
+              <option value="comfortable">舒适</option>
+              <option value="compact">紧凑</option>
             </Select>
           </div>
           <div className="space-y-1">
             <Label
               className="text-xs text-muted-foreground"
-              title="Auto fits as many columns as the list actually has room for, which changes when the calendar or the sidebar is hidden"
+              title="“自动”按列表实际可用空间显示尽可能多的分栏；隐藏日历或侧边栏时数量会随之变化"
             >
-              Columns
+              分栏
             </Label>
             <Select
               value={prefs.taskColumns}
               onChange={(e) => setPrefs({ taskColumns: Number(e.target.value) })}
             >
-              <option value={0}>Auto</option>
+              <option value={0}>自动</option>
               {[1, 2, 3, 4, 5, 6].map((n) => (
                 <option key={n} value={n}>
                   {n}
@@ -173,39 +173,39 @@ export function PreferencesSection() {
         </div>
         {/* Lived under Task colours until now, which is nobody's first guess. */}
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Add button (mobile)</Label>
+          <Label className="text-xs text-muted-foreground">添加按钮（移动端）</Label>
           <Select
             value={prefs.addButton}
             onChange={(e) => setPrefs({ addButton: e.target.value as AddButtonPosition })}
           >
-            <option value="top">Top right</option>
-            <option value="bottom">Bottom (FAB)</option>
+            <option value="top">右上角</option>
+            <option value="bottom">底部（悬浮按钮）</option>
           </Select>
         </div>
         <ToggleRow
-          label="Show calendar"
+          label="显示日历"
           checked={prefs.showCalendar}
           onChange={(v) => setPrefs({ showCalendar: v })}
         />
         <ToggleRow
-          label="Show activity chart"
+          label="显示活动图表"
           checked={prefs.showActivity}
           onChange={(v) => setPrefs({ showActivity: v })}
         />
         <ToggleRow
-          label="Task statistics"
-          hint="A task's typical gap, longest gap, and how it tracks against its routine, in its Manage window"
+          label="任务统计"
+          hint="任务的典型间隔、最长间隔及周期达成情况，显示在其管理窗口中"
           checked={prefs.showTaskStats}
           onChange={(v) => setPrefs({ showTaskStats: v })}
         />
         <ToggleRow
-          label="Count in the browser tab"
-          hint="Puts the number of overdue and due-soon tasks in the tab title, for a pinned tab"
+          label="在浏览器标签页上计数"
+          hint="把已逾期和即将到期的任务数放进标签页标题，适合固定标签页"
           checked={prefs.tabBadge}
           onChange={(v) => setPrefs({ tabBadge: v })}
         />
         <ToggleRow
-          label="Draggable windows"
+          label="窗口可拖动"
           checked={prefs.draggableWindows}
           onChange={(v) => setPrefs({ draggableWindows: v })}
         />
@@ -213,37 +213,37 @@ export function PreferencesSection() {
 
       <SettingsGroup
         id="prefs.behaviour"
-        title="Shortcuts &amp; input"
+        title="快捷键与输入"
         icon={<Keyboard />}
-        summary="Right-click, keys, quick add"
+        summary="右键、按键、快速添加"
       >
         <ToggleRow
-          label="Right-click menu"
-          hint="Right-click a task (or long-press on a touchscreen) for its actions. Off restores your browser's own menu."
+          label="右键菜单"
+          hint="右键点击任务（触屏上为长按）查看其操作。关闭后恢复浏览器自带菜单。"
           checked={prefs.contextMenu}
           onChange={(v) => setPrefs({ contextMenu: v })}
         />
         <ToggleRow
-          label="Keyboard shortcuts"
-          hint="Single keys for new task, search, and switching views — press ? for the list"
+          label="键盘快捷键"
+          hint="单键即可新建任务、搜索、切换视图——按 ? 查看列表"
           checked={prefs.keyboardShortcuts}
           onChange={(v) => setPrefs({ keyboardShortcuts: v })}
         />
         <ToggleRow
-          label="Quick add"
-          hint={'Offer to read "every 2 weeks #home /Kitchen" out of a new task\'s name'}
+          label="快速添加"
+          hint={'从新任务的名称中识别"every 2 weeks #home /Kitchen"等内容'}
           checked={prefs.quickAdd}
           onChange={(v) => setPrefs({ quickAdd: v })}
         />
         <ToggleRow
-          label="Toast notifications"
-          hint="Brief confirmations after an action — this is also where Undo appears after a log"
+          label="提示通知"
+          hint="操作后显示简短确认——打卡后的撤销也在这里出现"
           checked={prefs.toasts}
           onChange={(v) => setPrefs({ toasts: v })}
         />
         <ToggleRow
-          label="Use browser dialogs"
-          hint="System confirm boxes instead of Taskrr's own"
+          label="使用浏览器对话框"
+          hint="用系统确认框代替 Taskrr 自带的"
           checked={prefs.nativeDialogs}
           onChange={(v) => setPrefs({ nativeDialogs: v })}
         />
@@ -251,28 +251,28 @@ export function PreferencesSection() {
 
       <SettingsGroup
         id="prefs.pickers"
-        title="Pickers"
+        title="选择器"
         icon={<SlidersHorizontal />}
-        summary="Colour, date, time inputs"
+        summary="颜色、日期、时间输入"
       >
         <p className="text-[11px] text-muted-foreground">
-          Taskrr's own pickers are on by default; turn one off to use your device's native control.
+          Taskrr 自带的选择器默认开启；关闭后使用设备的原生控件。
         </p>
         <ToggleRow
-          label="Custom colour picker"
-          hint="A colour wheel instead of the system picker"
+          label="自定义颜色选择器"
+          hint="用色轮代替系统选色器"
           checked={prefs.colorPicker === "wheel"}
           onChange={(v) => setPrefs({ colorPicker: v ? "wheel" : "native" })}
         />
         <ToggleRow
-          label="Custom date picker"
-          hint="A calendar instead of the system date input"
+          label="自定义日期选择器"
+          hint="用日历代替系统日期输入"
           checked={prefs.datePicker}
           onChange={(v) => setPrefs({ datePicker: v })}
         />
         <ToggleRow
-          label="Custom time picker"
-          hint="An analog clock instead of the system time input"
+          label="自定义时间选择器"
+          hint="用表盘代替系统时间输入"
           checked={prefs.timePicker}
           onChange={(v) => setPrefs({ timePicker: v })}
         />
@@ -297,14 +297,13 @@ function TemplatesGroup() {
   return (
     <SettingsGroup
       id="prefs.templates"
-      title="Task templates"
+      title="任务模板"
       icon={<BookmarkIcon />}
-      summary={templates.length > 0 ? `${templates.length} saved` : "None yet"}
+      summary={templates.length > 0 ? `已保存 ${templates.length} 个` : "暂无"}
     >
       {templates.length === 0 ? (
         <p className="text-xs text-muted-foreground">
-          Right-click a task and choose <span className="font-medium">Save as template</span> to reuse its
-          setup on a new one.
+          右键点击任务并选择<span className="font-medium">保存为模板</span>，即可在新任务中复用其设置。
         </p>
       ) : (
         templates.map((t) => (
@@ -313,8 +312,8 @@ function TemplatesGroup() {
               <p className="truncate">{t.name}</p>
               <p className="truncate text-xs text-muted-foreground">
                 {[
-                  t.intervalSeconds != null ? `every ${formatInterval(t.intervalSeconds)}` : "no routine",
-                  t.folder ? `in ${t.folder}` : null,
+                  t.intervalSeconds != null ? `每 ${formatInterval(t.intervalSeconds)}` : "无周期",
+                  t.folder ? `位于 ${t.folder}` : null,
                   t.tags.length > 0 ? t.tags.map((x) => `#${x}`).join(" ") : null,
                 ]
                   .filter(Boolean)
@@ -326,7 +325,7 @@ function TemplatesGroup() {
               onClick={() => setPrefs({ taskTemplates: deleteTemplate(templates, t.name) })}
               className="shrink-0 text-xs text-muted-foreground hover:text-destructive"
             >
-              remove
+              删除
             </button>
           </div>
         ))
@@ -354,16 +353,16 @@ function TagColoursGroup() {
   return (
     <SettingsGroup
       id="prefs.tagColours"
-      title="Tag colours"
+      title="标签颜色"
       icon={<TagIcon />}
-      summary={coloured > 0 ? `${coloured} coloured` : "All one colour"}
+      summary={coloured > 0 ? `已设 ${coloured} 个` : "统一颜色"}
     >
       {tags.length === 0 ? (
-        <p className="text-xs text-muted-foreground">No tags yet. Add one to a task and it'll show up here.</p>
+        <p className="text-xs text-muted-foreground">还没有标签。给任务添加标签后就会出现在这里。</p>
       ) : (
         <>
           <p className="text-xs text-muted-foreground">
-            Tags you don't colour keep the plain chip.
+            未设置颜色的标签保持默认样式。
           </p>
           {tags.map((tag) => {
             const hex = tagColor(prefs.tagColors, tag);
@@ -377,7 +376,7 @@ function TagColoursGroup() {
                       onClick={() => setPrefs({ tagColors: setTagColor(prefs.tagColors, tag, null) })}
                       className="text-xs text-muted-foreground hover:text-foreground"
                     >
-                      clear
+                      清除
                     </button>
                   )}
                   <ColorField
@@ -396,7 +395,7 @@ function TagColoursGroup() {
               className="w-full"
               onClick={() => setPrefs({ tagColors: {} })}
             >
-              Clear all tag colours
+              清除全部标签颜色
             </Button>
           )}
         </>
@@ -415,19 +414,19 @@ function AnimationsGroup() {
   return (
     <SettingsGroup
       id="prefs.animations"
-      title="Animations"
+      title="动画"
       icon={<Sparkles />}
-      summary={prefs.animations ? "Motion, speed" : "All off"}
+      summary={prefs.animations ? "动效、速度" : "全部关闭"}
     >
       <ToggleRow
-        label="All animations"
-        hint="Master switch — off disables everything below plus the background"
+        label="所有动画"
+        hint="总开关——关闭后禁用下方全部选项及背景"
         checked={prefs.animations}
         onChange={(v) => setPrefs({ animations: v })}
       />
       {prefs.animations && (
         <div className="space-y-1">
-          <Label className="text-xs text-muted-foreground">Animation speed: {prefs.animationSpeed}×</Label>
+          <Label className="text-xs text-muted-foreground">动画速度：{prefs.animationSpeed}×</Label>
           <input
             type="range"
             min={0.25}
@@ -436,55 +435,55 @@ function AnimationsGroup() {
             value={prefs.animationSpeed}
             onChange={(e) => setPrefs({ animationSpeed: Number(e.target.value) })}
             className="w-full accent-primary"
-            aria-label="Animation speed"
+            aria-label="动画速度"
           />
         </div>
       )}
       <ToggleRow
-        label="Task cards moving"
-        hint="Cards glide to their new spot and fade in"
+        label="任务卡片移动"
+        hint="卡片滑到新位置并淡入"
         checked={prefs.animGrid}
         disabled={off}
         onChange={(v) => setPrefs({ animGrid: v })}
       />
       <ToggleRow
-        label="Action feedback"
-        hint="Quick-log pulse, count pops, button press-down"
+        label="操作反馈"
+        hint="快速打卡脉冲、计数弹跳、按钮按压效果"
         checked={prefs.animFeedback}
         disabled={off}
         onChange={(v) => setPrefs({ animFeedback: v })}
       />
       <ToggleRow
-        label="Sliding selection highlight"
-        hint="The bubble that slides between tabs, views, and calendar days"
+        label="滑动选中高亮"
+        hint="在标签、视图和日历日期之间滑动的高亮气泡"
         checked={prefs.animIndicators}
         disabled={off}
         onChange={(v) => setPrefs({ animIndicators: v })}
       />
       <ToggleRow
-        label="Windows and dialogs"
-        hint="Open, close, and minimise motion"
+        label="窗口与对话框"
+        hint="打开、关闭和最小化的动效"
         checked={prefs.animWindows}
         disabled={off}
         onChange={(v) => setPrefs({ animWindows: v })}
       />
       <ToggleRow
-        label="View transitions"
-        hint="Header crossfade, calendar month slide, list entrances"
+        label="视图过渡"
+        hint="顶栏交叉淡入、日历月份滑动、列表入场"
         checked={prefs.animViews}
         disabled={off}
         onChange={(v) => setPrefs({ animViews: v })}
       />
       <ToggleRow
-        label="Smooth wheel scrolling"
-        hint="Eases mouse-wheel steps at your display's refresh rate (touchpads and touch stay native)"
+        label="滚轮平滑滚动"
+        hint="按显示器刷新率缓动鼠标滚轮步进（触控板和触摸保持原生）"
         checked={prefs.smoothScroll}
         disabled={off}
         onChange={(v) => setPrefs({ smoothScroll: v })}
       />
       <ToggleRow
-        label="Pause background while dragging or scrolling"
-        hint="Only kicks in with frosted glass, where the blur is the cost"
+        label="拖动或滚动时暂停背景"
+        hint="仅在磨砂玻璃开启时生效，模糊的开销较大"
         checked={prefs.pauseBgOnDrag}
         disabled={off}
         onChange={(v) => setPrefs({ pauseBgOnDrag: v })}

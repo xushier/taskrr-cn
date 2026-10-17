@@ -47,9 +47,9 @@ import { useAuth } from "@/components/AuthProvider";
 // Human-readable result of an OIDC account-link attempt (see the callback in
 // internal/api/oidc.go, which redirects back here with ?oidcLink=...).
 const OIDC_LINK_MESSAGES: Record<string, string> = {
-  linked: "Single sign-on connected to your account.",
-  conflict: "That single sign-on identity is already linked to another account.",
-  error: "Could not connect single sign-on. Please try again.",
+  linked: "单点登录已连接到你的账户。",
+  conflict: "该单点登录身份已绑定其他账户。",
+  error: "无法连接单点登录，请重试。",
 };
 
 export default function App() {
@@ -72,7 +72,7 @@ export default function App() {
     const message = OIDC_LINK_MESSAGES[result] ?? OIDC_LINK_MESSAGES.error;
     if (result === "linked") queryClient.invalidateQueries({ queryKey: ["me"] });
     window.history.replaceState({}, "", window.location.pathname);
-    void alert({ title: "Single sign-on", description: message });
+    void alert({ title: "单点登录", description: message });
   }, [queryClient, alert]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   // Keyboard-shortcut targets: the search box to focus, and the two dialogs the
@@ -209,20 +209,20 @@ export default function App() {
   const bound = prefs.shortcutKeys;
   const shortcuts = useMemo<Shortcut[]>(() => {
     const list: Shortcut[] = [
-      { key: resolveKey(bound, "new"), label: "New task", run: () => setCreateOpen(true) },
+      { key: resolveKey(bound, "new"), label: "新建任务", run: () => setCreateOpen(true) },
       {
         key: resolveKey(bound, "search"),
-        label: "Search tasks",
+        label: "搜索任务",
         run: () => {
           setSidebarOpen(false);
           searchRef.current?.focus();
           searchRef.current?.select();
         },
       },
-      { key: resolveKey(bound, "help"), label: "Show this help", run: () => setShortcutsOpen((v) => !v) },
+      { key: resolveKey(bound, "help"), label: "显示此帮助", run: () => setShortcutsOpen((v) => !v) },
       {
         key: resolveKey(bound, "clear"),
-        label: "Clear search and selection",
+        label: "清除搜索与选择",
         run: () => {
           setSearch("");
           setActiveTag(null);
@@ -235,7 +235,7 @@ export default function App() {
       if (i > 8) return; // only single digits get a key
       list.push({
         key: String(i + 1),
-        label: `Go to ${f.label}`,
+        label: `前往${f.label}`,
         run: () => {
           setFilter(f.key);
           setSidebarOpen(false);
@@ -254,17 +254,17 @@ export default function App() {
   // keep confidently naming keys the user has since moved.
   const shortcutHelp = useMemo<ShortcutHelp[]>(
     () => [
-      { keys: [describeKey(resolveKey(bound, "new"))], label: "New task" },
-      { keys: [describeKey(resolveKey(bound, "search"))], label: "Search tasks" },
-      { keys: ["1", "…", String(Math.min(9, navFilters.length))], label: "Switch view" },
-      { keys: [describeKey(resolveKey(bound, "clear"))], label: "Clear search and selection" },
-      { keys: [describeKey(resolveKey(bound, "help"))], label: "Show this help" },
+      { keys: [describeKey(resolveKey(bound, "new"))], label: "新建任务" },
+      { keys: [describeKey(resolveKey(bound, "search"))], label: "搜索任务" },
+      { keys: ["1", "…", String(Math.min(9, navFilters.length))], label: "切换视图" },
+      { keys: [describeKey(resolveKey(bound, "clear"))], label: "清除搜索与选择" },
+      { keys: [describeKey(resolveKey(bound, "help"))], label: "显示此帮助" },
     ],
     [navFilters.length, bound],
   );
 
   const filterLabel =
-    [...FILTERS, ...SHARE_FILTERS].find((f) => f.key === filter)?.label ?? "Tasks";
+    [...FILTERS, ...SHARE_FILTERS].find((f) => f.key === filter)?.label ?? "任务";
   const archivedView = filter === "archived";
   const requestsView = filter === "requests";
 
@@ -446,7 +446,7 @@ export default function App() {
                 onClick={() =>
                   drawerNav ? setSidebarOpen(true) : setPrefs({ sidebarCollapsed: false })
                 }
-                aria-label="Open menu"
+                aria-label="打开菜单"
               >
                 <Menu />
               </Button>
@@ -459,8 +459,8 @@ export default function App() {
               <h2 className="truncate text-sm font-semibold">{filterLabel}</h2>
               <p className="text-xs text-muted-foreground">
                 {requestsView
-                  ? `${requestCount} ${requestCount === 1 ? "request" : "requests"}`
-                  : `${visible.length} ${visible.length === 1 ? "task" : "tasks"}`}
+                  ? `${requestCount} 个分享请求`
+                  : `${visible.length} 个任务`}
               </p>
             </div>
 
@@ -475,7 +475,7 @@ export default function App() {
                     setSelected(new Set());
                   }}
                 >
-                  <CheckSquare /> {selectMode ? "Done" : "Select"}
+                  <CheckSquare /> {selectMode ? "完成" : "选择"}
                 </Button>
               )}
               {/* Compact: add button in the header unless the user prefers a bottom FAB. */}
@@ -500,8 +500,8 @@ export default function App() {
                       ref={searchRef}
                       value={search}
                       onChange={(e) => setSearch(e.target.value)}
-                      placeholder="Search tasks"
-                      aria-label="Search tasks"
+                      placeholder="搜索任务"
+                      aria-label="搜索任务"
                       className={cn(
                         "h-9 w-full rounded-md border border-input bg-transparent pl-8 pr-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                         // These two sit straight on the page rather than on a
@@ -516,7 +516,7 @@ export default function App() {
                     <button
                       type="button"
                       onClick={() => setActiveFolder(null)}
-                      title="Show every folder again"
+                      title="重新显示所有文件夹"
                       className="inline-flex items-center gap-1 rounded-md bg-primary/15 px-2 py-1.5 text-xs font-medium text-primary"
                     >
                       <FolderIcon className="h-3 w-3" />
@@ -531,13 +531,13 @@ export default function App() {
                         setActiveFolder(e.target.value || null);
                         setSelected(new Set());
                       }}
-                      aria-label="Filter by folder"
+                      aria-label="按文件夹筛选"
                       className={cn(
                         "h-9 rounded-md border border-input bg-transparent px-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring [&>option]:bg-background",
                         onPicture && "bg-background/70",
                       )}
                     >
-                      <option value="">All folders</option>
+                      <option value="">所有文件夹</option>
                       {folderCounts.map((f) => (
                         <option key={f.name} value={f.name}>
                           {f.name} ({f.count})
@@ -558,7 +558,7 @@ export default function App() {
                   <select
                     value={prefs.sortBy}
                     onChange={(e) => setPrefs({ sortBy: e.target.value as SortKey })}
-                    aria-label="Sort tasks"
+                    aria-label="任务排序"
                     className={cn(
                       "h-9 rounded-md border border-input bg-transparent px-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                       onPicture && "bg-background/70",
@@ -575,10 +575,10 @@ export default function App() {
                     size="sm"
                     className="h-9"
                     aria-pressed={prefs.groupByFolder}
-                    title="Group by folder"
+                    title="按文件夹分组"
                     onClick={() => setPrefs({ groupByFolder: !prefs.groupByFolder })}
                   >
-                    <FolderTree /> Group
+                    <FolderTree /> 分组
                   </Button>
                 </div>
               )}
@@ -589,14 +589,14 @@ export default function App() {
 
               {!requestsView && isError && (
                 <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-sm text-destructive">
-                  Failed to load tasks: {(error as Error).message}
+                  任务加载失败：{(error as Error).message}
                 </div>
               )}
 
               {!requestsView && !isLoading && !isError && visible.length === 0 &&
                 (search.trim() || activeTag || activeFolder ? (
                   <p className="rounded-lg border border-dashed py-12 text-center text-sm text-muted-foreground">
-                    No tasks match.
+                    没有匹配的任务。
                   </p>
                 ) : (
                   <EmptyState filter={filter} animate={views} />
@@ -625,7 +625,7 @@ export default function App() {
                       canShare
                         ? [
                             {
-                              label: "Share this folder…",
+                              label: "分享此文件夹…",
                               icon: <Share2 />,
                               onSelect: () => setShareFolder({ folder, taskCount: folderTasks.length }),
                             },
@@ -645,7 +645,7 @@ export default function App() {
                               ) : (
                                 <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
                               )}
-                              <span className="truncate">{folder || "No folder"}</span>
+                              <span className="truncate">{folder || "未分组"}</span>
                               <span className="text-xs font-normal text-muted-foreground">{folderTasks.length}</span>
                             </button>
                             {canShare && (
@@ -653,8 +653,8 @@ export default function App() {
                                 variant="ghost"
                                 size="icon"
                                 className="h-6 w-6 shrink-0 text-muted-foreground hover:text-foreground"
-                                aria-label={`Share the ${folder} folder`}
-                                title="Share this folder"
+                                aria-label={`分享 ${folder} 文件夹`}
+                                title="分享此文件夹"
                                 onClick={() => setShareFolder({ folder, taskCount: folderTasks.length })}
                               >
                                 <Share2 className="h-3.5 w-3.5" />
@@ -706,7 +706,7 @@ export default function App() {
           trigger={
             <Button
               size="icon"
-              aria-label="New task"
+              aria-label="新建任务"
               className="pill-surface fixed bottom-4 right-4 z-[46] h-14 w-14 rounded-full shadow-xl"
             >
               <Plus className="h-6 w-6" />
@@ -730,11 +730,11 @@ function EmptyState({ filter, animate = true }: { filter: Filter; animate?: bool
       <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
         <ListTodo className="h-6 w-6 text-muted-foreground" />
       </div>
-      <h2 className="text-base font-semibold">{isAll ? "No tasks yet" : "Nothing here"}</h2>
+      <h2 className="text-base font-semibold">{isAll ? "还没有任务" : "这里空空如也"}</h2>
       <p className="mt-1 max-w-sm text-sm text-muted-foreground">
         {isAll
-          ? "Create your first task, then tap Quick log each time you do it to start tracking the time since."
-          : "No tasks match this view right now."}
+          ? "创建第一个任务，之后每次完成时点“快速打卡”，即可开始记录间隔时间。"
+          : "当前视图暂无匹配的任务。"}
       </p>
       {isAll && (
         <div className="mt-5">
